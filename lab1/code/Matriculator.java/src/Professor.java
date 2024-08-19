@@ -1,6 +1,6 @@
 import java.util.List;
 
-public class Professor {
+public class Professor extends Usuario {
     private final int permisssao = 2;
     private List<Disciplina> disciplinas;
 
