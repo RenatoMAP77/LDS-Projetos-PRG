@@ -33,6 +33,8 @@ class "Professor"{
 
       +listarAlunos(nomeDisciplina: String): void
       +listarDisciplinas(): void
+      +removerDisciplina(): void
+      +adicionarDisciplina(disciplina: Disciplina): void
 }
 
 class "Curso"{
@@ -40,7 +42,8 @@ class "Curso"{
      - creditos: int
      - disciplinas : List<Disciplina> 
 
-     +adicionarDisciplinas(disciplina: Disciplina): void  
+     +adicionarDisciplina(disciplina: Disciplina): void
+     +removerDisciplina(disciplina: Disciplina): void  
 
 }
 class "Disciplina"{

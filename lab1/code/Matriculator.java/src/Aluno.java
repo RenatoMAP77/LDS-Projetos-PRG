@@ -5,9 +5,9 @@ public class Aluno extends Usuario {
     private final int PERMISSAO = 1;
     private Curso curso;
 
-    public Aluno(String nome, String email, String senha, Curso curso) {
-        super(nome, email, senha);
-        this.curso = curso;
+    public Aluno(String nome, String senha, Curso curso) {
+        // super(nome, senha);
+        // this.curso = curso;
     }
 
     public void adicionarMatricula(Disciplina disciplina) {
