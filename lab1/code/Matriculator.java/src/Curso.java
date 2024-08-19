@@ -17,6 +17,10 @@ public class Curso {
         disciplinas.add(disciplina);
     }
 
+    public void removerDisciplina(Disciplina disciplina) {
+        disciplinas.remove(disciplina);
+    }
+
 
     public String getNome() {
         return nome;

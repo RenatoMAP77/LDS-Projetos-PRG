@@ -4,7 +4,11 @@ public class Matricula {
     private Disciplina disciplina ;
     private Aluno aluno;
 
-    public void matricular(Aluno aluno, Disciplina disciplina){
+    public void matricular( Disciplina disciplina){
+        //...
+    }
+
+    public void removerMatricula( Disciplina disciplina){
         //...
     }
 }
