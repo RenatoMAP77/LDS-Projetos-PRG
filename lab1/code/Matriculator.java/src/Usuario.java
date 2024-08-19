@@ -1,10 +1,14 @@
 public class Usuario {
-    private long id ;
+    static private long id = 0;
     private String senha;
     private String nome;
 
+
+
+
    public void  Cadastrar(long id, String senha, String nome){
         //...
+        id = id + 1; 
     }
 
    
