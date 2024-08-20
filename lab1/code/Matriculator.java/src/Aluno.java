@@ -18,5 +18,10 @@ public class Aluno extends Usuario {
     public void removerMatricula(Matricula matricula) {
         // a adicionar
     }
+
+    public String calcularMatriculas() {
+        // a adicionar
+        return "Você está matriculado em:  ";
+    }
     
 }

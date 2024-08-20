@@ -6,7 +6,7 @@ Actor "Usuario" as US
 Actor "Aluno" as AL
 Actor "Secretaria" as SC
 Actor "Professor" as PR
-Actor "Financeiro" as FI
+Actor "Sistema Financeiro" as FI
 
 US <|-- AL
 US <|-- SC

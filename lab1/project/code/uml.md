@@ -24,6 +24,7 @@ class "Aluno"{
 
      +adicionarMatricula(disciplina: Disciplina): void
      +removerMatricula(matricula: Matricula): void
+     +calcularMatriculas(): String
      
 }
 
