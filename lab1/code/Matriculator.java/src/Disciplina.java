@@ -3,39 +3,50 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Disciplina {
-    
-   private String nome;
-   private boolean estaAtiva;
-   private final int MIN_ALUNOS = 3;
-   private final int MAX_ALUNOS = 60;
-   private Professor professor ;
-   private List<Matricula> matriculados;
-   private static LocalDate dataLimiteMatricula = LocalDate.of(2024, 8, 31);
-   
+
+    private String nome;
+    private boolean estaAtiva;
+    private boolean matriculasAbertas;
+    private final int MIN_ALUNOS = 3;
+    private final int MAX_ALUNOS = 60;
+    private Professor professor;
+    private List<Matricula> matriculados;
 
     public boolean verificarDisponibilidade() {
-        if (matriculados.size() < MIN_ALUNOS || matriculados.size() > MAX_ALUNOS || !estaAtiva || LocalDate.now().isAfter(dataLimiteMatricula)) { 
+        if (!matriculasAbertas) {
+            return false;
+        } else if (matriculados.size() < MIN_ALUNOS || matriculados.size() > MAX_ALUNOS || !estaAtiva) {
             return false;
         }
-        
+
         return true;
     }
 
-    public void adcionarAluno(Matricula matricula){
-        if (verificarDisponibilidade()){
+    public void adcionarAluno(Matricula matricula) {
+        if (verificarDisponibilidade()) {
             matriculados.add(matricula);
-        }
-        else throw new RuntimeException("Não foi possível adicionar o aluno");
+        } else
+            throw new RuntimeException("Não foi possível adicionar o aluno");
     }
 
-    public void removerAluno(Matricula aluno){
+    public void removerAluno(Matricula aluno) {
         matriculados.remove(aluno);
-        
+
     }
 
-    public void mudarProfessor(Professor novoProfessor){
+    public void mudarProfessor(Professor novoProfessor) {
         this.professor.removerDisciplina(this);
         this.professor = novoProfessor;
+    }
+
+    public void listarAlunos() {
+        if (matriculados.size() == 0) {
+            System.out.println("Não há alunos matriculados");
+        }
+        System.out.println("Alunos matriculados na disciplina " + this.getNome());
+        for (Matricula matricula : this.getMatriculados()) {
+            System.out.println(matricula.getAluno().getNome());
+        }
     }
 
     public Disciplina(String nome, Professor professor) {
@@ -44,26 +55,49 @@ public class Disciplina {
         estaAtiva = true;
         matriculados = new LinkedList<Matricula>();
     }
+
     public String getNome() {
         return nome;
     }
+
     public List<Matricula> getMatriculados() {
         return matriculados;
     }
+
     public void setNome(String nome) {
         this.nome = nome;
     }
+
     public void setEstaAtiva(boolean estaAtiva) {
         this.estaAtiva = estaAtiva;
     }
-    public LocalDate getDataMatricula() {
-        return dataLimiteMatricula;
+
+    public boolean isMatriculasAbertas() {
+        return matriculasAbertas;
     }
 
+    public void setMatriculasAbertas(boolean matriculasAbertas) {
+        this.matriculasAbertas = matriculasAbertas;
+    }
 
+    public Professor getProfessor() {
+        return professor;
+    }
 
+    public void setProfessor(Professor professor) {
+        this.professor = professor;
+    }
 
+    public int getMIN_ALUNOS() {
+        return MIN_ALUNOS;
+    }
 
+    public int getMAX_ALUNOS() {
+        return MAX_ALUNOS;
+    }
 
+    public boolean isEstaAtiva() {
+        return estaAtiva;
+    }
 
 }

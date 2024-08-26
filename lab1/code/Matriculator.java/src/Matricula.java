@@ -25,4 +25,7 @@ public class Matricula {
     public boolean isObrigatoria() {
         return obrigatoriedade;
     }
+    public Aluno getAluno() {
+        return aluno;
+    }
 }

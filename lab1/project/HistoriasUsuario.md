@@ -18,5 +18,7 @@
 
 ### Como professor desejo visualizar os alunos matriculados em minha disciplina para ter um controle dos alunos que estão cursando a disciplina.
 
+### Como sistema financeiro desejo ser notificado de uma nova matricula de um aluno para que eu possa cobrar o aluno.
+
 ### Como financeiro desejo cobrar o aluno para que ele possa pagar a mensalidade.
 
