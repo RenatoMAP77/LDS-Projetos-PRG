@@ -1,13 +1,14 @@
-public class Usuario {
-    static private long id = 0;
+public abstract class Usuario {
+    private static  long id = 0;
     private String senha;
     private String nome;
 
 
 
 
-   public void  Cadastrar(long id, String senha, String nome){
-        //...
+   public void  Cadastrar( String senha, String nome){
+        this.senha = senha;
+        this.nome = nome;
         id = id + 1; 
     }
 

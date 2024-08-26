@@ -7,4 +7,5 @@ public class Secretaria extends Usuario {
     public int getPermisssao() {
         return permisssao;
     }
+    
 }
