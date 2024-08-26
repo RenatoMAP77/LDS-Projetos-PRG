@@ -22,9 +22,16 @@ public class Disciplina {
         return true;
     }
 
+    private void verificaTamanho() {
+        if ( matriculados.size() > MAX_ALUNOS) {
+            setMatriculasAbertas(false);
+        }
+    }
+
     public void adcionarAluno(Matricula matricula) {
         if (verificarDisponibilidade()) {
             matriculados.add(matricula);
+            verificaTamanho();
         } else
             throw new RuntimeException("Não foi possível adicionar o aluno");
     }
