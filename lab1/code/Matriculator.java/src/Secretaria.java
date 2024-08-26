@@ -51,6 +51,18 @@ public class Secretaria extends Usuario {
         return cursos;
     }
 
+    public void adicionarCurso(Curso curso) {
+        cursos.add(curso);
+    }
+
+    public void adicionarProfessor(Professor professor) {
+        professores.add(professor);
+    }
+
+    public void adicionarAluno(Aluno aluno) {
+        alunos.add(aluno);
+    }
+
     public int getPERMISSAO() {
         return PERMISSAO;
     }
@@ -59,3 +71,5 @@ public class Secretaria extends Usuario {
         return professores;
     }
 }
+
+

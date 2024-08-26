@@ -3,7 +3,7 @@ public abstract class Usuario {
     private String senha;
     private String nome;
 
-    public void Cadastrar(String senha, String nome) {
+    public void Cadastrar(String nome, String senha) {
         this.nome = nome;
         this.senha = senha;
         id = id + 1;
