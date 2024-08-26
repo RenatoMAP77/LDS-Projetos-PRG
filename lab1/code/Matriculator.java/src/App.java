@@ -1,18 +1,14 @@
-import java.io.File;
 import java.util.Scanner;
 import java.lang.Integer;
 
-@SuppressWarnings("rawtypes")
 public class App {
-    @SuppressWarnings("unchecked")
+
+    static GenericDAO<Secretaria> dao = new GenericDAO<>("dados");
+    static Secretaria secretaria = dao.getAll().stream().findFirst().orElse(new Secretaria());
+
     public static void main(String[] args) throws Exception {
         Scanner sc = new Scanner(System.in);
-        GenericDAO meuArquivo = new GenericDAO<String>("dados");
-        // meuArquivo.add(new Curso("Engenharia de Software", 10));
-        // meuArquivo.add(new Curso("Ciências da Computação", 15));
-        // meuArquivo.add(new Disciplina("POO", new Professor("Carlos", "1234")));
-        // meuArquivo.add(new Disciplina("Banco de Dados", new Professor("Maria", "4321")));
-        // meuArquivo.add(new Disciplina("Estrutura de Dados", new Professor("Joao", "1234")));
+        // Adicionar populador caso nao tenha
 
         int opcao = 0;
 
@@ -35,17 +31,63 @@ public class App {
                 int id = Integer.parseInt(sc.nextLine());
                 System.out.println("Digite a senha:");
                 String senha = sc.nextLine();
+                Aluno aluno = autenticarAluno(id, senha);
+                if (!aluno.equals(null)) {
+                    System.out.println("Bem vindo " + aluno.getNome());
+                    System.out.println("O que deseja fazer?\n");
+                    System.out.println("1 - Adicionar matrícula");
+                    System.out.println("2 - Remover matrícula");
+                    System.out.println("3 - Calcular matrículas");
 
-                // if(){
-                //   //  System.out.println("Bem vindo " + meuArquivo.get(id).toString());
-                //     // adicionarMatricula(disciplina)
-                //     // removerMatricula(matricula)
-                //     // calcularMatriculas()
-                // } else {
-                //     System.out.println("Usuário não encontrado");
-                // }
+                    opcao = Integer.parseInt(sc.nextLine());
 
+                    switch (opcao) {
+                        case 1:
+                            System.out.println("Digite o nome da disciplina:");
+                            String nomeDisciplina = sc.nextLine();
+                            Disciplina disciplina = secretaria.getCursos().stream()
+                                    .flatMap(c -> c.getDisciplinas().stream())
+                                    .filter(d -> d.getNome().equals(nomeDisciplina))
+                                    .findFirst()
+                                    .orElse(null);
+                            if (disciplina != null) {
+                                aluno.adicionarMatricula(disciplina);
+                            } else {
+                                System.out.println("Disciplina não encontrada");
+                            }
+                            break;
 
+                        case 2:
+                            System.out.println("Digite o nome da disciplina:");
+                            nomeDisciplina = sc.nextLine();
+                            disciplina = secretaria.getCursos().stream()
+                                    .flatMap(c -> c.getDisciplinas().stream())
+                                    .filter(d -> d.getNome().equals(nomeDisciplina))
+                                    .findFirst()
+                                    .orElse(null);
+                            if (disciplina != null) {
+                                Matricula matricula = aluno.getMatriculas().stream()
+                                        .filter(m -> m.getDisciplina().equals(disciplina))
+                                        .findFirst()
+                                        .orElse(null);
+                                if (matricula != null) {
+                                    aluno.removerMatricula(matricula);
+                                } else {
+                                    System.out.println("Matrícula não encontrada");
+                                }
+                            } else {
+                                System.out.println("Disciplina não encontrada");
+                            }
+                            break;
+
+                        case 3:
+                            System.out.println(aluno.calcularMatriculas());
+                            break;
+                    }
+
+                } else {
+                    System.out.println("Usuário não encontrado");
+                }
 
                 break;
 
@@ -54,22 +96,37 @@ public class App {
                 System.out.println("|    SECRETARIA    |");
                 System.out.println("--------------------");
 
+                System.out.println("Digite o id:");
+                int id = Integer.parseInt(sc.nextLine());
+                System.out.println("Digite a senha:");
+                String senha = sc.nextLine();
+                Aluno aluno = autenticarAluno(id, senha);
+
+                System.out.println("1 - Adicionar curso");
+                System.out.println("2 - Gerar currículo");
+
                 // gerarCurriculo()
 
                 break;
 
-
-                case 3:
+            case 3:
                 System.out.println("--------------------");
                 System.out.println("|    PROFESSOR    |");
                 System.out.println("--------------------");
 
                 // listarAlunos(nomeDisciplina)
                 // listarDisciplinas()
-                //removerDisciplina()
-                //adicionarDisciplina(disciplina)
-
-                }
+                // removerDisciplina()
+                // adicionarDisciplina(disciplina)
 
         }
+
     }
+
+    public static Aluno autenticarAluno(int id, String senha) {
+        return secretaria.getAlunos().stream()
+                .filter(a -> a.getId() == id && a.getSenha().equals(senha))
+                .findFirst()
+                .orElse(null);
+    }
+}

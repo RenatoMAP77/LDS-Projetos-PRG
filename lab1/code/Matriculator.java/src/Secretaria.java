@@ -1,11 +1,16 @@
-import java.util.List;
+import java.util.*;
 
 public class Secretaria extends Usuario {
-    private final int PERMISSAO = 3;
     private List<Curso> cursos;
     private List<Professor> professores;
     private List<Aluno> alunos;
 
+    public Secretaria() {
+        super.Cadastrar("secretaria","senha123",3);
+        this.cursos = new ArrayList<>();
+        this.professores = new ArrayList<>();
+        this.alunos = new ArrayList<>();
+    }
 
     public void gerarCurriculo() {
         if (cursos == null || cursos.size() == 0) {
@@ -18,8 +23,35 @@ public class Secretaria extends Usuario {
             }
         }
     }
-    public int getPermisssao() {
-        return PERMISSAO;
+
+
+
+    @Override
+    public long getId() {
+        return super.getId();
     }
+
+    @Override
+    public String getNome() {
+        return super.getNome();
+    }
+
+    @Override
+    public String getSenha() {
+        return super.getSenha();
+    }
+
+    public List<Aluno> getAlunos() {
+        return alunos;
+    }
+
+    public List<Curso> getCursos() {
+        return cursos;
+    }
+
     
+
+    public List<Professor> getProfessores() {
+        return professores;
+    }
 }

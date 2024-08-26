@@ -3,11 +3,10 @@ import java.util.List;
 
 public class Aluno extends Usuario {
     private List<Matricula> matriculas;
-    private final int PERMISSAO = 1;
     private Curso curso;
 
     public Aluno(String nome, String senha, Curso curso) {
-        super.Cadastrar(nome, senha);
+        super.Cadastrar(nome, senha,1);
         this.curso = curso;
         this.curso = curso;
         matriculas = new LinkedList<Matricula>();
@@ -61,8 +60,10 @@ public class Aluno extends Usuario {
         
     }
 
-    public int getPermisssao() {
-        return PERMISSAO;
+   
+
+    public List<Matricula> getMatriculas() {
+        return matriculas;
     }
     
 }
