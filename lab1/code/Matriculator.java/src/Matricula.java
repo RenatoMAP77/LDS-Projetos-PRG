@@ -1,5 +1,7 @@
-public class Matricula {
+import java.io.Serializable;
 
+public class Matricula implements Serializable{
+    Long serialVersionUID = 7L;
     private boolean obrigatoriedade;
     private Disciplina disciplina ;
     private Aluno aluno;

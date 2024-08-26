@@ -1,4 +1,7 @@
-public abstract class Usuario {
+import java.io.Serializable;
+
+public abstract class Usuario implements Serializable {
+    Long serialVersionUID = 1L;
     private static  long id = 0;
     private String senha;
     private String nome;

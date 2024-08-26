@@ -1,6 +1,9 @@
+import java.io.Serializable;
 import java.util.*;
 
-public class Secretaria extends Usuario {
+public class Secretaria extends Usuario implements Serializable {
+    Long serialVersionUID = 4L;
+    
     private final int PERMISSAO = 3;
     private List<Curso> cursos;
     private List<Professor> professores;

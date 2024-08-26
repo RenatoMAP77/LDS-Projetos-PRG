@@ -1,8 +1,10 @@
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Curso {
+public class Curso implements Serializable {
+    Long serialVersionUID = 5L;
     private String nome;
     private List<Disciplina> disciplinas;
     private static LocalDate dataLimiteMatricula = LocalDate.of(2024, 8, 31);

@@ -1,8 +1,9 @@
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Disciplina {
-
+public class Disciplina implements Serializable {
+    Long serialVersionUID = 6L;
     private String nome;
     private boolean estaAtiva;
     private boolean matriculasAbertas;

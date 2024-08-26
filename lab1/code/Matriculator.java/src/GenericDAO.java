@@ -10,7 +10,7 @@ public class GenericDAO<T> {
 
     public GenericDAO(String arquivo) {
         this.objetos = new ArrayList<>();
-        arquivo = arquivo + ".dat";
+        this.arquivo = arquivo + ".dat";
         carregarDados();
     }
 

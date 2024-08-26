@@ -1,7 +1,8 @@
 import java.util.LinkedList;
 import java.util.List;
 
-public class Aluno extends Usuario {
+public class Aluno extends Usuario  {
+    Long serialVersionUID = 2L;
     private List<Matricula> matriculas;
     private final int PERMISSAO = 1;
     private Curso curso;
@@ -57,7 +58,7 @@ public class Aluno extends Usuario {
             for (Matricula matricula : matriculas) {
                 matriculasString += matricula.getDisciplina().getNome() + " ";
             }
-        return "Você está matriculado em:  "+ matriculas.size()+ "disciplinas" +"\n" + matriculasString;
+        return "Você está matriculado em:  "+ matriculas.size()+ " disciplinas" +"\n" + matriculasString;
         
     }
 

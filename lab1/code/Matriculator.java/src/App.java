@@ -52,6 +52,7 @@ public class App {
         SAVE.add(secretaria);
         dao.atualizarDados(SAVE);
 
+        sc.close();
           
     }
 
@@ -65,10 +66,13 @@ public class App {
         System.out.println("Digite a senha:");
         String senha = sc.nextLine();
         Aluno aluno = autenticarAluno(id, senha);
-        if (!aluno.equals(null)) {
+        if (aluno != null) {
             System.out.println("Bem vindo " + aluno.getNome());
             int opcao = 0;
             do {
+                 System.out.println("--------------------");
+                 System.out.println("|       ALUNO      |");
+                 System.out.println("--------------------");
             System.out.println("O que deseja fazer?\n");
             System.out.println("1 - Adicionar matrícula");
             System.out.println("2 - Remover matrícula");
@@ -145,14 +149,17 @@ public class App {
                     int id = Integer.parseInt(sc.nextLine());
                     System.out.println("Digite a senha:");
                     String senha = sc.nextLine();
-                    boolean autenticado = autenticarSecretaria(id, senha);
+                    Boolean autenticado = autenticarSecretaria(id, senha);
     
                     if (!autenticado) {
-                        throw new RuntimeException("Usuário não encontrado");
+                        System.out.println("Usuário não encontrado");
                     }
                     System.out.println("Bem vindo " );
                     int opcao = 0;
                     do {
+                        System.out.println("--------------------");
+                        System.out.println("|    SECRETARIA    |");
+                        System.out.println("--------------------");
                     System.out.println("O que deseja fazer?\n");
                     System.out.println("1 - Adicionar curso");
                     System.out.println("2 - Gerar currículo");
@@ -163,6 +170,7 @@ public class App {
                     System.out.println("7 - Adicionar Aluno");
                     System.out.println("8 - Remover Aluno");
                     System.out.println("9 - Mudar professor de disciplina");
+                    System.out.println("10 - Sair");
                     opcao = Integer.parseInt(sc.nextLine());
                     
                     switch (opcao) {
@@ -348,19 +356,23 @@ public class App {
         System.out.println("Digite a senha:");
         String senha = sc.nextLine();
         Professor prof = autenticarProfessor(id, senha);
-        if (prof.equals(null)) {
+        if (prof == null) {
             System.out.println("Usuário não encontrado");
             return;
         }
         System.out.println("Bem vindo " + prof.getNome());
-    do {
+    int opcaoProfessor = 0;
+    do {    
+        System.out.println("--------------------");
+        System.out.println("|    PROFESSOR    |");
+        System.out.println("--------------------");
         System.out.println("O que deseja fazer?\n");
         System.out.println("1 - Listar alunos");
         System.out.println("2 - Listar disciplinas");
         System.out.println("3 - Sair");
         
-        int opcaoProfessor = Integer.parseInt(sc.nextLine());
-
+        opcaoProfessor = Integer.parseInt(sc.nextLine());
+    
         switch (opcaoProfessor) {
             case 1:
                 System.out.println("Digite o nome da disciplina:");
@@ -384,8 +396,8 @@ public class App {
         
             default:
                 break;
-            }while (opcaoProfessor != 3);
-        }
+            }
+        } while(opcaoProfessor != 3);
         
         
 
@@ -393,10 +405,13 @@ public class App {
     }
 
     public static Aluno autenticarAluno(int id, String senha) {
+
         return secretaria.getAlunos().stream()
                 .filter(a -> a.getId() == id && a.getSenha().equals(senha))
                 .findFirst()
                 .orElse(null);
+
+
     }
 
     public static Professor autenticarProfessor(int id, String senha) {
