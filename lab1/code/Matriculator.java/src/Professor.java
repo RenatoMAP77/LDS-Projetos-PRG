@@ -1,12 +1,12 @@
-import java.util.*;
+import java.util.List;
 
 public class Professor extends Usuario {
-    
+    private final int PERMISSAO = 2;
     private List<Disciplina> disciplinas;
 
     public Professor(String nome, String senha) {
-        super.Cadastrar(nome, senha, 2);
-        disciplinas = new ArrayList<>();
+        super.Cadastrar(nome, senha);
+        disciplinas = null;
     }
 
     public void listarAlunos(String nomeDisciplina) {
@@ -36,7 +36,9 @@ public class Professor extends Usuario {
     }
     }
 
-  
+    public int getPermisssao() {
+        return PERMISSAO;
+    }
     public List<Disciplina> getDisciplinas() {
         return disciplinas;
     }

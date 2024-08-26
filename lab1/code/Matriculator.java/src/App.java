@@ -96,14 +96,14 @@ public class App {
                 System.out.println("|    SECRETARIA    |");
                 System.out.println("--------------------");
 
-                System.out.println("Digite o id:");
-                int id = Integer.parseInt(sc.nextLine());
-                System.out.println("Digite a senha:");
-                String senha = sc.nextLine();
-                Aluno aluno = autenticarAluno(id, senha);
+                // System.out.println("Digite o id:");
+                // int id = Integer.parseInt(sc.nextLine());
+                // System.out.println("Digite a senha:");
+                // String senha = sc.nextLine();
+                // Aluno aluno = autenticarAluno(id, senha);
 
-                System.out.println("1 - Adicionar curso");
-                System.out.println("2 - Gerar currículo");
+                // System.out.println("1 - Adicionar curso");
+                // System.out.println("2 - Gerar currículo");
 
                 // gerarCurriculo()
 

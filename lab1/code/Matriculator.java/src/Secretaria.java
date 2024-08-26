@@ -1,12 +1,12 @@
 import java.util.*;
 
 public class Secretaria extends Usuario {
+    private final int PERMISSAO = 3;
     private List<Curso> cursos;
     private List<Professor> professores;
     private List<Aluno> alunos;
 
     public Secretaria() {
-        super.Cadastrar("secretaria","senha123",3);
         this.cursos = new ArrayList<>();
         this.professores = new ArrayList<>();
         this.alunos = new ArrayList<>();
@@ -24,7 +24,9 @@ public class Secretaria extends Usuario {
         }
     }
 
-
+    public int getPermisssao() {
+        return PERMISSAO;
+    }
 
     @Override
     public long getId() {
@@ -49,7 +51,9 @@ public class Secretaria extends Usuario {
         return cursos;
     }
 
-    
+    public int getPERMISSAO() {
+        return PERMISSAO;
+    }
 
     public List<Professor> getProfessores() {
         return professores;
