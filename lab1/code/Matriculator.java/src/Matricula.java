@@ -11,11 +11,14 @@ public class Matricula {
         this.obrigatoriedade = obrigatoriedade;
     }
 
-    public void removerMatricula( Disciplina disciplina){
-        //...
+    //metodo para o garbage colector apagar este objeto
+    public void removerMatricula( ){
+        disciplina.removerAluno(this);
+        this.aluno = null;
+        disciplina = null;
     }
 
-    public Object getDisciplina() {
+    public Disciplina getDisciplina() {
         return disciplina;
     }
 

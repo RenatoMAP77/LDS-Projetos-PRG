@@ -12,15 +12,16 @@ public class Aluno extends Usuario {
         matriculas = new LinkedList<Matricula>();
     }
 
+    // se a disciplina não estiver no curso, verificar se ja tem mais de 2 materias
+    // nao obrigatoria abertas
+    // instanciar uma nova matricula e adiciona-la
     public void adicionarMatricula(Disciplina disciplina) {
-        // se a disciplina não estiver no curso, verificar se ja tem mais de 2 materias
-        // nao obrigatoria abertas
-        // instanciar uma nova matricula e adiciona-la
         if (this.matriculas != null) {
+            boolean matriculaObrigatoria = true;
             if (matriculas.size() < 6) {
                 if (!curso.getDisciplinas().contains(disciplina)) {
                     int cont = 0;
-
+                    matriculaObrigatoria = false;
                     for (Matricula matricula : matriculas) {
                         if (!matricula.isObrigatoria()) {
                             cont++;
@@ -36,18 +37,27 @@ public class Aluno extends Usuario {
             } else
                 throw new RuntimeException("Você não pode se matricular em mais de 6 disciplinas");
 
-            Matricula matricula = new Matricula(disciplina);
+            Matricula matricula = new Matricula(disciplina,this, matriculaObrigatoria);
             matriculas.add(matricula);
         }
     }
     
     public void removerMatricula(Matricula matricula) {
-        // a adicionar
+        matricula.removerMatricula();
+        matriculas.remove(matricula);
     }
 
     public String calcularMatriculas() {
-        // a adicionar
-        return "Você está matriculado em:  ";
+        if (matriculas.size() == 0) {
+            return "Você não está matriculado em nenhuma disciplina";
+            
+        }
+        String matriculasString = "";
+            for (Matricula matricula : matriculas) {
+                matriculasString += matricula.getDisciplina().getNome() + " ";
+            }
+        return "Você está matriculado em:  "+ matriculas.size()+ "disciplinas" +"\n" + matriculasString;
+        
     }
     
 }
