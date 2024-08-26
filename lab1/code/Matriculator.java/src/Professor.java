@@ -1,7 +1,7 @@
 import java.util.List;
 
 public class Professor extends Usuario {
-    private final int permisssao = 2;
+    private final int PERMISSAO = 2;
     private List<Disciplina> disciplinas;
 
     public void listarAlunos(String nomeDisciplina) {
@@ -32,7 +32,7 @@ public class Professor extends Usuario {
     }
 
     public int getPermisssao() {
-        return permisssao;
+        return PERMISSAO;
     }
     public List<Disciplina> getDisciplinas() {
         return disciplinas;

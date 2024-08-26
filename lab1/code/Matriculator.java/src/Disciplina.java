@@ -19,6 +19,7 @@ public class Disciplina {
             return false;
         }
 
+
         return true;
     }
 
@@ -38,7 +39,6 @@ public class Disciplina {
 
     public void removerAluno(Matricula aluno) {
         matriculados.remove(aluno);
-
     }
 
     public void mudarProfessor(Professor novoProfessor) {
@@ -63,17 +63,21 @@ public class Disciplina {
         matriculados = new LinkedList<Matricula>();
     }
 
+
     public String getNome() {
         return nome;
     }
+
 
     public List<Matricula> getMatriculados() {
         return matriculados;
     }
 
+
     public void setNome(String nome) {
         this.nome = nome;
     }
+
 
     public void setEstaAtiva(boolean estaAtiva) {
         this.estaAtiva = estaAtiva;

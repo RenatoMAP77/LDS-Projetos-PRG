@@ -6,6 +6,7 @@ public class Secretaria extends Usuario {
     private List<Professor> professores;
     private List<Aluno> alunos;
 
+
     public void gerarCurriculo() {
         if (cursos == null || cursos.size() == 0) {
             throw new RuntimeException("Não há cursos cadastrados");

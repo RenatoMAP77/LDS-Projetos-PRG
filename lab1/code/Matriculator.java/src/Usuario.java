@@ -3,26 +3,28 @@ public abstract class Usuario {
     private String senha;
     private String nome;
 
-
-
-
-   public void  Cadastrar( String senha, String nome){
-        this.senha = senha;
+    public void Cadastrar(String senha, String nome) {
         this.nome = nome;
-        id = id + 1; 
+        this.senha = senha;
+        id = id + 1;
     }
 
-   
     public String getNome() {
         return nome;
     }
+
     public String getSenha() {
         return senha;
     }
-    
+
+    public long getId() {
+        return id;
+    }
+
     public void setNome(String nome) {
         this.nome = nome;
     }
+
     public void setSenha(String senha) {
         this.senha = senha;
     }

@@ -9,6 +9,7 @@ public class Aluno extends Usuario {
     public Aluno(String nome, String senha, Curso curso) {
         super.Cadastrar(nome, senha);
         this.curso = curso;
+        this.curso = curso;
         matriculas = new LinkedList<Matricula>();
     }
 
@@ -58,6 +59,10 @@ public class Aluno extends Usuario {
             }
         return "Você está matriculado em:  "+ matriculas.size()+ "disciplinas" +"\n" + matriculasString;
         
+    }
+
+    public int getPermisssao() {
+        return PERMISSAO;
     }
     
 }
