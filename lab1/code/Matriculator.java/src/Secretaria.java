@@ -2,18 +2,21 @@ import java.io.Serializable;
 import java.util.*;
 
 public class Secretaria extends Usuario implements Serializable {
-    Long serialVersionUID = 4L;
+    private static final long serialVersionUID = 4L;
     
     private final int PERMISSAO = 3;
     private List<Curso> cursos;
     private List<Professor> professores;
     private List<Aluno> alunos;
 
-    public Secretaria() {
+    public Secretaria(String nome,String senha) {
+        super.Cadastrar(nome, senha);;
         this.cursos = new ArrayList<>();
         this.professores = new ArrayList<>();
         this.alunos = new ArrayList<>();
     }
+
+    
 
     public void gerarCurriculo() {
         if (cursos == null || cursos.size() == 0) {
@@ -73,6 +76,13 @@ public class Secretaria extends Usuario implements Serializable {
     public List<Professor> getProfessores() {
         return professores;
     }
+
+    @Override
+    public void setId(long id) {
+        super.setId(id);
+    }
+
+    
 }
 
 

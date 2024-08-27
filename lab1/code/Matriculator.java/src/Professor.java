@@ -1,8 +1,8 @@
-import java.io.Serializable;
+
 import java.util.List;
 
 public class Professor extends Usuario  {
-    Long serialVersionUID = 3L;
+    private static final long serialVersionUID = 3L;
     private final int PERMISSAO = 2;
     private List<Disciplina> disciplinas;
 

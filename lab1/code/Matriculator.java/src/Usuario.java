@@ -1,15 +1,17 @@
 import java.io.Serializable;
 
 public abstract class Usuario implements Serializable {
-    Long serialVersionUID = 1L;
-    private static  long id = 0;
+    private static final long serialVersionUID = 1L;
+    private static long currentId = 0;
+    private long id;
     private String senha;
     private String nome;
 
     public void Cadastrar(String nome, String senha) {
         this.nome = nome;
         this.senha = senha;
-        id = id + 1;
+        currentId++;
+        id = currentId;
     }
 
     public String getNome() {
@@ -23,6 +25,9 @@ public abstract class Usuario implements Serializable {
     public long getId() {
         return id;
     }
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public void setNome(String nome) {
         this.nome = nome;
@@ -31,4 +36,5 @@ public abstract class Usuario implements Serializable {
     public void setSenha(String senha) {
         this.senha = senha;
     }
+    
 }

@@ -5,12 +5,20 @@ import java.util.ArrayList;
 
 public class App {
 
-    static GenericDAO<Secretaria> dao = new GenericDAO<>("dados");
-    static Secretaria secretaria = dao.getAll().stream().findFirst().orElse(new Secretaria());
+    static GenericDAO<Secretaria> dao;
+    static Secretaria secretaria;
 
     public static void main(String[] args) throws Exception {
         Scanner sc = new Scanner(System.in);
         // Adicionar populador caso nao tenha
+        dao = new GenericDAO<>("dados");
+         List<Secretaria> lista = dao.getAll();
+             if (!lista.isEmpty()) {
+              secretaria = lista.get(0);
+            }else {
+              secretaria = new Secretaria("admin","admin");
+              dao.add(secretaria);
+    }
 
         int opcao = 0;
         do {
@@ -150,9 +158,11 @@ public class App {
                     System.out.println("Digite a senha:");
                     String senha = sc.nextLine();
                     Boolean autenticado = autenticarSecretaria(id, senha);
-    
+                    
+                
                     if (!autenticado) {
-                        System.out.println("Usuário não encontrado");
+                        System.out.println("Senha ou id incorretos");
+                        return;
                     }
                     System.out.println("Bem vindo " );
                     int opcao = 0;
