@@ -16,8 +16,10 @@ public class App {
              if (!lista.isEmpty()) {
               secretaria = lista.get(0);
             }else {
-              secretaria = new Secretaria("admin","admin");
-              dao.add(secretaria);
+              Populador populador = new Populador();
+                populador.popular();
+                lista = dao.getAll();
+                secretaria = lista.get(0);
     }
 
         int opcao = 0;
