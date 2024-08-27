@@ -9,6 +9,9 @@ public class App {
     static Secretaria secretaria;
 
     public static void main(String[] args) throws Exception {
+        try {
+            
+        
         Scanner sc = new Scanner(System.in);
         // Adicionar populador caso nao tenha
         dao = new GenericDAO<>("dados");
@@ -26,6 +29,7 @@ public class App {
             System.out.println("--------------------");
             System.out.println("|  MENU PRINCIPAL  |");
             System.out.println("--------------------");
+            Thread.sleep(1000);
     
             System.out.println("1 - Acessar área do Aluno");
             System.out.println("2 - Acessar Secretaria");
@@ -62,14 +66,18 @@ public class App {
         dao.atualizarDados(SAVE);
 
         sc.close();
+    } catch (Exception e) {
+        System.out.println("Erro: " + e.getMessage());
+    }
           
     }
 
-    public static void menuAluno(Scanner sc) {
+    public static void menuAluno(Scanner sc) throws Exception {
         System.out.println("--------------------");
         System.out.println("|       ALUNO      |");
         System.out.println("--------------------");
-
+        
+        Thread.sleep(1000);
         System.out.println("Digite o id:");
         int id = Integer.parseInt(sc.nextLine());
         System.out.println("Digite a senha:");
@@ -82,12 +90,14 @@ public class App {
                  System.out.println("--------------------");
                  System.out.println("|       ALUNO      |");
                  System.out.println("--------------------");
+                Thread.sleep(1000);
             System.out.println("O que deseja fazer?\n");
             System.out.println("1 - Adicionar matrícula");
             System.out.println("2 - Remover matrícula");
             System.out.println("3 - Calcular matrículas");
             System.out.println("4 - Sair");
                  opcao = Integer.parseInt(sc.nextLine());
+
 
             switch (opcao) {
                 case 1:
@@ -97,7 +107,9 @@ public class App {
                     if (disciplina != null) {
                         aluno.adicionarMatricula(disciplina);
                     } else {
+                    
                         System.out.println("Disciplina não encontrada");
+                        Thread.sleep(1000);
                     }
                     break;
 
@@ -110,10 +122,14 @@ public class App {
                         if (matricula != null) {
                             aluno.removerMatricula(matricula);
                         } else {
+                            
                             System.out.println("Matrícula não encontrada");
+                            Thread.sleep(1000);
                         }
                     } else {
+                        
                         System.out.println("Disciplina não encontrada");
+                        Thread.sleep(1000);
                     }
                     break;
 
@@ -124,6 +140,7 @@ public class App {
                 default:
                 if (opcao!=4) {
                     System.out.println("Opção inválida");
+                    Thread.sleep(1000);
                 }
                     break;
             }
@@ -132,10 +149,11 @@ public class App {
 
         } else {
             System.out.println("Usuário não encontrado");
+            Thread.sleep(1000);
         }
     }
 
-    public static void menuSecretaria(Scanner sc){
+    public static void menuSecretaria(Scanner sc) throws Exception {
                     System.out.println("--------------------");
                     System.out.println("|    SECRETARIA    |");
                     System.out.println("--------------------");
@@ -152,6 +170,7 @@ public class App {
                 
                     if (!autenticado) {
                         System.out.println("Senha ou id incorretos");
+                        Thread.sleep(1000);
                         return;
                     }
                     System.out.println("Bem vindo " );
@@ -160,6 +179,7 @@ public class App {
                         System.out.println("--------------------");
                         System.out.println("|    SECRETARIA    |");
                         System.out.println("--------------------");
+                        Thread.sleep(1000);
                     System.out.println("O que deseja fazer?\n");
                     System.out.println("1 - Adicionar curso");
                     System.out.println("2 - Gerar currículo");
@@ -197,6 +217,7 @@ public class App {
                             
                             if (cursoAtual == null) {
                                 System.out.println("Curso não encontrado");
+                                Thread.sleep(1000);
                                 break;
                             }
                             Professor professor = procurarProfessor(nomeProfessor);
@@ -207,18 +228,22 @@ public class App {
                                 
                             } else {
                                 System.out.println("Professor não encontrado");
+                                Thread.sleep(1000);
                             }
                             
                             break;
 
                         case 4:
                         System.out.println("Digite o nome da disciplina:");
+                        Thread.sleep(1000);
                         nomeDisciplina = sc.nextLine();
                         System.out.println("Digite o nome do curso:");
+                        Thread.sleep(1000);
                         nomeCursoX = sc.nextLine();
                             Curso cursoAtuaX = procurarCurso(nomeCursoX);
                             if (cursoAtuaX == null) {
                                 System.out.println("Curso não encontrado");
+                                Thread.sleep(1000);
                                 break;
                             }
 
@@ -228,6 +253,7 @@ public class App {
                                 cursoAtuaX.removerDisciplina(disciplina);
                             } else {
                                 System.out.println("Disciplina não encontrada");
+                                Thread.sleep(1000);
                             }
 
                             break;
@@ -251,6 +277,7 @@ public class App {
                                 secretaria.getProfessores().remove(professorX);
                             } else {
                                 System.out.println("Professor não encontrado");
+                                Thread.sleep(1000);
                             }
                             break; 
 
@@ -267,10 +294,12 @@ public class App {
                             
                             if (alunoX != null) {
                                 System.out.println("Aluno já cadastrado");
+                                Thread.sleep(1000);
                                 break;
                             }
                             if (cursoAlunoX == null) {
                                 System.out.println("Curso não encontrado");
+                                Thread.sleep(1000);
                                 break;
                             }
 
@@ -287,6 +316,7 @@ public class App {
                                 secretaria.getAlunos().remove(alunoY);
                             } else {
                                 System.out.println("Aluno não encontrado");
+                                Thread.sleep(1000);
                             }
                             
                             break;
@@ -305,6 +335,7 @@ public class App {
                                 disciplina1.setProfessor(professor1);
                             } else {
                                 System.out.println("Disciplina ou professor não encontrado");
+                                Thread.sleep(1000);
                             }
                             break; 
 
@@ -312,6 +343,7 @@ public class App {
                         default:
                         if(opcao!=10)
                         System.out.println("Opção inválida");
+                        Thread.sleep(1000);
                             break;
                         }
                     }
@@ -319,7 +351,7 @@ public class App {
                 
     }
 
-    public static void menuProfessor(Scanner sc){
+    public static void menuProfessor(Scanner sc)throws Exception {
         
         System.out.println("--------------------");
         System.out.println("|    PROFESSOR    |");
@@ -361,6 +393,7 @@ public class App {
                     disciplina.listarAlunos();
                 } else {
                     System.out.println("Disciplina não encontrada");
+                    Thread.sleep(1000);
                 }
         
                 
