@@ -16,10 +16,9 @@ public class App {
              if (!lista.isEmpty()) {
               secretaria = lista.get(0);
             }else {
-              Populador populador = new Populador();
-                populador.popular();
-                lista = dao.getAll();
-                secretaria = lista.get(0);
+             secretaria = new Secretaria("1", "admin");
+                dao.add(secretaria);
+
     }
 
         int opcao = 0;
@@ -94,11 +93,7 @@ public class App {
                 case 1:
                     System.out.println("Digite o nome da disciplina:");
                     String nomeDisciplina = sc.nextLine();
-                    Disciplina disciplina = secretaria.getCursos().stream()
-                            .flatMap(c -> c.getDisciplinas().stream())
-                            .filter(d -> d.getNome().equals(nomeDisciplina))
-                            .findFirst()
-                            .orElse(null);
+                    Disciplina disciplina = procurarDisciplina(nomeDisciplina); 
                     if (disciplina != null) {
                         aluno.adicionarMatricula(disciplina);
                     } else {
@@ -109,16 +104,9 @@ public class App {
                 case 2:
                     System.out.println("Digite o nome da disciplina:");
                     nomeDisciplina = sc.nextLine();
-                   Disciplina disciplinaX = secretaria.getCursos().stream()
-                            .flatMap(c -> c.getDisciplinas().stream())
-                            .filter(d -> d.getNome().equals(nomeDisciplina))
-                            .findFirst()
-                            .orElse(null);
+                   Disciplina disciplinaX = procurarDisciplina(nomeDisciplina);
                     if (disciplinaX != null) {
-                        Matricula matricula = aluno.getMatriculas().stream()
-                                .filter(m -> m.getDisciplina().equals(disciplinaX))
-                                .findFirst()
-                                .orElse(null);
+                        Matricula matricula = procurMatricula(nomeDisciplina);
                         if (matricula != null) {
                             aluno.removerMatricula(matricula);
                         } else {
@@ -204,18 +192,14 @@ public class App {
                             String nomeProfessor = sc.nextLine();
                             System.out.println("Digite o nome do curso que será relacionada a disciplina:");
                             String nomeCursoX = sc.nextLine();
-                            Curso cursoAtual = secretaria.getCursos().stream()
-                                    .filter(c -> c.getNome().equals(nomeCursoX))
-                                    .findFirst()
-                                    .orElse(null);
+
+                            Curso cursoAtual = procurarCurso(nomeCursoX);
+                            
                             if (cursoAtual == null) {
                                 System.out.println("Curso não encontrado");
                                 break;
                             }
-                            Professor professor = secretaria.getProfessores().stream()
-                                    .filter(p -> p.getNome().equals(nomeProfessor))
-                                    .findFirst()
-                                    .orElse(null);
+                            Professor professor = procurarProfessor(nomeProfessor);
                             if (professor != null) {
                                 Disciplina disciplina = new Disciplina(nomeDisciplina, professor);
                                 cursoAtual.adcionarDisciplina(disciplina);
@@ -232,20 +216,13 @@ public class App {
                         nomeDisciplina = sc.nextLine();
                         System.out.println("Digite o nome do curso:");
                         nomeCursoX = sc.nextLine();
-                            Curso cursoAtuaX = secretaria.getCursos().stream()
-                                    .filter(c -> c.getNome().equals(nomeCursoX))
-                                    .findFirst()
-                                    .orElse(null);
+                            Curso cursoAtuaX = procurarCurso(nomeCursoX);
                             if (cursoAtuaX == null) {
                                 System.out.println("Curso não encontrado");
                                 break;
                             }
 
-                            Disciplina disciplina = secretaria.getCursos().stream()
-                                    .flatMap(c -> c.getDisciplinas().stream())
-                                    .filter(d -> d.getNome().equals(nomeDisciplina))
-                                    .findFirst()
-                                    .orElse(null);
+                            Disciplina disciplina = procurarDisciplina(nomeDisciplina);
                             
                             if (disciplina != null) {
                                 cursoAtuaX.removerDisciplina(disciplina);
@@ -267,10 +244,9 @@ public class App {
                         case 6:
                             System.out.println("Digite o nome do professor:");
                             String nomeProfessor2 = sc.nextLine();
-                            Professor professorX = secretaria.getProfessores().stream()
-                                    .filter(p -> p.getNome().equals(nomeProfessor2))
-                                    .findFirst()
-                                    .orElse(null);
+
+                            Professor professorX = procurarProfessor(nomeProfessor2);
+
                             if (professorX != null) {
                                 secretaria.getProfessores().remove(professorX);
                             } else {
@@ -286,14 +262,8 @@ public class App {
                             System.out.println("Digite o curso do aluno:");
                             String cursoAluno = sc.nextLine();
                             
-                            Aluno alunoX = secretaria.getAlunos().stream()
-                                    .filter(a -> a.getNome().equals(nomeAluno))
-                                    .findFirst()
-                                    .orElse(null);
-                            Curso cursoAlunoX = secretaria.getCursos().stream()
-                                    .filter(c -> c.getNome().equals(cursoAluno))
-                                    .findFirst()
-                                    .orElse(null);  
+                            Aluno alunoX = procurarAluno(nomeAluno);
+                            Curso cursoAlunoX = procurarCurso(cursoAluno);
                             
                             if (alunoX != null) {
                                 System.out.println("Aluno já cadastrado");
@@ -312,10 +282,7 @@ public class App {
                             System.out.println("Digite o nome do aluno:");
                             String nomeAluno1 = sc.nextLine();
 
-                            Aluno alunoY = secretaria.getAlunos().stream()
-                                    .filter(a -> a.getNome().equals(nomeAluno1))
-                                    .findFirst()
-                                    .orElse(null);
+                            Aluno alunoY = procurarAluno(nomeAluno1);
                             if (alunoY != null) {
                                 secretaria.getAlunos().remove(alunoY);
                             } else {
@@ -329,15 +296,11 @@ public class App {
                             String nomeDisciplina1 = sc.nextLine();
                             System.out.println("Digite o nome do professor:");
                             String nomeProfessor3 = sc.nextLine();
-                            Disciplina disciplina1 = secretaria.getCursos().stream()
-                                    .flatMap(c -> c.getDisciplinas().stream())
-                                    .filter(d -> d.getNome().equals(nomeDisciplina1))
-                                    .findFirst()
-                                    .orElse(null);
-                            Professor professor1 = secretaria.getProfessores().stream()
-                                    .filter(p -> p.getNome().equals(nomeProfessor3))
-                                    .findFirst()
-                                    .orElse(null);
+
+                            Disciplina disciplina1 = procurarDisciplina(nomeDisciplina1);
+                            Professor professor1 = procurarProfessor(nomeProfessor3);
+
+
                             if (disciplina1 != null && professor1 != null) {
                                 disciplina1.setProfessor(professor1);
                             } else {
@@ -389,11 +352,11 @@ public class App {
             case 1:
                 System.out.println("Digite o nome da disciplina:");
                 String nomeDisciplina = sc.nextLine();
-                Disciplina disciplina = secretaria.getCursos().stream()
-                        .flatMap(c -> c.getDisciplinas().stream())
-                        .filter(d -> d.getNome().equals(nomeDisciplina))
-                        .findFirst()
-                        .orElse(null);
+
+
+                Disciplina disciplina = procurarDisciplina(nomeDisciplina);
+
+
                 if (disciplina != null) {
                     disciplina.listarAlunos();
                 } else {
@@ -435,7 +398,40 @@ public class App {
     
     public static boolean autenticarSecretaria(int id, String senha) {
         return secretaria.getId() == id && secretaria.getSenha().equals(senha);
-    } 
+    }
+    public static Curso procurarCurso(String nomeCurso){
+        return secretaria.getCursos().stream()
+        .filter(c -> c.getNome().equals(nomeCurso))
+        .findFirst()
+        .orElse(null);
+    }
+    public static Disciplina procurarDisciplina(String nomeDisciplina){
+        return secretaria.getCursos().stream()
+        .flatMap(c -> c.getDisciplinas().stream())
+        .filter(d -> d.getNome().equals(nomeDisciplina))
+        .findFirst()
+        .orElse(null);
+    }
+    public static Professor procurarProfessor(String nomeProfessor){
+        return secretaria.getProfessores().stream()
+        .filter(p -> p.getNome().equals(nomeProfessor))
+        .findFirst()
+        .orElse(null);
+    }
+    public static Aluno procurarAluno(String nomeAluno){
+        return secretaria.getAlunos().stream()
+        .filter(a -> a.getNome().equals(nomeAluno))
+        .findFirst()
+        .orElse(null);
+    }
+    public static Matricula procurMatricula(String nomeMatricula){
+        return secretaria.getAlunos().stream()
+        .flatMap(a -> a.getMatriculas().stream())
+        .filter(m -> m.getDisciplina().getNome().equals(nomeMatricula))
+        .findFirst()
+        .orElse(null);
+    }
+
     
 
     
