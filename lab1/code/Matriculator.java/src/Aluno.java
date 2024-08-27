@@ -19,6 +19,10 @@ public class Aluno extends Usuario  {
     // instanciar uma nova matricula e adiciona-la
     public void adicionarMatricula(Disciplina disciplina) {
         if (this.matriculas != null) {
+            if (disciplina.verificarDisponibilidade() == false) {
+                throw new RuntimeException("Disciplina lotada ou não disponível");
+                
+            }
             boolean matriculaObrigatoria = true;
             if (matriculas.size() < 6) {
                 if (!curso.getDisciplinas().contains(disciplina)) {
@@ -41,6 +45,7 @@ public class Aluno extends Usuario  {
 
             Matricula matricula = new Matricula(disciplina,this, matriculaObrigatoria);
             matriculas.add(matricula);
+            disciplina.adcionarAluno(matricula);
         }
     }
     

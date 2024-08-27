@@ -10,7 +10,7 @@ public class Secretaria extends Usuario implements Serializable {
     private List<Aluno> alunos;
 
     public Secretaria(String nome,String senha) {
-        super.Cadastrar(nome, senha);;
+        super.Cadastrar(nome, senha);
         this.cursos = new ArrayList<>();
         this.professores = new ArrayList<>();
         this.alunos = new ArrayList<>();

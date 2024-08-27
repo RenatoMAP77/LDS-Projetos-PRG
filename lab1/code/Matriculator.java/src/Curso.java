@@ -13,8 +13,9 @@ public class Curso implements Serializable {
 
         for (Disciplina disciplina : disciplinas) {
             if (dataLimiteMatricula.isBefore(LocalDate.now())) {
-                if (disciplina.getMatriculados().size() < 3) {
-                    disciplina.setMatriculasAbertas(false);
+                disciplina.setMatriculasAbertas(false);
+                if (disciplina.getMatriculados().size() < disciplina.getMIN_ALUNOS()) {
+                    disciplina.setEstaAtiva(false);
 
                 }
             }

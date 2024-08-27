@@ -12,10 +12,19 @@ public class Disciplina implements Serializable {
     private Professor professor;
     private List<Matricula> matriculados;
 
+    public Disciplina(String nome, Professor professor, boolean estaAtiva, boolean matriculasAbertas) {
+        this.nome = nome;
+        this.professor = professor;
+        this.estaAtiva = estaAtiva;
+        this.matriculasAbertas = matriculasAbertas;
+        matriculados = new LinkedList<Matricula>();
+        professor.adcionarDisciplina(this);
+    }
+
     public boolean verificarDisponibilidade() {
         if (!matriculasAbertas) {
             return false;
-        } else if (matriculados.size() < MIN_ALUNOS || matriculados.size() > MAX_ALUNOS || !estaAtiva) {
+        } else if ( matriculados.size() > MAX_ALUNOS || !estaAtiva) {
             return false;
         }
 
