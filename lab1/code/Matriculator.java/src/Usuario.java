@@ -8,10 +8,18 @@ public abstract class Usuario implements Serializable {
     private String nome;
 
     public void Cadastrar(String nome, String senha) {
-        this.nome = nome;
-        this.senha = senha;
-        currentId++;
-        id = currentId;
+        try {
+            if (nome == null || senha == null) {
+                throw new IllegalArgumentException("Nome e senha não podem ser nulos");
+            }
+            this.nome = nome;
+            this.senha = senha;
+            currentId++;
+            id = currentId;
+        } catch (Exception e) {
+            System.err.println("Erro ao cadastrar usuário: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     public String getNome() {
@@ -25,6 +33,7 @@ public abstract class Usuario implements Serializable {
     public long getId() {
         return id;
     }
+
     public void setId(long id) {
         this.id = id;
     }
@@ -36,5 +45,5 @@ public abstract class Usuario implements Serializable {
     public void setSenha(String senha) {
         this.senha = senha;
     }
-    
+
 }

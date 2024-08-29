@@ -1,7 +1,7 @@
 import java.util.LinkedList;
 import java.util.List;
 
-public class Aluno extends Usuario  {
+public class Aluno extends Usuario {
     Long serialVersionUID = 2L;
     private List<Matricula> matriculas;
     private final int PERMISSAO = 1;
@@ -18,53 +18,75 @@ public class Aluno extends Usuario  {
     // nao obrigatoria abertas
     // instanciar uma nova matricula e adiciona-la
     public void adicionarMatricula(Disciplina disciplina) {
-        if (this.matriculas != null) {
-            if (disciplina.verificarDisponibilidade() == false) {
-                throw new RuntimeException("Disciplina lotada ou não disponível");
-                
+        try {
+            if (disciplina == null) {
+                throw new IllegalArgumentException("Disciplina não pode ser nula");
             }
-            boolean matriculaObrigatoria = true;
-            if (matriculas.size() < 6) {
-                if (!curso.getDisciplinas().contains(disciplina)) {
-                    int cont = 0;
-                    matriculaObrigatoria = false;
-                    for (Matricula matricula : matriculas) {
-                        if (!matricula.isObrigatoria()) {
-                            cont++;
-                        }
-                    }
-                    if (cont < 2) {
-                        throw new RuntimeException(
-                                "Você não pode se matricular em mais de 2 disciplinas não obrigatórias");
-                    }
 
+            if (this.matriculas != null) {
+                if (!disciplina.verificarDisponibilidade()) {
+                    throw new RuntimeException("Disciplina lotada ou não disponível");
                 }
 
-            } else
-                throw new RuntimeException("Você não pode se matricular em mais de 6 disciplinas");
+                boolean matriculaObrigatoria = true;
+                if (matriculas.size() < 6) {
+                    if (!curso.getDisciplinas().contains(disciplina)) {
+                        int cont = 0;
+                        matriculaObrigatoria = false;
+                        for (Matricula matricula : matriculas) {
+                            if (!matricula.isObrigatoria()) {
+                                cont++;
+                            }
+                        }
+                        if (cont < 2) {
+                            throw new RuntimeException(
+                                    "Você não pode se matricular em mais de 2 disciplinas não obrigatórias");
+                        }
 
-            Matricula matricula = new Matricula(disciplina,this, matriculaObrigatoria);
-            matriculas.add(matricula);
-            disciplina.adcionarAluno(matricula);
+                    }
+
+                } else
+                    throw new RuntimeException("Você não pode se matricular em mais de 6 disciplinas");
+
+                Matricula matricula = new Matricula(disciplina, this, matriculaObrigatoria);
+                matriculas.add(matricula);
+                disciplina.adcionarAluno(matricula);
+            }
+        } catch (Exception e) {
+            System.err.println("Erro ao adicionar matrícula: " + e.getMessage());
+            e.printStackTrace();
         }
     }
-    
+
     public void removerMatricula(Matricula matricula) {
-        matricula.removerMatricula();
-        matriculas.remove(matricula);
+        try {
+            if (matricula == null) {
+                throw new IllegalArgumentException("Matrícula não pode ser nula");
+            }
+
+            matricula.removerMatricula();
+            matriculas.remove(matricula);
+        } catch (Exception e) {
+            System.err.println("Erro ao remover matrícula: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     public String calcularMatriculas() {
-        if (matriculas.size() == 0) {
-            return "Você não está matriculado em nenhuma disciplina";
-            
-        }
-        String matriculasString = "";
-            for (Matricula matricula : matriculas) {
-                matriculasString += matricula.getDisciplina().getNome() + " ";
+        try {
+            if (matriculas.isEmpty()) {
+                return "Você não está matriculado em nenhuma disciplina";
             }
-        return "Você está matriculado em:  "+ matriculas.size()+ " disciplinas" +"\n" + matriculasString;
-        
+            StringBuilder matriculasString = new StringBuilder();
+            for (Matricula matricula : matriculas) {
+                matriculasString.append(matricula.getDisciplina().getNome()).append(" ");
+            }
+            return "Você está matriculado em: " + matriculas.size() + " disciplinas\n" + matriculasString;
+        } catch (Exception e) {
+            System.err.println("Erro ao calcular matrículas: " + e.getMessage());
+            e.printStackTrace();
+            return "Erro ao calcular matrículas";
+        }
     }
 
     public int getPermisssao() {
@@ -74,5 +96,5 @@ public class Aluno extends Usuario  {
     public List<Matricula> getMatriculas() {
         return matriculas;
     }
-    
+
 }

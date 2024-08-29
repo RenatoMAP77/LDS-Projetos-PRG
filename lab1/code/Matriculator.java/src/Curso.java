@@ -10,32 +10,56 @@ public class Curso implements Serializable {
     private static LocalDate dataLimiteMatricula = LocalDate.of(2024, 8, 31);
 
     public void fecharMatricula() {
-
-        for (Disciplina disciplina : disciplinas) {
+        try{
             if (dataLimiteMatricula.isBefore(LocalDate.now())) {
-                disciplina.setMatriculasAbertas(false);
-                if (disciplina.getMatriculados().size() < disciplina.getMIN_ALUNOS()) {
-                    disciplina.setEstaAtiva(false);
-
+                for (Disciplina disciplina : disciplinas) {
+                    disciplina.setMatriculasAbertas(false);
+                    if (disciplina.getMatriculados().size() < disciplina.getMIN_ALUNOS()) {
+                        disciplina.setEstaAtiva(false);
+                    }
                 }
             }
-
+        } catch (Exception e) {
+            System.err.println("Erro ao fechar matrícula: " + e.getMessage());
+            e.printStackTrace();
         }
-
     }
 
     public Curso(String nome) {
-        this.nome = nome;
-        disciplinas = new LinkedList<Disciplina>();
+        try{
+            if (nome == null) {
+                throw new IllegalArgumentException("Nome não pode ser nulo");
+            }
+            this.nome = nome;
+            disciplinas = new LinkedList<Disciplina>();
+        } catch (Exception e) {
+            System.err.println("Erro ao criar curso: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     public void adcionarDisciplina(Disciplina disciplina) {
-
-        disciplinas.add(disciplina);
+        try{
+            if (disciplina == null) {
+                throw new IllegalArgumentException("Disciplina não pode ser nula");
+            }
+            disciplinas.add(disciplina);
+        } catch (Exception e) {
+            System.err.println("Erro ao adicionar disciplina: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     public void removerDisciplina(Disciplina disciplina) {
-        disciplinas.remove(disciplina);
+        try{
+            if (disciplina == null) {
+                throw new IllegalArgumentException("Disciplina não pode ser nula");
+            }
+            disciplinas.remove(disciplina);
+        } catch (Exception e) {
+            System.err.println("Erro ao remover disciplina: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     public String getNome() {

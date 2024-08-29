@@ -13,80 +13,140 @@ public class Disciplina implements Serializable {
     private List<Matricula> matriculados;
 
     public Disciplina(String nome, Professor professor, boolean estaAtiva, boolean matriculasAbertas) {
-        this.nome = nome;
-        this.professor = professor;
-        this.estaAtiva = estaAtiva;
-        this.matriculasAbertas = matriculasAbertas;
-        matriculados = new LinkedList<Matricula>();
-        professor.adcionarDisciplina(this);
+        try {
+            if (nome == null || professor == null) {
+                throw new IllegalArgumentException("Nome e professor não podem ser nulos");
+            }
+            this.nome = nome;
+            this.professor = professor;
+            this.estaAtiva = estaAtiva;
+            this.matriculasAbertas = matriculasAbertas;
+            matriculados = new LinkedList<>();
+            professor.adcionarDisciplina(this);
+        } catch (Exception e) {
+            System.err.println("Erro ao criar disciplina: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     public boolean verificarDisponibilidade() {
-        if (!matriculasAbertas) {
-            return false;
-        } else if ( matriculados.size() > MAX_ALUNOS || !estaAtiva) {
+        try {
+            if (!matriculasAbertas || !estaAtiva || matriculados.size() > MAX_ALUNOS) {
+                return false;
+            }
+            return true;
+        } catch (Exception e) {
+            System.err.println("Erro ao verificar disponibilidade: " + e.getMessage());
+            e.printStackTrace();
             return false;
         }
-
-
-        return true;
     }
 
     private void verificaTamanho() {
-        if ( matriculados.size() > MAX_ALUNOS) {
-            setMatriculasAbertas(false);
+        try {
+            if (matriculados.size() > MAX_ALUNOS) {
+                setMatriculasAbertas(false);
+            }
+        } catch (Exception e) {
+            System.err.println("Erro ao verificar tamanho: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
     public void adcionarAluno(Matricula matricula) {
-        if (verificarDisponibilidade()) {
-            matriculados.add(matricula);
-            verificaTamanho();
-        } else
-            throw new RuntimeException("Não foi possível adicionar o aluno");
+        try {
+            if (matricula == null) {
+                throw new IllegalArgumentException("Matrícula não pode ser nula");
+            }
+            if (verificarDisponibilidade()) {
+                matriculados.add(matricula);
+                verificaTamanho();
+            } else {
+                throw new RuntimeException("Não foi possível adicionar o aluno");
+            }
+        } catch (Exception e) {
+            System.err.println("Erro ao adicionar aluno: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     public void removerAluno(Matricula aluno) {
-        matriculados.remove(aluno);
+        try {
+            if (aluno == null) {
+                throw new IllegalArgumentException("Matrícula não pode ser nula");
+            }
+            matriculados.remove(aluno);
+        } catch (Exception e) {
+            System.err.println("Erro ao remover aluno: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     public void mudarProfessor(Professor novoProfessor) {
-        this.professor.removerDisciplina(this);
-        this.professor = novoProfessor;
+        try {
+            if (novoProfessor == null) {
+                throw new IllegalArgumentException("Novo professor não pode ser nulo");
+            }
+            this.professor.removerDisciplina(this);
+            this.professor = novoProfessor;
+        } catch (Exception e) {
+            System.err.println("Erro ao mudar professor: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     public void listarAlunos() {
-        if (matriculados.size() == 0) {
-            System.out.println("Não há alunos matriculados");
-        }
-        System.out.println("Alunos matriculados na disciplina " + this.getNome());
-        for (Matricula matricula : this.getMatriculados()) {
-            System.out.println(matricula.getAluno().getNome());
+        try {
+            if (matriculados.isEmpty()) {
+                System.out.println("Não há alunos matriculados");
+            } else {
+                System.out.println("Alunos matriculados na disciplina " + this.getNome());
+                for (Matricula matricula : this.getMatriculados()) {
+                    System.out.println(matricula.getAluno().getNome());
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Erro ao listar alunos: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
     public Disciplina(String nome, Professor professor) {
-        this.nome = nome;
-        this.professor = professor;
-        estaAtiva = true;
-        matriculados = new LinkedList<Matricula>();
+        try {
+            if (nome == null || professor == null) {
+                throw new IllegalArgumentException("Nome e professor não podem ser nulos");
+            }
+            this.nome = nome;
+            this.professor = professor;
+            estaAtiva = true;
+            matriculados = new LinkedList<>();
+        } catch (Exception e) {
+            System.err.println("Erro ao criar disciplina: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
+    // Getters e Setters
 
     public String getNome() {
         return nome;
     }
 
-
     public List<Matricula> getMatriculados() {
         return matriculados;
     }
 
-
     public void setNome(String nome) {
-        this.nome = nome;
+        try {
+            if (nome == null || nome.isEmpty()) {
+                throw new IllegalArgumentException("Nome não pode ser nulo ou vazio");
+            }
+            this.nome = nome;
+        } catch (Exception e) {
+            System.err.println("Erro ao definir nome: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
-
 
     public void setEstaAtiva(boolean estaAtiva) {
         this.estaAtiva = estaAtiva;
@@ -105,7 +165,15 @@ public class Disciplina implements Serializable {
     }
 
     public void setProfessor(Professor professor) {
-        this.professor = professor;
+        try {
+            if (professor == null) {
+                throw new IllegalArgumentException("Professor não pode ser nulo");
+            }
+            this.professor = professor;
+        } catch (Exception e) {
+            System.err.println("Erro ao definir professor: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     public int getMIN_ALUNOS() {
@@ -119,5 +187,4 @@ public class Disciplina implements Serializable {
     public boolean isEstaAtiva() {
         return estaAtiva;
     }
-
 }

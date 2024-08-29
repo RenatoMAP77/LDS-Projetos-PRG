@@ -11,7 +11,6 @@ public class App {
     public static void main(String[] args) throws Exception {
         try {
             
-        
         Scanner sc = new Scanner(System.in);
         // Adicionar populador caso nao tenha
         dao = new GenericDAO<>("dados");
