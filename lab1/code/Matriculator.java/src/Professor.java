@@ -2,7 +2,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Professor extends Usuario {
-    private static final long serialVersionUID = 3L;
+    private static final long serialVersionUID = 2L;
     private final int PERMISSAO = 2;
     private List<Disciplina> disciplinas;
 

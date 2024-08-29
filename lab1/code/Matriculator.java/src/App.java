@@ -5,23 +5,20 @@ import java.util.ArrayList;
 
 public class App {
 
-    static GenericDAO<Secretaria> dao;
+    
     static Secretaria secretaria;
 
+    private static GenericDAO<Secretaria> secretariaDAO = new GenericDAO<>("dados");
     public static void main(String[] args) throws Exception {
         try {
             
+        
         Scanner sc = new Scanner(System.in);
-        // Adicionar populador caso nao tenha
-        dao = new GenericDAO<>("dados");
-         List<Secretaria> lista = dao.getAll();
-             if (!lista.isEmpty()) {
-              secretaria = lista.get(0);
-            }else {
-             secretaria = new Secretaria("1", "admin");
-                dao.add(secretaria);
-
-    }
+        secretaria = inicializarDados();
+        // System.out.println(secretaria.getAlunos().size());
+        // System.out.println(secretaria.getProfessores().size());
+        // System.out.println(secretaria.getCursos().size());
+        // System.out.println(secretaria.getProfessores().get(0).getId());
 
         int opcao = 0;
         do {
@@ -62,7 +59,7 @@ public class App {
         } while (opcao!=4);
         List<Secretaria> SAVE = new ArrayList<>();
         SAVE.add(secretaria);
-        dao.atualizarDados(SAVE);
+        secretariaDAO.atualizarDados(SAVE);
 
         sc.close();
     } catch (Exception e) {
@@ -464,6 +461,26 @@ public class App {
         .orElse(null);
     }
 
+    private static Secretaria inicializarDados() {
+        List<Secretaria> secretarias = secretariaDAO.getAll();
+        if (secretarias.isEmpty()) {
+            Populador populador = new Populador();
+            try {
+                populador.popular(secretariaDAO);
+            } catch (Exception e) {
+                System.out.println("Erro ao popular os dados: " + e.getMessage());
+            }
+            secretarias = secretariaDAO.getAll();
+        }
+    
+        
+        if (secretarias.isEmpty()) {
+            System.out.println("Erro: Nenhuma secretaria encontrada após a tentativa de popular os dados.");
+            return null;  
+        }
+        
+        return secretarias.get(0);
+    }
     
 
     

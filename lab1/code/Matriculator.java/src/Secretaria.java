@@ -2,7 +2,7 @@ import java.io.Serializable;
 import java.util.*;
 
 public class Secretaria extends Usuario implements Serializable {
-    private static final long serialVersionUID = 4L;
+    private static final long serialVersionUID = 2L;
     
     private final int PERMISSAO = 3;
     private List<Curso> cursos;
