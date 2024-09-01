@@ -11,8 +11,17 @@ abstract class "Usuario"{
 
 class "Secretaria"{
       {static} -PERMISSAO = 3 : int
+      - cursos : List<Curso>
+      - professores : List<Professor>
+      - alunos : List<Aluno>
+      
+
  
-      +gerarCurriculo() : void
+      + gerarCurriculo() : void
+      + adicionarCurso(curso : Curso) : void
+      + adicionarProfessor(professor : Professor) : void
+      + adicionarAluno(aluno : Aluno) : void
+      
  
 }
 
@@ -42,6 +51,7 @@ class "Curso"{
      - nome: String
      - creditos: int
      - disciplinas : List<Disciplina> 
+     - {static} dataLimiteMatricula : LocalDate
 
      +adicionarDisciplina(disciplina: Disciplina): void
      +removerDisciplina(disciplina: Disciplina): void  
@@ -71,6 +81,30 @@ class "Matricula"{
     + matricular(disciplina : Disciplina) : void
     + removerMatricula(disciplina : Disciplina) : void
 }
+
+class "GenericDAO"{
+    - arquivo : String
+    - objestos : List<T>
+
+    + add(objeto : T) : void
+    + atualizarDados(novosObjetos : List<T>) : void
+    + salvarDados() : void
+    + carregarDados() : void
+    
+}
+
+class "Populador"{
+    + popular(dao : GenericDAO<Secretaria>)
+}
+
+class "App"{
+    - {static} secretaria : Secretaria
+
+    + {static} main(args: String) : void
+ 
+}
+
+
  
 
 
@@ -83,6 +117,9 @@ Curso "1" o-- "1,*" Disciplina
 Disciplina "1" -- "0,*" Matricula
 Aluno "1" -- "0,*" Matricula
 Professor "1" -- "1,*" Disciplina
+GenericDAO "1" --"1" Populador
+GenericDAO "1" -- "1" Secretaria
+Secretaria"1" -- "1"App
 
 
 
