@@ -10,8 +10,8 @@ public class Populador {
             Curso curso = new Curso("Curso" + i);
             secretaria.adicionarCurso(curso);
             for (int j = 0; j < 5; j++) {
-                Professor professor = new Professor("Professor" + i+j, "senha123");
-                Disciplina disciplina = new Disciplina("Disciplina" + j, professor, true, true);
+                Professor professor = new Professor("Professor" + i+j, "123");
+                Disciplina disciplina = new Disciplina("Disciplina" + i+j, professor, true, true);
                 secretaria.adicionarProfessor(professor);
                 curso.adcionarDisciplina(disciplina);
                 for (int k = 0; k < 5; k++) {
