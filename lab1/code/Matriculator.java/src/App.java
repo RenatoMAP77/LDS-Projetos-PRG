@@ -90,7 +90,7 @@ public class App {
             System.out.println("O que deseja fazer?\n");
             System.out.println("1 - Adicionar matrícula");
             System.out.println("2 - Remover matrícula");
-            System.out.println("3 - Calcular matrículas");
+            System.out.println("3 - Calcular/Visualizar matrículas");
             System.out.println("4 - Sair");
                  opcao = Integer.parseInt(sc.nextLine());
 
