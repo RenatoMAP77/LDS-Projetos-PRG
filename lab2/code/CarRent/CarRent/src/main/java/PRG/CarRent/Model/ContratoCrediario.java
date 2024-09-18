@@ -1,9 +1,6 @@
 
 package PRG.CarRent.Model;
 
-
-import PRG.CarRent.Util.Enums.StatusPedido;
-import PRG.CarRent.Util.Enums.TipoPedido;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,25 +11,18 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Table(name = "contato_crediario")
 @Entity
-@Table(name = "pedido")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class PedidoModel {
+public class ContratoCrediario {
     
     @Column(name = "id", nullable = false, unique = true)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
 
-    @Column(name = "codigo_pedido", nullable = false, unique = true)
-    private String codigoPedido;
-
-    @Column(name = "tipo_pedido", nullable = false)
-    private TipoPedido tipoPedido = TipoPedido.NORMAL;
-
-    @Column(name = "status_pedido", nullable = false)
-    private StatusPedido statusPedido = StatusPedido.PENDENTE;
-
+    @Column(name = "cpf_cnpj_proprietario", nullable = false, unique = true)
+    private String cpfCnpjProprietario;
 }

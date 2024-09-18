@@ -1,3 +1,5 @@
+package PRG.CarRent.Util.Enums; 
+
 public enum TipoBanco {
     FISICO("Fisico"),
     ONLINE("Online");
@@ -6,6 +8,10 @@ public enum TipoBanco {
 
     TipoBanco(String tipo) {
         this.tipo = tipo;
+    }
+
+    public String getTipo() {
+        return tipo;
     }
     
 }

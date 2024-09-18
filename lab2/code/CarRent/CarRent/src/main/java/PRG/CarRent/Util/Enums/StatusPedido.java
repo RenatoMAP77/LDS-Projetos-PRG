@@ -1,11 +1,14 @@
+
+package PRG.CarRent.Util.Enums; 
+
+
 public enum StatusPedido {
     
     PENDENTE("Pendente"),
     APROVADO("Aprovado"),
-    REPROVADO("Reprovado")//,
-    // CANCELADO("Cancelado"),
-    // FINALIZADO("Finalizado")
-    ;
+    REPROVADO("Reprovado"),
+    CANCELADO("Cancelado"),
+    FINALIZADO("Finalizado");
 
     private String status;
 

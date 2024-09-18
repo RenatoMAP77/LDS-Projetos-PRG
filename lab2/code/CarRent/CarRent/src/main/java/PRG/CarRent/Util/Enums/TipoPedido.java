@@ -1,3 +1,5 @@
+package PRG.CarRent.Util.Enums; 
+
 public enum TipoPedido {
 
     CREDIARIO("Crediário"),
@@ -7,6 +9,9 @@ public enum TipoPedido {
 
     TipoPedido(String descricao) {
         this.descricao = descricao;
+    }
+    public String getDescricao() {
+        return descricao;
     }
     
 }
