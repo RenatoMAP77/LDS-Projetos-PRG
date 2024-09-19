@@ -4,11 +4,15 @@ package PRG.CarRent.Model;
 
 import PRG.CarRent.Util.Enums.StatusPedido;
 import PRG.CarRent.Util.Enums.TipoPedido;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -34,5 +38,29 @@ public class PedidoModel {
 
     @Column(name = "status_pedido", nullable = false)
     private StatusPedido statusPedido = StatusPedido.PENDENTE;
+
+    @JoinColumn(name = "automovel_id", nullable = false)
+    @ManyToOne()
+    private AutomovelModel automovel;
+
+    @JoinColumn(name = "cliente_id", nullable = false)
+    @ManyToOne()
+    private ClienteModel cliente;
+
+    @JoinColumn(name = "empresa_id", nullable = false)
+    @ManyToOne()
+    private EmpresaModel empresa;
+
+    @JoinColumn(name = "banco_id", nullable = false)
+    @ManyToOne()
+    private BancoModel banco;
+
+    @JoinColumn(name = "contrato_id", nullable = false)
+    @OneToOne(mappedBy = "pedido",cascade = CascadeType.ALL)
+    private ContratoModel contrato;
+
+    @JoinColumn(name = "contrato_crediario_id", nullable = false)
+    @OneToOne(mappedBy = "pedido",cascade = CascadeType.ALL)
+    private ContratoCrediario contratoCrediario;
 
 }

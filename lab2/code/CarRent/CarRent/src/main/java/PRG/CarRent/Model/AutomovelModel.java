@@ -3,11 +3,16 @@ package PRG.CarRent.Model;
 
 
 import PRG.CarRent.Util.Enums.TipoProprietario;
+import java.util.List;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -41,6 +46,18 @@ public class AutomovelModel {
     @Column(name = "tipo_proprietario", nullable = false, unique = false)
     private TipoProprietario tipoProprietario;
 
+    @JoinColumn(name = "cliente_id", nullable = true)
+    @ManyToOne()
+    private ClienteModel cliente;
+    
+    @JoinColumn(name = "empresa_id", nullable = true)
+    @ManyToOne()
+    private EmpresaModel empresa;
+
+    @OneToMany(mappedBy = "automovel")
+    private List<PedidoModel> pedidos;
+
+    
 
 
 }
