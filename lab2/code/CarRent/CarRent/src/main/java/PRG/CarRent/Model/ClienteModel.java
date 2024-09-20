@@ -39,12 +39,6 @@ public class ClienteModel extends Usuario{
     @Column(name = "cpf", nullable = false, unique = true)
     private String cpf;
 
-    @Column(name = "nome", nullable = false)
-    private String nome; 
-
-    @Column(name = "email", nullable = false)
-    private String email;
-
     @Column(name = "profissao",nullable = false)
     private String profissao;
 
