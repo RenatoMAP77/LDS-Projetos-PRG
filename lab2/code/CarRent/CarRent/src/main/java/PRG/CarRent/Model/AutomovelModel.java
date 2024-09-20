@@ -47,12 +47,12 @@ public class AutomovelModel {
     private TipoProprietario tipoProprietario;
 
     @JoinColumn(name = "cliente_id", nullable = true)
-    @ManyToOne()
+    @ManyToOne
     private ClienteModel cliente;
     
-    @JoinColumn(name = "empresa_id", nullable = true)
-    @ManyToOne()
-    private EmpresaModel empresa;
+    // @JoinColumn(name = "empresa_id", nullable = true)
+    // @ManyToOne()
+    // private EmpresaModel empresa;
 
     @OneToMany(mappedBy = "automovel")
     private List<PedidoModel> pedidos;
