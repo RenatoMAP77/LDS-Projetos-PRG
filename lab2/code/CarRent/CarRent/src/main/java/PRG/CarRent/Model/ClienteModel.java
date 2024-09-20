@@ -3,28 +3,38 @@ package PRG.CarRent.Model;
 
 import java.util.ArrayList;
 
+import org.hibernate.mapping.Array;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "cliente")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class ClienteModel {
+@EqualsAndHashCode(callSuper = false)
+@Getter
+@Setter
+public class ClienteModel extends Usuario{
 
-    @Column(name = "id", nullable = false, unique = true)
+    @Column(name = "cliente_id", nullable = false, unique = true)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    private Long id;
+    private Long cliente_id;
 
     @Column(name = "cpf", nullable = false, unique = true)
     private String cpf;
@@ -63,8 +73,55 @@ public class ClienteModel {
     private String cep;
 
     @Column(name = "rendimentos", nullable = false)
-    private ArrayList<String> rendimentos;
+    private ArrayList<String> rendimentos = new ArrayList<String>();
     @Column(name = "empregadores", nullable = false)
-    private ArrayList<String> empregadores;
+    private ArrayList<String> empregadores = new ArrayList<String>();
+
+    @OneToMany(mappedBy = "cliente")
+    private ArrayList<PedidoModel> pedidos;
+
+    @OneToMany(mappedBy = "cliente")
+    private ArrayList<AutomovelModel> automoveis;
+
+    public void introduzirRendimento(String rendimento){
+        this.rendimentos.add(rendimento);
+    }
+
+    public void introduzirEmpregador(String empregador){
+        this.empregadores.add(empregador);
+    }
+
+    public void removerRendimento(String rendimento){
+        this.rendimentos.remove(rendimento);
+    }
+
+    public void removerEmpregador(String empregador){
+        this.empregadores.remove(empregador);
+    }
+
+    public void introduzirPedido(PedidoModel pedido){
+        //todo
+    }
+
+    public void cancelarPedido(PedidoModel pedido){
+        //todo
+    }
+
+    public void atualizarPedido(PedidoModel pedido){
+        //todo
+    }
+
+    public void atualizarCliente(ClienteModel cliente){
+        //todo
+    }
+    @JsonIgnore
+    public ArrayList<PedidoModel> getPedidos(){
+        return this.pedidos;
+    }
+
+    @JsonIgnore
+    public ArrayList<AutomovelModel> getAutomoveis(){
+        return this.automoveis;
+    }
 
 }
