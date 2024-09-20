@@ -2,6 +2,7 @@
 package PRG.CarRent.Model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.hibernate.mapping.Array;
 
@@ -72,10 +73,10 @@ public class ClienteModel extends Usuario{
     private ArrayList<String> empregadores = new ArrayList<String>();
 
     @OneToMany(mappedBy = "cliente")
-    private ArrayList<PedidoModel> pedidos;
+    private List<PedidoModel> pedidos;
 
     @OneToMany(mappedBy = "cliente")
-    private ArrayList<AutomovelModel> automoveis;
+    private List<AutomovelModel> automoveis;
 
     public void introduzirRendimento(String rendimento){
         this.rendimentos.add(rendimento);
@@ -109,12 +110,12 @@ public class ClienteModel extends Usuario{
         //todo
     }
     @JsonIgnore
-    public ArrayList<PedidoModel> getPedidos(){
+    public List<PedidoModel> getPedidos(){
         return this.pedidos;
     }
 
     @JsonIgnore
-    public ArrayList<AutomovelModel> getAutomoveis(){
+    public List<AutomovelModel> getAutomoveis(){
         return this.automoveis;
     }
 

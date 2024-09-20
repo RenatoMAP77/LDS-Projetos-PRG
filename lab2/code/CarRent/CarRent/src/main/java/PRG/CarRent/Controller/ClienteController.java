@@ -36,6 +36,7 @@ public class ClienteController {
     @PostMapping
     @Transactional
     public ResponseEntity<ClienteModel> createCliente(@RequestBody ClienteModel cliente) {
+        cliente.setCliente_id(null);
         entityManager.persist(cliente);
         return ResponseEntity.status(HttpStatus.CREATED).body(cliente);
     }
