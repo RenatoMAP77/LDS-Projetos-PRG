@@ -27,10 +27,10 @@ import lombok.NoArgsConstructor;
 @Data
 public class BancoModel {
    
-    @Column(name = "id", nullable = false, unique = true)
+    @Column(name = "banco_id", nullable = false, unique = true)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    private Long id;
+    private Long banco_id;
 
     @Column(name = "nome", nullable = false, unique = true)
     private String nome;

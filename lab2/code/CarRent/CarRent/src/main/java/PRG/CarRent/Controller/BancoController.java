@@ -47,7 +47,7 @@ public class BancoController {
     @PostMapping
     @Transactional
     public ResponseEntity<BancoModel> createBanco(@RequestBody BancoModel banco) {
-        banco.setId(null);
+        banco.setBanco_id(null);
         entityManager.persist(banco);
         return ResponseEntity.ok(banco);
     }
