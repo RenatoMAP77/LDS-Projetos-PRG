@@ -60,7 +60,7 @@ public class ClienteController {
             cliente.setEstado(clienteDetails.getEstado());
             cliente.setPais(clienteDetails.getPais());
             cliente.setCep(clienteDetails.getCep());
-            cliente.setRendimentos(clienteDetails.getRendimentos());
+            cliente.setRendimento(clienteDetails.getRendimento());
             cliente.setEmpregadores(clienteDetails.getEmpregadores());
 
             entityManager.merge(cliente);

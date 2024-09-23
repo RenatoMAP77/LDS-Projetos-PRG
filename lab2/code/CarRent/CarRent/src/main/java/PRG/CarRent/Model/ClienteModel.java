@@ -78,17 +78,12 @@ public class ClienteModel extends Usuario{
     @OneToMany(mappedBy = "cliente")
     private List<AutomovelModel> automoveis;
 
-    public void introduzirRendimento(String rendimento){
-        this.rendimentos.add(rendimento);
-    }
+   
 
     public void introduzirEmpregador(String empregador){
         this.empregadores.add(empregador);
     }
 
-    public void removerRendimento(String rendimento){
-        this.rendimentos.remove(rendimento);
-    }
 
     public void removerEmpregador(String empregador){
         this.empregadores.remove(empregador);
