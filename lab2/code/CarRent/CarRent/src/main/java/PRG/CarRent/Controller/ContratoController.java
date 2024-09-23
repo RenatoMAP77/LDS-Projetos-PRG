@@ -1,100 +1,76 @@
 package PRG.CarRent.Controller;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import PRG.CarRent.Model.BancoModel;
 import PRG.CarRent.Model.ContratoModel;
+import PRG.CarRent.Model.PedidoModel;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 
-
-@RestController()
+@RestController
 @RequestMapping("/contrato")
 public class ContratoController {
 
-    private final JdbcTemplate jdbcTemplate;
-
-    public ContratoController(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
-
-    private RowMapper<ContratoModel> contratoRowMapper = new RowMapper<>() {
-        @Override
-        public ContratoModel mapRow(ResultSet rs, int rowNum) throws SQLException {
-            ContratoModel contrato = new ContratoModel();
-            contrato.setId(rs.getLong("id"));
-            contrato.setDataInicio(rs.getTimestamp("data_inicio").toLocalDateTime());
-            contrato.setDataFinal(rs.getTimestamp("data_final").toLocalDateTime());
-            // Para o relacionamento OneToOne com Pedido, o ID será obtido separadamente.
-            return contrato;
-        }
-    };
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Operation(summary = "Cria um contrato")
     @PostMapping()
-    public ResponseEntity<String> criarContrato(@RequestBody ContratoModel contrato) {
-        String sql = "INSERT INTO contrato (data_inicio, data_final, pedido_id) VALUES (?,?,?)";
-        int result = jdbcTemplate.update(sql,
-                contrato.getDataInicio(),
-                contrato.getDataFinal(),
-                contrato.getPedido().getId());
-
-        if (result == 1) {
-            return ResponseEntity.ok("Contrato criado com sucesso");
-        } else {
-            return ResponseEntity.status(500).body("Erro ao criar contrato");
-        }
+    @Transactional
+    public ResponseEntity<ContratoModel> criarContrato(@RequestBody ContratoModel contrato) {
+        contrato.setId(null);  // Certifique-se de que o ID seja null para criar um novo registro
+        entityManager.persist(contrato);
+        return ResponseEntity.ok(contrato);
     }
 
     @Operation(summary = "Busca todos os contratos")
     @GetMapping()
-    public ResponseEntity<Iterable<ContratoModel>> buscarContratos() {
-        String sql = "SELECT * FROM contrato";
-        List<ContratoModel> contratos = jdbcTemplate.query(sql, contratoRowMapper);
-        return ResponseEntity.ok(contratos);
+    public List<ContratoModel> buscarContratos() {
+        return entityManager.createQuery("SELECT c FROM ContratoModel c", ContratoModel.class).getResultList();
     }
 
     @Operation(summary = "Busca um contrato por ID")
     @GetMapping("/{id}")
     public ResponseEntity<ContratoModel> buscarContratoPorId(@PathVariable Long id) {
-        String sql = "SELECT * FROM contrato WHERE id = ?";
-        ContratoModel contrato = jdbcTemplate.queryForObject(sql, new Object[]{id}, contratoRowMapper);
-        return ResponseEntity.ok(contrato);
+        ContratoModel contrato = entityManager.find(ContratoModel.class, id);
+        return contrato != null ? ResponseEntity.ok(contrato) : ResponseEntity.notFound().build();
     }
 
     @Operation(summary = "Atualiza um contrato")
     @PutMapping("/{id}")
-    public ResponseEntity<String> atualizarContrato(@PathVariable Long id, @RequestBody ContratoModel contrato) {
-        String sql = "UPDATE contrato SET data_inicio = ?, data_final = ?, pedido_id = ? WHERE id = ?";
-        int result = jdbcTemplate.update(sql,
-                contrato.getDataInicio(),
-                contrato.getDataFinal(),
-                contrato.getPedido().getId(),
-                id);
+    @Transactional
+    public ResponseEntity<String> atualizarContrato(@PathVariable Long id, @RequestBody ContratoModel contratoDetails) {
+        ContratoModel contrato = entityManager.find(ContratoModel.class, id);
 
-        if (result == 1) {
+        if (contrato != null) {
+            contrato.setDataInicio(contratoDetails.getDataInicio());
+            contrato.setDataFinal(contratoDetails.getDataFinal());
+            // Atualize outras associações conforme necessário
+            entityManager.persist(contrato);
             return ResponseEntity.ok("Contrato atualizado com sucesso");
         } else {
-            return ResponseEntity.status(500).body("Erro ao atualizar contrato");
+            return ResponseEntity.notFound().build();
         }
     }
 
     @Operation(summary = "Deleta um contrato")
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deletarContrato(@PathVariable Long id) {
-        String sql = "DELETE FROM contrato WHERE id = ?";
-        int result = jdbcTemplate.update(sql, id);
-        if (result == 1) {
-            return ResponseEntity.ok("Contrato deletado com sucesso");
+    @Transactional
+    public ResponseEntity<Void> deletarContrato(@PathVariable Long id) {
+        ContratoModel contrato = entityManager.find(ContratoModel.class, id);
+
+        if (contrato != null) {
+            entityManager.remove(contrato);
+            return ResponseEntity.noContent().build();
         } else {
-            return ResponseEntity.status(500).body("Erro ao deletar contrato");
+            return ResponseEntity.notFound().build();
         }
     }
 }

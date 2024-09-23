@@ -68,7 +68,7 @@ public class ClienteModel extends Usuario{
     private String cep;
 
     @Column(name = "rendimentos", nullable = false)
-    private ArrayList<String> rendimentos = new ArrayList<String>();
+    private String rendimento;
     @Column(name = "empregadores", nullable = false)
     private ArrayList<String> empregadores = new ArrayList<String>();
 

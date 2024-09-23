@@ -47,19 +47,19 @@ public class PedidoModel {
     @ManyToOne()
     private ClienteModel cliente;
 
-    @JoinColumn(name = "empresa_id", nullable = false)
+    @JoinColumn(name = "empresa_id")
     @ManyToOne()
     private EmpresaModel empresa;
 
-    @JoinColumn(name = "banco_id", nullable = false)
+    @JoinColumn(name = "banco_id")
     @ManyToOne()
     private BancoModel banco;
 
-    @JoinColumn(name = "contrato_id", nullable = false)
+    @JoinColumn(name = "contrato_id")
     @OneToOne(mappedBy = "pedido",cascade = CascadeType.ALL)
     private ContratoModel contrato;
 
-    @JoinColumn(name = "contrato_crediario_id", nullable = false)
+    @JoinColumn(name = "contrato_crediario_id")
     @OneToOne(mappedBy = "pedido",cascade = CascadeType.ALL)
     private ContratoCrediario contratoCrediario;
 
