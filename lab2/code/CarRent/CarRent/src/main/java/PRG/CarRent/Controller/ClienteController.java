@@ -83,4 +83,17 @@ public class ClienteController {
 
         return ResponseEntity.notFound().build();
     }
+
+    @Operation(summary = "Realizar login")
+    @GetMapping("/login")
+    public ResponseEntity<ClienteModel> login(@RequestBody ClienteModel cliente) {
+        Optional<ClienteModel> clienteOptional = entityManager.createQuery("SELECT c FROM ClienteModel c WHERE c.email = :email AND c.senha = :senha", ClienteModel.class)
+                .setParameter("email", cliente.getEmail())
+                .setParameter("senha", cliente.getSenha())
+                .getResultList()
+                .stream()
+                .findFirst();
+
+        return clienteOptional.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
 }

@@ -10,7 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
 import PRG.CarRent.Model.EmpresaModel;
+import PRG.CarRent.Model.PedidoModel;
 import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
@@ -73,4 +75,52 @@ public class EmpresaController {
         }
     }
 
+    @Operation(description = "Busca uma empresa pelo CNPJ")
+    @GetMapping("/cnpj/{cnpj}")
+    public ResponseEntity<EmpresaModel> getEmpresaByCnpj(@PathVariable String cnpj) {
+        Optional<EmpresaModel> empresa = entityManager.createQuery("SELECT e FROM EmpresaModel e WHERE e.cnpj = :cnpj", EmpresaModel.class)
+                .setParameter("cnpj", cnpj)
+                .getResultList()
+                .stream()
+                .findFirst();
+
+        return empresa.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @Operation(summary = "Busca todos os contratos associados a essa empresa")
+    @GetMapping("/{id}/contratos")
+    @Transactional
+    public List<EmpresaModel> getContratos(@PathVariable Long id) {
+        return entityManager.createQuery("SELECT c FROM ContratoModel c WHERE c.pedido.empresa_id = :id", EmpresaModel.class)
+                .setParameter("id", id).getResultList();
+    }
+
+    @Operation(summary = "Busca todos os pedidos associados a essa empresa")
+    @GetMapping("/{id}/pedidos")
+    @Transactional
+    public List<EmpresaModel> getPedidos(@PathVariable Long id) {
+        return entityManager.createQuery("SELECT p FROM PedidoModel p WHERE p.empresa_id = :id", EmpresaModel.class)
+                .setParameter("id", id).getResultList();
+    }
+
+    @Operation(summary = "Avaliar pedido, relacionado a este empresa")
+    @PatchMapping("/{id}/pedido/{idPedido}/{resposta}")
+    @Transactional
+    public ResponseEntity<String> avaliarPedido(@PathVariable Long id, @PathVariable Long idPedido,
+            @PathVariable boolean resposta) {
+        EmpresaModel empresa = entityManager.find(EmpresaModel.class, id);
+        PedidoModel pedido = entityManager.find(PedidoModel.class, idPedido);
+
+        if (empresa != null && pedido != null) {
+            if (empresa.avaliarPedido(pedido, resposta)) {
+                entityManager.persist(empresa);
+                entityManager.persist(pedido);
+                return ResponseEntity.ok("Pedido avaliado com sucesso");
+            } else {
+                return ResponseEntity.badRequest().body("Pedido já foi avaliado");
+            }
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

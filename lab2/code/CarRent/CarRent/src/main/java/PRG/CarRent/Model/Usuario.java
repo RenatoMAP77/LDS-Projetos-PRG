@@ -8,8 +8,10 @@ public abstract class Usuario {
     
     @Column(name = "nome", nullable = false)
     private String nome;
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
+    @Column(name = "senha", nullable = false)
+    private String senha;
 
     // Getters e Setters
     public String getNome() {
@@ -26,5 +28,9 @@ public abstract class Usuario {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+    
+    public String getSenha() {
+        return senha;
     }
 }
