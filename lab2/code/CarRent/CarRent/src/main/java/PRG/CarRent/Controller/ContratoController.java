@@ -21,14 +21,7 @@ public class ContratoController {
     @PersistenceContext
     private EntityManager entityManager;
 
-    @Operation(summary = "Cria um contrato")
-    @PostMapping()
-    @Transactional
-    public ResponseEntity<ContratoModel> criarContrato(@RequestBody ContratoModel contrato) {
-        contrato.setId(null);  // Certifique-se de que o ID seja null para criar um novo registro
-        entityManager.persist(contrato);
-        return ResponseEntity.ok(contrato);
-    }
+  
 
     @Operation(summary = "Busca todos os contratos")
     @GetMapping()

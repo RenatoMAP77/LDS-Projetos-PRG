@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 import PRG.CarRent.Model.AutomovelModel;
 import PRG.CarRent.Model.ClienteModel;
+import PRG.CarRent.Model.ContratoCrediario;
 import PRG.CarRent.Model.ContratoModel;
 import PRG.CarRent.Model.EmpresaModel;
 import PRG.CarRent.Model.PedidoModel;
@@ -45,7 +46,7 @@ public class PedidoController {
         return pedido != null ? ResponseEntity.ok(pedido) : ResponseEntity.notFound().build();
     }
 
-    @Operation(summary = "Atualiza um pedido")
+    @Operation(summary = "Cria Contrato Creditário ou Contrato Normal para um pedido") 
     @PutMapping("/{id}")
     @Transactional
     public ResponseEntity<String> atualizarPedido(@PathVariable Long id, @RequestBody PedidoModel pedidoDetails) {
@@ -56,12 +57,22 @@ public class PedidoController {
             pedido.setTipoPedido(pedidoDetails.getTipoPedido());
             pedido.setStatusPedido(pedidoDetails.getStatusPedido());
             pedido.setAutomovel(pedidoDetails.getAutomovel());
-            if (pedido.getStatusPedido() == StatusPedido.APROVADO) {
+            if (pedido.getStatusPedido() == StatusPedido.APROVADO && pedido.getTipoPedido() == TipoPedido.NORMAL) {
             ContratoModel contrato = new ContratoModel();
             contrato.setDataInicio(pedido.getDataInicio());
             contrato.setDataFinal(pedido.getDataFinal());
             contrato.setPedido(pedido);
-            }
+            entityManager.persist(pedido);
+            return ResponseEntity.ok("Contrato criado com sucesso");
+            } else if (pedido.getStatusPedido() == StatusPedido.APROVADO && pedido.getTipoPedido() == TipoPedido.CREDIARIO) {
+            ContratoCrediario contratoCred = new ContratoCrediario();
+            contratoCred.setDataInicio(pedido.getDataInicio());
+            contratoCred.setDataFinal(pedido.getDataFinal());
+            contratoCred.setPedido(pedido);
+            contratoCred.setBanco(pedido.getBanco());
+            entityManager.persist(pedido);
+            return ResponseEntity.ok("Contrato Creditário criado com sucesso");
+            } 
 
             // Atualize outras associações conforme necessário
             entityManager.persist(pedido);

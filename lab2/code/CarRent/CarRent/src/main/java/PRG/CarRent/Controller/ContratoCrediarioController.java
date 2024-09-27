@@ -20,15 +20,7 @@ public class ContratoCrediarioController {
     @PersistenceContext
     private EntityManager entityManager;
 
-    @Operation(summary = "Cria um contrato crediário")
-    @PostMapping()
-    @Transactional
-    public ResponseEntity<ContratoCrediario> criarContratoCrediario(@RequestBody ContratoCrediario contratoCrediario) {
-        contratoCrediario.setId(null);  // Certifique-se de que o ID seja null para criar um novo registro        
-        entityManager.persist(contratoCrediario);
-        return ResponseEntity.ok(contratoCrediario);
-
-    }
+    
 
     @Operation(summary = "Busca todos os contratos crediários")
     @GetMapping()
