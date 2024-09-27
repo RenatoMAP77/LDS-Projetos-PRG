@@ -45,7 +45,7 @@ public class PedidoModel {
     @ManyToOne()
     private AutomovelModel automovel;
 
-    @JoinColumn(name = "cliente_id", nullable = false)
+    @JoinColumn(name = "cliente_id", nullable = true)
     @ManyToOne()
     private ClienteModel cliente;
 

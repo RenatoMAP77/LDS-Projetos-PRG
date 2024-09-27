@@ -3,6 +3,8 @@ package PRG.CarRent.Model;
 import java.sql.Date;
 import java.time.LocalDateTime;
 
+import org.springframework.cglib.core.Local;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -27,23 +29,23 @@ public class ContratoCrediario  {
     @Id
     private Long id;
 
-    @Column(name = "cpf_cnpj_proprietario", nullable = false)
+    @Column(name = "cpf_cnpj_proprietario")
     private String cpfCnpjProprietario;
 
-    @Column(name = "valor_total", nullable = false)
-    private double valorTotal;
+    @Column(name = "valor_total")
+    private Double valorTotal;
 
-    @Column(name = "data_inicio", nullable = false)
+    @Column(name = "data_inicio")
     private LocalDateTime dataInicio;
 
-    @Column(name = "data_final", nullable = false)
+    @Column(name = "data_final" )
     private LocalDateTime dataFinal;
     
     @OneToOne
     private PedidoModel pedido;
 
     @ManyToOne
-    @JoinColumn(name = "banco_id", nullable = false)
+    @JoinColumn(name = "banco_id")
     private BancoModel banco;
 
 }

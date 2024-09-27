@@ -48,6 +48,9 @@ public class AutomovelModel {
     @ManyToOne
     private ClienteModel cliente;
     
+    @Column(name = "diaria", nullable = false)
+    private Double diaria;
+    
     @JoinColumn(name = "empresa_id", nullable = true)
     @ManyToOne()
     private EmpresaModel empresa;

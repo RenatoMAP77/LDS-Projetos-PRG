@@ -20,7 +20,9 @@ public record AutomovelDTO(       String marca,
 
  Long cliente,
 
- Long empresa) {
+ Long empresa ,
+ 
+ Double diaria) {
     
     
 

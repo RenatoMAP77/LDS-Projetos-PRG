@@ -1,5 +1,8 @@
 package PRG.CarRent.Controller;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -46,36 +49,101 @@ public class PedidoController {
         return pedido != null ? ResponseEntity.ok(pedido) : ResponseEntity.notFound().build();
     }
 
-    @Operation(summary = "Cria Contrato Creditário ou Contrato Normal para um pedido") 
+    @Operation(summary = "Cria Contrato Creditário ou Contrato Normal para um pedido")
     @PutMapping("/{id}")
     @Transactional
     public ResponseEntity<String> atualizarPedido(@PathVariable Long id, @RequestBody PedidoModel pedidoDetails) {
         PedidoModel pedido = entityManager.find(PedidoModel.class, id);
 
         if (pedido != null) {
-            pedido.setCodigoPedido(pedidoDetails.getCodigoPedido());
-            pedido.setTipoPedido(pedidoDetails.getTipoPedido());
-            pedido.setStatusPedido(pedidoDetails.getStatusPedido());
-            pedido.setAutomovel(pedidoDetails.getAutomovel());
-            if (pedido.getStatusPedido() == StatusPedido.APROVADO && pedido.getTipoPedido() == TipoPedido.NORMAL) {
-            ContratoModel contrato = new ContratoModel();
-            contrato.setDataInicio(pedido.getDataInicio());
-            contrato.setDataFinal(pedido.getDataFinal());
-            contrato.setPedido(pedido);
-            entityManager.persist(pedido);
-            return ResponseEntity.ok("Contrato criado com sucesso");
-            } else if (pedido.getStatusPedido() == StatusPedido.APROVADO && pedido.getTipoPedido() == TipoPedido.CREDIARIO) {
-            ContratoCrediario contratoCred = new ContratoCrediario();
-            contratoCred.setDataInicio(pedido.getDataInicio());
-            contratoCred.setDataFinal(pedido.getDataFinal());
-            contratoCred.setPedido(pedido);
-            contratoCred.setBanco(pedido.getBanco());
-            entityManager.persist(pedido);
-            return ResponseEntity.ok("Contrato Creditário criado com sucesso");
-            } 
+            if (pedidoDetails.getCodigoPedido() != null) {
+                pedido.setCodigoPedido(pedidoDetails.getCodigoPedido());
+            }
+            if (pedidoDetails.getDataInicio() != null) {
+                pedido.setDataInicio(pedidoDetails.getDataInicio());
+            }
+            if (pedidoDetails.getDataFinal() != null) {
+                pedido.setDataFinal(pedidoDetails.getDataFinal());
+            }
+            if (pedidoDetails.getStatusPedido() != StatusPedido.APROVADO && pedidoDetails.getStatusPedido() != null) {
+                pedido.setStatusPedido(pedidoDetails.getStatusPedido());
+            }
+            if (pedidoDetails.getTipoPedido() != null) {
+                pedido.setTipoPedido(pedidoDetails.getTipoPedido());
+            }
+            if (pedidoDetails.getEmpresa() != null) {
+                pedido.setEmpresa(pedidoDetails.getEmpresa());
+            }
+            if (pedidoDetails.getBanco() != null) {
+                pedido.setBanco(pedidoDetails.getBanco());
+            }
+            if (pedidoDetails.getAutomovel() != null) {
+                pedido.setAutomovel(pedidoDetails.getAutomovel());
+
+            }
+            if (pedidoDetails.getCliente() != null) {
+                pedido.setCliente(pedidoDetails.getCliente());
+            }
+
+            if (pedidoDetails.getStatusPedido() == StatusPedido.CANCELADO) {
+                entityManager.remove(pedido.getContrato());
+            }
+            if (pedido.getStatusPedido() == StatusPedido.APROVADO
+                    && pedidoDetails.getStatusPedido() == StatusPedido.APROVADO) {
+                return ResponseEntity.badRequest().body("Pedido já aprovado");
+            } else if (pedidoDetails.getStatusPedido() == StatusPedido.REPROVADO) {
+                entityManager.remove(pedido);
+                return ResponseEntity.ok("Pedido reprovado com sucesso");
+            } else if (pedidoDetails.getStatusPedido() == StatusPedido.APROVADO
+                    && pedido.getTipoPedido() == TipoPedido.NORMAL) {
+                pedido.setStatusPedido(StatusPedido.APROVADO);
+                ContratoModel contrato = new ContratoModel();
+
+                contrato.setDataInicio(pedido.getDataInicio());
+                contrato.setDataFinal(pedido.getDataFinal());
+                contrato.setPedido(pedido);
+                entityManager.merge(pedido);
+                entityManager.persist(contrato);
+
+
+
+                return ResponseEntity.ok("Contrato criado com sucesso");
+            } else if (pedidoDetails.getStatusPedido() == StatusPedido.APROVADO
+                    && pedido.getTipoPedido() == TipoPedido.CREDIARIO) {
+
+
+                ContratoCrediario contratoCred = new ContratoCrediario();
+                if (pedido.getCliente() != null) {
+                    contratoCred.setCpfCnpjProprietario(pedido.getCliente().getCpf());
+
+
+                } else if (pedido.getEmpresa() != null) {
+                    contratoCred.setCpfCnpjProprietario(pedido.getEmpresa().getCnpj());
+
+
+                }
+                pedido.setStatusPedido(StatusPedido.APROVADO);
+
+                // Calcula o valor total do contrato
+                long dias = ChronoUnit.DAYS.between(pedido.getDataInicio(), pedido.getDataFinal());
+
+
+                contratoCred.setDataInicio(pedido.getDataInicio());
+                contratoCred.setDataFinal(pedido.getDataFinal());
+                contratoCred.setPedido(pedido);
+                contratoCred.setBanco(pedido.getBanco());
+                contratoCred.setValorTotal(pedido.getAutomovel().getDiaria() * dias);
+                
+
+                entityManager.merge(pedido);
+                entityManager.persist(contratoCred);
+                
+
+                return ResponseEntity.ok("Contrato Creditário criado com sucesso");
+            }
 
             // Atualize outras associações conforme necessário
-            entityManager.persist(pedido);
+            entityManager.merge(pedido); // Atualizar pedido
             return ResponseEntity.ok("Pedido atualizado com sucesso");
         } else {
             return ResponseEntity.notFound().build();
@@ -91,28 +159,35 @@ public class PedidoController {
         if (pedido != null) {
             entityManager.remove(pedido);
             return ResponseEntity.noContent().build();
+
         } else {
             return ResponseEntity.notFound().build();
         }
     }
-    
-    @Operation(summary = "Aluga um automóvel")
-    @PostMapping("/alugar/{idAutomovel}")
+
+    @Operation(summary = "Aluga um automóvel ")
+    @PostMapping("/alugar")
     @Transactional
-    public ResponseEntity<String> alugarAutomovel(@RequestBody PedidoModel pedido, @PathVariable Long idAutomovel ) {
+    public ResponseEntity<String> alugarAutomovel(@RequestBody PedidoModel pedido) {
+        Long idAutomovel = pedido.getAutomovel().getId();
         AutomovelModel automovel = entityManager.find(AutomovelModel.class, idAutomovel);
         for (PedidoModel p : automovel.getPedidos()) {
-            if (p.getStatusPedido() == StatusPedido.APROVADO &&
-             (pedido.getDataInicio().isAfter(p.getDataInicio()) 
-             && pedido.getDataInicio().isBefore(p.getDataFinal()) 
-             && pedido.getDataFinal().isBefore(p.getDataFinal())
-              && pedido.getDataFinal().isAfter(p.getDataInicio()))){   
+            if (p.getStatusPedido() == StatusPedido.APROVADO 
+                    &&
+                    (pedido.getDataInicio().isAfter(p.getDataInicio())
+                    && pedido.getDataInicio().isBefore(p.getDataFinal())
+                    && pedido.getDataFinal().isBefore(p.getDataFinal())
+                    && pedido.getDataFinal().isAfter(p.getDataInicio())
+                    )) {
+
                 return ResponseEntity.badRequest().body("Automóvel já alugado nesse período");
-            
-        }}
+
+            }
+        }
         pedido.setAutomovel(automovel);
         pedido.setStatusPedido(StatusPedido.PENDENTE);
         entityManager.persist(pedido);
         return ResponseEntity.ok("Automóvel alugado com sucesso");
     }
+
 }
