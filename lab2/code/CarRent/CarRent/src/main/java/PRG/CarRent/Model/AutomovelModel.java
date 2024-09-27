@@ -39,7 +39,7 @@ public class AutomovelModel {
     private String modelo;
 
     @Column(name = "ano", nullable = false, unique = false)
-    private int ano;
+    private Integer ano;
 
     @Column(name = "tipo_proprietario", nullable = false, unique = false)
     private TipoProprietario tipoProprietario;

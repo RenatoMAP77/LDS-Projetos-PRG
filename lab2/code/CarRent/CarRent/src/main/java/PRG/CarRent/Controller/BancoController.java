@@ -86,16 +86,16 @@ public class BancoController {
         }
     }
 
-    @Operation(description = "Busca todos os contratos de crediario associados a esse banco")
-    @GetMapping("/{id}/contratos")
-    @Transactional
-    public List<BancoModel> getContratos(@PathVariable Long id) {
-        return entityManager.createQuery("SELECT c FROM BancoModel c WHERE c.banco_id = :id", BancoModel.class)
-                .setParameter("id", id).getResultList();
-    }
+    // @Operation(description = "Busca todos os contratos de crediario associados a esse banco")
+    // @GetMapping("/{id}/contratos")
+    // @Transactional
+    // public List<BancoModel> getContratos(@PathVariable Long id) {
+    //     return entityManager.createQuery("SELECT c FROM BancoModel c WHERE c.banco_id = :id", BancoModel.class)
+    //             .setParameter("id", id).getResultList();
+    // }
 
     @Operation(description = "Busca todos os contratos associados a esse banco")
-    @GetMapping("/{id}/contratos")
+    @GetMapping("/{id}/contratos/crediario")
     @Transactional
     public List<BancoModel> getContratosCrediario(@PathVariable Long id) {
         return entityManager.createQuery("SELECT c FROM ContratoCrediario c WHERE c.banco_id = :id", BancoModel.class)
