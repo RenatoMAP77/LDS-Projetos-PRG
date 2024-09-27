@@ -61,14 +61,21 @@ public class AutomovelController {
         automovel.setAno(automovelDTO.ano());
         automovel.setTipoProprietario(automovelDTO.tipoProprietario());
         if (automovelDTO.tipoProprietario() == TipoProprietario.CLIENTE) {
-            automovel.setCliente(entityManager.find(ClienteModel.class, automovelDTO.cliente().getCliente_id()));
-            automovel.setEmpresa(entityManager.find(EmpresaModel.class, automovelDTO.empresa().getId()));
+            automovel.setCliente(entityManager.find(ClienteModel.class, automovelDTO.cliente()));
+            automovel.setEmpresa(entityManager.find(EmpresaModel.class, automovelDTO.empresa()));
         } else {
-            EmpresaModel empresa = entityManager.find(EmpresaModel.class, automovelDTO.empresa().getId());
+            EmpresaModel empresa = entityManager.find(EmpresaModel.class, automovelDTO.empresa());
             automovel.setEmpresa(empresa);
             automovel.setCliente(null);
         }
 
+        //Verificando se ja nao exite um veiculo com parametros parecidos
+        List<AutomovelModel> automoveis = entityManager.createQuery("SELECT a FROM AutomovelModel a", AutomovelModel.class).getResultList();
+        for (AutomovelModel a : automoveis) {
+            if (a.getMarca().equals(automovel.getMarca()) && a.getModelo().equals(automovel.getModelo()) && /*Comparar pela string */ a.getAno().equals(automovel.getAno())) {
+                return ResponseEntity.badRequest().build();
+            }
+        }
         entityManager.persist(automovel);
         return ResponseEntity.ok().build();
     }

@@ -10,7 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
-public record AutomovelDTO(     Long id,  String marca,
+public record AutomovelDTO(       String marca,
 
  String modelo,
 
@@ -18,9 +18,9 @@ public record AutomovelDTO(     Long id,  String marca,
 
  TipoProprietario tipoProprietario,
 
- ClienteModel cliente,
+ Long cliente,
 
- EmpresaModel empresa) {
+ Long empresa) {
     
     
 
