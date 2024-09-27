@@ -96,4 +96,20 @@ public class ClienteController {
 
         return clienteOptional.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+    @Operation(summary = "Busca todos os contratos associados a esse cliente")
+    @GetMapping("/{id}/contratos")
+    @Transactional
+    public List<ClienteModel> getContratos(@PathVariable Long id) {
+        return entityManager.createQuery("SELECT c FROM ContratoModel c WHERE c.cliente_id = :id", ClienteModel.class)
+                .setParameter("id", id).getResultList();
+    }
+
+    @Operation(summary = "Busca todos os pedidos associados a esse cliente")
+    @GetMapping("/{id}/pedidos")
+    @Transactional
+    public List<ClienteModel> getPedidos(@PathVariable Long id) {
+        return entityManager.createQuery("SELECT p FROM PedidoModel p WHERE p.cliente_id = :id", ClienteModel.class)
+                .setParameter("id", id).getResultList();
+    }
 }
