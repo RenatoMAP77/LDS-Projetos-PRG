@@ -1,6 +1,7 @@
 package PRG.CarRent.Model;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -33,10 +34,10 @@ public class ContratoCrediario  {
     private double valorTotal;
 
     @Column(name = "data_inicio", nullable = false)
-    private Date dataInicio;
+    private LocalDateTime dataInicio;
 
     @Column(name = "data_final", nullable = false)
-    private Date dataFinal;
+    private LocalDateTime dataFinal;
     
     @OneToOne
     private PedidoModel pedido;
