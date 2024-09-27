@@ -2,6 +2,8 @@
 package PRG.CarRent.Model;
 
 
+import java.time.LocalDateTime;
+
 import PRG.CarRent.Util.Enums.StatusPedido;
 import PRG.CarRent.Util.Enums.TipoPedido;
 import jakarta.persistence.CascadeType;
@@ -54,6 +56,13 @@ public class PedidoModel {
     @JoinColumn(name = "banco_id")
     @ManyToOne()
     private BancoModel banco;
+    
+     @Column(name = "data_inicio", nullable = false)
+    private LocalDateTime dataInicio ;
+    
+    @Column(name = "data_final", nullable = false)
+    private LocalDateTime dataFinal;
+
 
     @JoinColumn(name = "contrato_id")
     @OneToOne(mappedBy = "pedido",cascade = CascadeType.ALL)

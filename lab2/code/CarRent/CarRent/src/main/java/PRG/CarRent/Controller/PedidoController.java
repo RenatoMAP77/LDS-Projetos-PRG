@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 import PRG.CarRent.Model.AutomovelModel;
 import PRG.CarRent.Model.ClienteModel;
+import PRG.CarRent.Model.ContratoModel;
 import PRG.CarRent.Model.EmpresaModel;
 import PRG.CarRent.Model.PedidoModel;
 import PRG.CarRent.Util.Enums.StatusPedido;
@@ -54,6 +55,13 @@ public class PedidoController {
             pedido.setCodigoPedido(pedidoDetails.getCodigoPedido());
             pedido.setTipoPedido(pedidoDetails.getTipoPedido());
             pedido.setStatusPedido(pedidoDetails.getStatusPedido());
+            pedido.setAutomovel(pedidoDetails.getAutomovel());
+            if (pedido.getStatusPedido() == StatusPedido.APROVADO) {
+            ContratoModel contrato = new ContratoModel();
+            contrato.setDataInicio(pedido.getDataInicio());
+            contrato.setDataFinal(pedido.getDataFinal());
+            contrato.setPedido(pedido);
+            }
 
             // Atualize outras associações conforme necessário
             entityManager.persist(pedido);
@@ -75,5 +83,25 @@ public class PedidoController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+    
+    @Operation(summary = "Aluga um automóvel")
+    @PostMapping("/alugar/{idAutomovel}")
+    @Transactional
+    public ResponseEntity<String> alugarAutomovel(@RequestBody PedidoModel pedido, @PathVariable Long idAutomovel ) {
+        AutomovelModel automovel = entityManager.find(AutomovelModel.class, idAutomovel);
+        for (PedidoModel p : automovel.getPedidos()) {
+            if (p.getStatusPedido() == StatusPedido.APROVADO &&
+             (pedido.getDataInicio().isAfter(p.getDataInicio()) 
+             && pedido.getDataInicio().isBefore(p.getDataFinal()) 
+             && pedido.getDataFinal().isBefore(p.getDataFinal())
+              && pedido.getDataFinal().isAfter(p.getDataInicio()))){   
+                return ResponseEntity.badRequest().body("Automóvel já alugado nesse período");
+            
+        }}
+        pedido.setAutomovel(automovel);
+        pedido.setStatusPedido(StatusPedido.PENDENTE);
+        entityManager.persist(pedido);
+        return ResponseEntity.ok("Automóvel alugado com sucesso");
     }
 }
