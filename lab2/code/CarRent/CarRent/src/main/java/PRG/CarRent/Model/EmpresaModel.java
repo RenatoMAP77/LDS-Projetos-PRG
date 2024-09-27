@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class EmpresaModel {
+public class EmpresaModel extends Agente{
     
     @Column(name = "id", nullable = false, unique = true)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -54,20 +54,20 @@ public class EmpresaModel {
         this.pedidos.add(pedido);
     }
 
-     public boolean avaliarPedido(PedidoModel pedido, boolean status){
-        if (pedido.getStatusPedido() == StatusPedido.APROVADO || pedido.getStatusPedido() == StatusPedido.REPROVADO){
-            return false;
+    //  public boolean avaliarPedido(PedidoModel pedido, boolean status){
+    //     if (pedido.getStatusPedido() == StatusPedido.APROVADO || pedido.getStatusPedido() == StatusPedido.REPROVADO){
+    //         return false;
             
-        }
-        if (status) {
-            pedido.setStatusPedido(StatusPedido.APROVADO);
-        }
-        else{
-            pedido.setStatusPedido(StatusPedido.REPROVADO);
-        }
+    //     }
+    //     if (status) {
+    //         pedido.setStatusPedido(StatusPedido.APROVADO);
+    //     }
+    //     else{
+    //         pedido.setStatusPedido(StatusPedido.REPROVADO);
+    //     }
 
-        return true;
-    }
+    //     return true;
+    // }
 
 
 }

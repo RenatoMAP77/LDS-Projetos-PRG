@@ -12,7 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
+
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -31,8 +31,6 @@ public class AutomovelModel {
     @Id
     private Long id;
 
-    @Column(name = "matricula", nullable = false, unique = true)
-    private String matricula;
 
     @Column(name = "marca", nullable = false, unique = false)
     private String marca;
@@ -50,9 +48,9 @@ public class AutomovelModel {
     @ManyToOne
     private ClienteModel cliente;
     
-    // @JoinColumn(name = "empresa_id", nullable = true)
-    // @ManyToOne()
-    // private EmpresaModel empresa;
+    @JoinColumn(name = "empresa_id", nullable = true)
+    @ManyToOne()
+    private EmpresaModel empresa;
 
     @OneToMany(mappedBy = "automovel")
     private List<PedidoModel> pedidos;
