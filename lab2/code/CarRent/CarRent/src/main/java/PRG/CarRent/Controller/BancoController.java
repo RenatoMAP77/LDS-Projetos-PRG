@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RestController;
 import PRG.CarRent.Model.BancoModel;
+import PRG.CarRent.Model.PedidoModel;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -91,5 +93,45 @@ public class BancoController {
         return entityManager.createQuery("SELECT c FROM BancoModel c WHERE c.banco_id = :id", BancoModel.class)
                 .setParameter("id", id).getResultList();
     }
+
+    @Operation(description = "Busca todos os contratos associados a esse banco")
+    @GetMapping("/{id}/contratos")
+    @Transactional
+    public List<BancoModel> getContratosCrediario(@PathVariable Long id) {
+        return entityManager.createQuery("SELECT c FROM ContratoCrediario c WHERE c.banco_id = :id", BancoModel.class)
+                .setParameter("id", id).getResultList();
+    }
+
+    @Operation(description = "Busca todos os pedidos associados a esse banco")
+    @GetMapping("/{id}/pedidos")
+    @Transactional
+    public List<BancoModel> getPedidos(@PathVariable Long id) {
+        return entityManager.createQuery("SELECT c FROM PedidoModel c WHERE c.banco_id = :id", BancoModel.class)
+                .setParameter("id", id).getResultList();
+    }
+
+    @Operation(summary = "Avaliar pedido, relacionado a este banco")
+    @PatchMapping("/{id}/pedido/{idPedido}/{resposta}")
+    @Transactional
+    public ResponseEntity<String> avaliarPedido(@PathVariable Long id, @PathVariable Long idPedido,
+            @PathVariable boolean resposta) {
+        BancoModel banco = entityManager.find(BancoModel.class, id);
+        PedidoModel pedido = entityManager.find(PedidoModel.class, idPedido);
+
+        if (banco != null && pedido != null) {
+            if (banco.avaliarPedido(pedido, resposta)) {
+                entityManager.persist(banco);
+                entityManager.persist(pedido);
+                return ResponseEntity.ok("Pedido avaliado com sucesso");
+            } else {
+                return ResponseEntity.badRequest().body("Pedido já foi avaliado");
+            }
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    
+
 
 }

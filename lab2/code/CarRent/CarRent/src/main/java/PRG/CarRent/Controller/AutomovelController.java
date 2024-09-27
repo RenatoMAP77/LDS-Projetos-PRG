@@ -5,6 +5,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import PRG.CarRent.Model.AutomovelModel;
 import PRG.CarRent.Model.ClienteModel;
+import PRG.CarRent.Model.EmpresaModel;
+import PRG.CarRent.Model.Usuario;
+import PRG.CarRent.Model.DTOs.AutomovelDTO;
 import PRG.CarRent.Util.Enums.TipoProprietario;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.persistence.EntityManager;
@@ -38,13 +41,36 @@ public class AutomovelController {
         return automovel != null ? ResponseEntity.ok(automovel) : ResponseEntity.notFound().build();
     }
 
-    @Operation(description = "Cria um novo automóvel")
+    @Operation(description = "Cria um novo automóvel, método para fins administrativos apenas") 
     @PostMapping
     @Transactional
     public ResponseEntity<AutomovelModel> createAutomovel(@RequestBody AutomovelModel automovel) {
         automovel.setId(null);  // Certifique-se de que o ID seja null para criar um novo registro
         entityManager.persist(automovel);
         return ResponseEntity.ok(automovel);
+    }
+
+    @Operation(summary = "Cadastra um novo automóvel no sistema")
+    @PostMapping("/cadastrar")
+    @Transactional
+    public ResponseEntity<AutomovelModel> cadastrarAutomovel(@RequestBody AutomovelDTO automovelDTO ) {
+        AutomovelModel automovel = new AutomovelModel();
+        
+        automovel.setMarca(automovelDTO.marca());
+        automovel.setModelo(automovelDTO.modelo());
+        automovel.setAno(automovelDTO.ano());
+        automovel.setTipoProprietario(automovelDTO.tipoProprietario());
+        if (automovelDTO.tipoProprietario() == TipoProprietario.CLIENTE) {
+            automovel.setCliente(entityManager.find(ClienteModel.class, automovelDTO.cliente().getCliente_id()));
+            automovel.setEmpresa(entityManager.find(EmpresaModel.class, automovelDTO.empresa().getId()));
+        } else {
+            EmpresaModel empresa = entityManager.find(EmpresaModel.class, automovelDTO.empresa().getId());
+            automovel.setEmpresa(empresa);
+            automovel.setCliente(null);
+        }
+
+        entityManager.persist(automovel);
+        return ResponseEntity.ok().build();
     }
 
     @Operation(description = "Atualiza um automóvel existente")
@@ -54,7 +80,6 @@ public class AutomovelController {
         AutomovelModel automovel = entityManager.find(AutomovelModel.class, id);
 
         if (automovel != null) {
-            automovel.setMatricula(automovelDetails.getMatricula());
             automovel.setMarca(automovelDetails.getMarca());
             automovel.setModelo(automovelDetails.getModelo());
             automovel.setAno(automovelDetails.getAno());
