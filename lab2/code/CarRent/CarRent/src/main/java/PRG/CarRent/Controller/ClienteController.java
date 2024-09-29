@@ -85,7 +85,7 @@ public class ClienteController {
     }
 
     @Operation(summary = "Realizar login")
-    @GetMapping("/login")
+    @PostMapping("/login")
     public ResponseEntity<ClienteModel> login(@RequestBody ClienteModel cliente) {
         Optional<ClienteModel> clienteOptional = entityManager.createQuery("SELECT c FROM ClienteModel c WHERE c.email = :email AND c.senha = :senha", ClienteModel.class)
                 .setParameter("email", cliente.getEmail())
@@ -94,7 +94,7 @@ public class ClienteController {
                 .stream()
                 .findFirst();
 
-        return clienteOptional.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+                return ResponseEntity.status(HttpStatus.OK).body(clienteOptional.get());
     }
 
     @Operation(summary = "Busca todos os contratos associados a esse cliente")
