@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import PRG.CarRent.Model.ClienteModel;
+import PRG.CarRent.Model.ContratoModel;
+import PRG.CarRent.Model.PedidoModel;
 import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
@@ -100,16 +102,16 @@ public class ClienteController {
     @Operation(summary = "Busca todos os contratos associados a esse cliente")
     @GetMapping("/{id}/contratos")
     @Transactional
-    public List<ClienteModel> getContratos(@PathVariable Long id) {
-        return entityManager.createQuery("SELECT c FROM ContratoModel c WHERE c.cliente_id = :id", ClienteModel.class)
+    public List<ContratoModel> getContratos(@PathVariable Long id) {
+        return entityManager.createQuery("SELECT c FROM ContratoModel c WHERE c.id = :id", ContratoModel.class)
                 .setParameter("id", id).getResultList();
     }
 
     @Operation(summary = "Busca todos os pedidos associados a esse cliente")
     @GetMapping("/{id}/pedidos")
     @Transactional
-    public List<ClienteModel> getPedidos(@PathVariable Long id) {
-        return entityManager.createQuery("SELECT p FROM PedidoModel p WHERE p.cliente_id = :id", ClienteModel.class)
+    public List<PedidoModel> getPedidos(@PathVariable Long id) {
+        return entityManager.createQuery("SELECT p FROM PedidoModel p WHERE p.id = :id", PedidoModel.class)
                 .setParameter("id", id).getResultList();
     }
 }

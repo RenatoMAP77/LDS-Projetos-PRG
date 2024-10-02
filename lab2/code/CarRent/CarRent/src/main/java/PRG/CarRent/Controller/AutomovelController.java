@@ -54,12 +54,14 @@ public class AutomovelController {
     @PostMapping("/cadastrar")
     @Transactional
     public ResponseEntity<AutomovelModel> cadastrarAutomovel(@RequestBody AutomovelDTO automovelDTO ) {
+        System.out.println(automovelDTO.diaria());
         AutomovelModel automovel = new AutomovelModel();
         
         automovel.setMarca(automovelDTO.marca());
         automovel.setModelo(automovelDTO.modelo());
         automovel.setAno(automovelDTO.ano());
         automovel.setTipoProprietario(automovelDTO.tipoProprietario());
+        automovel.setDiaria(automovelDTO.diaria());
         if (automovelDTO.tipoProprietario() == TipoProprietario.CLIENTE) {
             automovel.setCliente(entityManager.find(ClienteModel.class, automovelDTO.cliente()));
             automovel.setEmpresa(entityManager.find(EmpresaModel.class, automovelDTO.empresa()));
