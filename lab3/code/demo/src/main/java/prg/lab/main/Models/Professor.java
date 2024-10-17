@@ -31,5 +31,5 @@ public class Professor extends Usuario {
 
     @OneToOne
     @JoinColumn(name = "instituicao_id")
-    private Instituição instituicao;
+    private Instituicao instituicao;
 }

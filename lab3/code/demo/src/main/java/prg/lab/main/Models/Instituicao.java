@@ -19,7 +19,7 @@ import lombok.Setter;
 @EqualsAndHashCode
 @Table(name = "Instituicoes")
 @Entity
-public class Instituição {
+public class Instituicao {
     
     @Id
     private Long id;

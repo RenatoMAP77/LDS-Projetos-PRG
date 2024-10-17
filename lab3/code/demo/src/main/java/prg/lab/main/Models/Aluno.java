@@ -38,7 +38,7 @@ public class Aluno extends Usuario {
 
     @OneToOne
     @JoinColumn(name = "instituicao_id")
-    private Instituição instituicao;
+    private Instituicao instituicao;
 
     @OneToMany
     private List<Cupom> cupons;
