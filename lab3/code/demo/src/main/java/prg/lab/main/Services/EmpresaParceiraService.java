@@ -11,26 +11,41 @@ import prg.lab.main.Repositories.EmpresaParceiraRepository;
 
 @Service
 public class EmpresaParceiraService {
+  
     @Autowired
     private EmpresaParceiraRepository empresaParceiraRepository;
 
 
-    public EmpresaParceira getEmpresaParceiraById(Long id){
+    public EmpresaParceira findById(Long id){
         Optional<EmpresaParceira> empresaParceira = empresaParceiraRepository.findById(id);
         return empresaParceira.orElseThrow(() -> new RuntimeException("Empresa Parceira não encontrada"));
     }
     @Transactional
-    public EmpresaParceira createEmpresaParceira(EmpresaParceira empresaParceira){
+    public EmpresaParceira create(EmpresaParceira empresaParceira){
         return empresaParceiraRepository.save(empresaParceira);
     }
     @Transactional
-    public EmpresaParceira updateEmpresaParceira(EmpresaParceira empresaParceira){
-        EmpresaParceira newEmpresaParceira = getEmpresaParceiraById(empresaParceira.getId());
+    public EmpresaParceira update(EmpresaParceira empresaParceira){
+        EmpresaParceira newEmpresaParceira = findById(empresaParceira.getId());
         newEmpresaParceira.setNome(empresaParceira.getNome());
         return empresaParceiraRepository.save(empresaParceira);
     }
     @Transactional
-    public void deleteEmpresaParceira(Long id){
+    public void delete(Long id){
         empresaParceiraRepository.deleteById(id);
+    }
+
+    public Iterable<EmpresaParceira> findAll(){
+        return empresaParceiraRepository.findAll();
+    }
+
+    public EmpresaParceira login(String email, String senha){
+        Optional<EmpresaParceira> empresa=  this.empresaParceiraRepository.findByEmailAndSenha(email, senha);
+        return empresa.orElseThrow(() -> new RuntimeException("Email ou senha inválidos"));
+    }
+
+    public EmpresaParceira findByEmail(String email){
+        Optional<EmpresaParceira> empresa = this.empresaParceiraRepository.findByEmail(email);
+        return empresa.orElseThrow(() -> new RuntimeException("Email não encontrado"));
     }
 }

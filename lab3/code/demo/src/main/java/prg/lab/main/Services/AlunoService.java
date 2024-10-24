@@ -39,4 +39,9 @@ public class AlunoService {
         return alunoRepository.findAll();
     }
 
+    public Aluno login(String email, String senha) {
+        Optional<Aluno> aluno = this.alunoRepository.findByEmailAndSenha(email, senha);
+        return aluno.orElseThrow(() -> new RuntimeException("Email ou senha inválidos"));
+    }
+
 }
