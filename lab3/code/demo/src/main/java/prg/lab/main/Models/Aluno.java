@@ -4,6 +4,8 @@ import java.util.List;
 
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
@@ -24,6 +26,7 @@ import lombok.Setter;
 public class Aluno extends Usuario {
     
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String cpf;
@@ -43,4 +46,15 @@ public class Aluno extends Usuario {
     @OneToMany
     private List<Cupom> cupons;
 
+    public Aluno(String cpf, String rg, String endereco, String curso, String nome, String email, String senha, Instituicao instituicao) {
+        super(nome, email, senha);
+        this.id = null;
+        this.cpf = cpf;
+        this.rg = rg;
+        this.endereco = endereco;
+        this.curso = curso;
+        this.saldoMoedas = 0;
+        this.instituicao = instituicao;
+
+    }
 }

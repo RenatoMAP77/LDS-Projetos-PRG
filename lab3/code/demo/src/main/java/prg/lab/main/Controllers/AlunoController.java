@@ -12,6 +12,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import io.swagger.v3.oas.annotations.Operation;
 import prg.lab.main.Models.Aluno;
 import prg.lab.main.Services.AlunoService;
+import prg.lab.main.Services.InstituicaoService;
+import prg.lab.main.Util.DTOs.AlunoDTO;
+import prg.lab.main.Util.DTOs.LoginDTO;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,16 +31,22 @@ public class AlunoController {
     @Autowired
     private AlunoService alunoService;
 
+    @Autowired
+    private InstituicaoService instituicaoService;
+
     @Operation(description = "Busca um aluno pelo id")
     @GetMapping("/{id}")
-    public ResponseEntity<Aluno> getMethodName(@RequestParam Long id) {
+    public ResponseEntity<Aluno> getMethodName(@PathVariable Long id) {
         return ResponseEntity.ok(alunoService.getAlunoById(id));
     }
 
     @Operation(description = "Cria um aluno")
     @PostMapping()
-    public ResponseEntity<Aluno> create(@RequestParam Aluno aluno) {
-        this.alunoService.createAluno(aluno);
+    public ResponseEntity<Aluno> create(@RequestBody AlunoDTO alunoDto) {
+        
+       Aluno aluno = this.alunoService.createAluno(new Aluno(alunoDto.cpf(), alunoDto.rg(), alunoDto.endereco(),
+        alunoDto.curso(), alunoDto.nome(), alunoDto.email(), alunoDto.senha(),
+         instituicaoService.getInstituicaoById(alunoDto.instituicaoId())));
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(aluno.getId()).toUri();
         return ResponseEntity.created(uri).build();
     }
@@ -67,8 +76,8 @@ public class AlunoController {
 
     @Operation(description = "Login de aluno")
     @GetMapping("/login")
-    public ResponseEntity<Aluno> login(@RequestParam String email, @RequestParam String senha) {
-        return ResponseEntity.ok(alunoService.login(email, senha));
+    public ResponseEntity<Aluno> login(@RequestBody LoginDTO loginDTO) {
+        return ResponseEntity.ok(alunoService.login(loginDTO.email(), loginDTO.senha()));
     }
 
 }

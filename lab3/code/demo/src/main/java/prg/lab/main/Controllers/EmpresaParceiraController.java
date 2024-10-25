@@ -18,6 +18,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import io.swagger.v3.oas.annotations.Operation;
 import prg.lab.main.Models.EmpresaParceira;
 import prg.lab.main.Services.EmpresaParceiraService;
+import prg.lab.main.Util.DTOs.EmpresaParceiraDTO;
 
 @RestController
 @RequestMapping("/empresaParceira")
@@ -49,10 +50,11 @@ public class EmpresaParceiraController {
      
     @Operation(description = "Cria uma nova empresa")
     @PostMapping
-    public ResponseEntity<Void> create(@RequestBody EmpresaParceira empresa){
-         this.empresaParceiraService.create(empresa);
+    public ResponseEntity<Void> create(@RequestBody EmpresaParceiraDTO empresa){
+        EmpresaParceira empresaParceira = new EmpresaParceira(empresa.cnpj(), empresa.nome(), empresa.email(), empresa.senha(), empresa.descricao());
+         this.empresaParceiraService.create(empresaParceira);
          URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-                    .path("/{id}").buildAndExpand(empresa.getId()).toUri() ;
+                    .path("/{id}").buildAndExpand(empresaParceira.getId()).toUri() ;
          return ResponseEntity.created(uri).build();
     }
 

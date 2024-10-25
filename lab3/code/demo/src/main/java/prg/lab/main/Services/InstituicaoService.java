@@ -18,6 +18,10 @@ private InstituicaoRepository instituicaoRepository;
         Optional<Instituicao> instituicao = instituicaoRepository.findById(id);
         return instituicao.orElseThrow(() -> new RuntimeException("Instituicao não encontrada"));
     }
+
+    public Iterable<Instituicao> findAll(){
+        return instituicaoRepository.findAll();
+    }
     @Transactional
     public Instituicao createInstituicao(Instituicao instituicao){
         return instituicaoRepository.save(instituicao);
