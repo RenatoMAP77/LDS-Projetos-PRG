@@ -46,12 +46,21 @@ const EmpresaSchema = z.object({
     .max(1000)
     .min(10, { message: "Insira no mínimo 10 caracteres e no máximo 1000." }),
 });
+type FormValues = z.infer<typeof AlunoSchema> | z.infer<typeof EmpresaSchema>;
+
+enum TipoUsuario {
+  ALUNO = "ALUNO",
+  EMPRESA = "EMPRESA",
+}
+enum TipoForm {
+  ADICIONAR = "ADICIONAR",
+  EDITAR = "EDITAR",
+}
 
 interface GenericFormProps {
-  tipo: "adicionar" | "editar";
-  entidade: "ALUNO" | "EMPRESA";
+  tipo: TipoForm;
+  entidade: TipoUsuario;
 }
-type FormValues = z.infer<typeof AlunoSchema> | z.infer<typeof EmpresaSchema>;
 
 export default function GenericForm({ tipo, entidade }: GenericFormProps) {
   const [loading, setLoading] = useState(false);
@@ -60,7 +69,7 @@ export default function GenericForm({ tipo, entidade }: GenericFormProps) {
   const searchParams = useSearchParams();
   const id = searchParams.get("id") ?? undefined;
   const schema = entidade === "ALUNO" ? AlunoSchema : EmpresaSchema;
-  const {adicionarEntidade, editarEntidade} = useEntidade();
+  const { adicionarEntidade, editarEntidade } = useEntidade();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
@@ -78,8 +87,6 @@ export default function GenericForm({ tipo, entidade }: GenericFormProps) {
       curso: "",
     },
   });
-  
-
 
   useEffect(() => {
     const fetchEntidade = async () => {
@@ -98,7 +105,7 @@ export default function GenericForm({ tipo, entidade }: GenericFormProps) {
       }
     };
 
-    if (tipo === "editar") {
+    if (tipo === TipoForm.EDITAR) {
       fetchEntidade();
     }
   }, [id, tipo, entidade, form, toast]);
@@ -106,11 +113,10 @@ export default function GenericForm({ tipo, entidade }: GenericFormProps) {
   async function onSubmit(values: z.infer<typeof schema>) {
     try {
       setLoading(true);
-      if (tipo === "adicionar") {
+      if (tipo === TipoForm.ADICIONAR) {
         await adicionarEntidade(values, entidade);
       } else {
         await editarEntidade(id as string, values, entidade);
-        
       }
       setTimeout(() => {
         router.push(`/${entidade.toLowerCase()}s/listar`);
@@ -119,7 +125,7 @@ export default function GenericForm({ tipo, entidade }: GenericFormProps) {
       toast({
         title: "Erro!",
         description: `Erro ao ${
-          tipo === "adicionar" ? "criar" : "atualizar"
+          tipo === TipoForm.ADICIONAR ? "criar" : "atualizar"
         } ${entidade}, tente novamente.`,
       });
       setLoading(false);
@@ -137,7 +143,6 @@ export default function GenericForm({ tipo, entidade }: GenericFormProps) {
               <FormItem>
                 <FormLabel htmlFor="nome">Nome</FormLabel>
                 <Input {...field} />
-                
               </FormItem>
             )}
           />
@@ -148,7 +153,6 @@ export default function GenericForm({ tipo, entidade }: GenericFormProps) {
               <FormItem>
                 <FormLabel htmlFor="email">Email</FormLabel>
                 <Input {...field} />
-                
               </FormItem>
             )}
           />
@@ -157,9 +161,10 @@ export default function GenericForm({ tipo, entidade }: GenericFormProps) {
             name="senha"
             render={({ field }) => (
               <FormItem>
-                <FormLabel htmlFor="senha">Senha (mínimo 8 caracteres)</FormLabel>
+                <FormLabel htmlFor="senha">
+                  Senha (mínimo 8 caracteres)
+                </FormLabel>
                 <Input {...field} />
-                
               </FormItem>
             )}
           />
@@ -172,7 +177,6 @@ export default function GenericForm({ tipo, entidade }: GenericFormProps) {
                   <FormItem>
                     <FormLabel htmlFor="cpf">CPF (11 caracteres)</FormLabel>
                     <Input {...field} />
-                    
                   </FormItem>
                 )}
               />
@@ -193,7 +197,6 @@ export default function GenericForm({ tipo, entidade }: GenericFormProps) {
                   <FormItem>
                     <FormLabel htmlFor="saldoMoedas">Saldo Moedas</FormLabel>
                     <Input {...field} />
-                    
                   </FormItem>
                 )}
               />
@@ -204,7 +207,6 @@ export default function GenericForm({ tipo, entidade }: GenericFormProps) {
                   <FormItem>
                     <FormLabel htmlFor="curso">Curso</FormLabel>
                     <Input {...field} />
-                   
                   </FormItem>
                 )}
               />
@@ -215,7 +217,6 @@ export default function GenericForm({ tipo, entidade }: GenericFormProps) {
                   <FormItem>
                     <FormLabel htmlFor="endereco">Endereço</FormLabel>
                     <Input {...field} />
-                   
                   </FormItem>
                 )}
               />
@@ -224,9 +225,10 @@ export default function GenericForm({ tipo, entidade }: GenericFormProps) {
                 name="instituicaoId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel htmlFor="instituicaoId">Instituição ID</FormLabel>
+                    <FormLabel htmlFor="instituicaoId">
+                      Instituição ID
+                    </FormLabel>
                     <Input {...field} />
-                    
                   </FormItem>
                 )}
               />
@@ -240,7 +242,6 @@ export default function GenericForm({ tipo, entidade }: GenericFormProps) {
                   <FormItem>
                     <FormLabel htmlFor="cnpj">CNPJ (14 caracteres)</FormLabel>
                     <Input {...field} />
-                    
                   </FormItem>
                 )}
               />
@@ -251,7 +252,6 @@ export default function GenericForm({ tipo, entidade }: GenericFormProps) {
                   <FormItem>
                     <FormLabel htmlFor="descricao">Descrição</FormLabel>
                     <Input {...field} />
-                    
                   </FormItem>
                 )}
               />
@@ -260,10 +260,14 @@ export default function GenericForm({ tipo, entidade }: GenericFormProps) {
         </div>
         <div className="flex justify-center mb-10">
           <Button type="submit" disabled={loading}>
-            {loading ? "Carregando..." : `${tipo === "adicionar" ? "Adicionar" : "Atualizar"} ${entidade}`}
+            {loading
+              ? "Carregando..."
+              : `${
+                  tipo === TipoForm.ADICIONAR ? "Adicionar" : "Atualizar"
+                } ${entidade}`}
           </Button>
         </div>
       </form>
     </Form>
   );
-};
+}

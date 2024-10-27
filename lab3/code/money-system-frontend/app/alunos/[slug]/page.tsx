@@ -1,18 +1,24 @@
-import AlunosTable from "@/components/root/AlunosTable";
+import TabelaAlunos from "@/components/root/AlunosTable";
 import GenericForm from "@/components/root/GenericForm";
-import { Aluno } from "@/lib/types";
+import { Aluno, TipoForm, TipoUsuario } from "@/lib/types";
 import { readAllEntidades } from "@/services/crudService";
 
-export default async function Page({ params }: any) {
-  const { slug } = await params;
-  
-  const data = await readAllEntidades<Aluno>('ALUNO');
+interface Params {
+  params: {
+    slug: string;
+  };
+}
 
-  if (slug === "adicionar") {
-    return <GenericForm tipo="adicionar" entidade="ALUNO" />;
-  } else if (slug === "editar") {
-    return <GenericForm tipo="editar" entidade="ALUNO" />;
+export default async function Page({ params }: Params) {
+  const { slug } = await params;
+  const data = await readAllEntidades<Aluno>(TipoUsuario.ALUNO);
+
+  if (slug === TipoForm.ADICIONAR.toLowerCase()) {
+    return <GenericForm tipo={TipoForm.ADICIONAR} entidade={TipoUsuario.ALUNO} />;
+
+  } else if (slug === TipoForm.EDITAR.toLowerCase()) {
+    return <GenericForm tipo={TipoForm.EDITAR} entidade={TipoUsuario.ALUNO}/>;
   } else {
-    return <AlunosTable alunos={data} />;
+    return <TabelaAlunos alunos={data} />;
   }
 }

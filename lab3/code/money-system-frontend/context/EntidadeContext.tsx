@@ -1,16 +1,16 @@
 "use client"
 import React, { createContext, useContext } from 'react';
-import { tipoUsuario } from '@/lib/types';
+import { TipoUsuario } from '@/lib/types';
 import { createEntidade, updateEntidade, readAllEntidades, readEntidadeById ,deleteEntidade} from '@/services/crudService';
 import { useToast } from '@/hooks/use-toast';
 
 
 interface EntidadeContextProps {
-  adicionarEntidade: (entidade: any, tipo: tipoUsuario) => Promise<void>;
-  editarEntidade: (id: string, entidade: any, tipo: tipoUsuario) => Promise<void>;
-    deletarEntidade: (id: string, tipo: tipoUsuario) => Promise<void>;
-    lerEntidades: (tipo: tipoUsuario) => Promise<any>;
-    lerEntidadePorId: (id: string, tipo: tipoUsuario) => Promise<any>;
+  adicionarEntidade: (entidade: any, tipo: TipoUsuario) => Promise<void>;
+  editarEntidade: (id: string, entidade: any, tipo: TipoUsuario) => Promise<void>;
+  deletarEntidade: (id: string, tipo: TipoUsuario) => Promise<void>;
+  lerEntidades: (tipo: TipoUsuario) => Promise<any>;
+  lerEntidadePorId: (id: string, tipo: TipoUsuario) => Promise<any>;
 }
 
 const EntidadeContext = createContext<EntidadeContextProps | undefined>(undefined);
@@ -18,7 +18,6 @@ const EntidadeContext = createContext<EntidadeContextProps | undefined>(undefine
 export const EntidadeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { toast } = useToast();
   
-
   const lerEntidades = async (entidade:any) => {
     try {
       return await readAllEntidades(entidade);
@@ -56,7 +55,7 @@ export const EntidadeProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         }
     }
 
-  const adicionarEntidade = async (entidade: any, tipo: tipoUsuario) => {
+  const adicionarEntidade = async (entidade: any, tipo: TipoUsuario) => {
     try {
       await createEntidade(entidade, tipo);
       toast({
@@ -71,7 +70,7 @@ export const EntidadeProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     }
   };
 
-  const editarEntidade = async (id: string, entidade: any, tipo: tipoUsuario) => {
+  const editarEntidade = async (id: string, entidade: any, tipo: TipoUsuario) => {
     try {
       await updateEntidade({ ...entidade, id }, tipo);
       toast({
@@ -87,7 +86,7 @@ export const EntidadeProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   };
 
   return (
-    <EntidadeContext.Provider value={{ adicionarEntidade, editarEntidade, deletarEntidade, lerEntidadePorId, lerEntidades }}>
+    <EntidadeContext.Provider value={{ adicionarEntidade, editarEntidade, deletarEntidade, lerEntidadePorId, lerEntidades}}>
       {children}
     </EntidadeContext.Provider>
   );

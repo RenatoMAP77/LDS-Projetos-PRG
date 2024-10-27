@@ -5,7 +5,7 @@ import { Empresa } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import {Skeleton} from "@/components/ui/skeleton";
 import { useEntidade } from "@/context/EntidadeContext";
-
+import { TipoUsuario } from "@/lib/types";
 interface TabelaEmpresasProps {
   empresas: Empresa[];
 }
@@ -33,7 +33,7 @@ const TabelaEmpresas: React.FC<TabelaEmpresasProps> = ({ empresas }) => {
 
   const confirmDelete = async () => {
     if (empresaSelecionada?.id) {
-      await deletarEntidade(empresaSelecionada.id,'EMPRESA');
+      await deletarEntidade(empresaSelecionada.id,TipoUsuario.EMPRESA);
       reloadEmpresas();
     }
     setShowDeleteModal(false);
@@ -41,7 +41,7 @@ const TabelaEmpresas: React.FC<TabelaEmpresasProps> = ({ empresas }) => {
 
   const reloadEmpresas = async () => {
     setLoading(true);
-    const novasEmpresas = await lerEntidades('EMPRESA');
+    const novasEmpresas = await lerEntidades(TipoUsuario.EMPRESA);
     setEmpresaList(novasEmpresas);
     setLoading(false);
   };

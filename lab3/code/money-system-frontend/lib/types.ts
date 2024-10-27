@@ -1,4 +1,16 @@
-export type tipoUsuario = "EMPRESA" | "ALUNO";
+export enum TipoUsuario {
+  ALUNO = "ALUNO",
+  EMPRESA = "EMPRESA",
+}
+export enum TipoForm {
+  ADICIONAR = "ADICIONAR",
+  EDITAR = "EDITAR",
+}
+
+export enum TipoEntidade {
+  ALUNO = "ALUNO",
+  EMPRESA = "EMPRESA",
+}
 
 export type Empresa = {
   id?: string | undefined;
@@ -20,4 +32,11 @@ export type Aluno = {
   nome: string;
   email: string;
   senha: string;
+  instituicao? : Instituicao;
+};
+
+export type Instituicao = {
+  id: string;
+  nome: string;
+  
 };

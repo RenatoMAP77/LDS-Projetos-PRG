@@ -5,6 +5,7 @@ import { Aluno } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { useEntidade } from "@/context/EntidadeContext";
 import { Skeleton } from "@/components/ui/skeleton";
+import { TipoUsuario } from "@/lib/types";
 
 interface AlunosTableProps {
   alunos: Aluno[];
@@ -29,7 +30,7 @@ const AlunosTable: React.FC<AlunosTableProps> = ({ alunos }) => {
 
   const confirmDelete = async () => {
     if (alunoSelecionado?.id) {
-      await deletarEntidade(alunoSelecionado.id, "ALUNO");
+      await deletarEntidade(alunoSelecionado.id, TipoUsuario.ALUNO);
       reloadAlunos();
     }
     setShowDeleteModal(false);
@@ -37,7 +38,7 @@ const AlunosTable: React.FC<AlunosTableProps> = ({ alunos }) => {
 
   const reloadAlunos = async () => {
     setLoading(true);
-    const novosAlunos = await lerEntidades("ALUNO");
+    const novosAlunos = await lerEntidades(TipoUsuario.ALUNO);
     setAlunoList(novosAlunos);
     setLoading(false);
   };
@@ -46,7 +47,7 @@ const AlunosTable: React.FC<AlunosTableProps> = ({ alunos }) => {
     setAlunoList(alunos);
   }, [alunos]);
 
-  console.log(alunos, "alunos")
+
   return (
     <>
       {loading ? (
@@ -76,7 +77,7 @@ const AlunosTable: React.FC<AlunosTableProps> = ({ alunos }) => {
                 <td className="px-4 py-2 border-b">{aluno.endereco}</td>
                 <td className="px-4 py-2 border-b">{aluno.curso}</td>
                 <td className="px-4 py-2 border-b">{aluno.saldoMoedas}</td>
-                <td className="px-4 py-2 border-b">{aluno.instituicaoId}</td>
+                <td className="px-4 py-2 border-b">{aluno.instituicao?.nome}</td>
                 <td className="px-4 py-2 border-b">{aluno.email}</td>
                 <td className="px-4 py-2 border-b">
                   <Button

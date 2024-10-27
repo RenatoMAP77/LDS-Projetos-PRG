@@ -1,17 +1,27 @@
 import TabelaEmpresas from "@/components/root/EmpresasTable";
 import GenericForm from "@/components/root/GenericForm";
-import { Empresa } from "@/lib/types";
+import { Empresa, TipoForm, TipoUsuario } from "@/lib/types";
 import { readAllEntidades } from "@/services/crudService";
 
-export default async function Page({ params }: any) {
+
+interface Params {
+  params: {
+    slug: string;
+  };
+}
+
+export default async function Page({ params }: Params) {
   const { slug } = await params;
+  const data = await readAllEntidades<Empresa>(TipoUsuario.EMPRESA);
 
-  const data = await readAllEntidades<Empresa>("EMPRESA");
-
-  if (slug === "adicionar") {
-    return <GenericForm tipo="adicionar" entidade="EMPRESA" />;
-  } else if (slug === "editar") {
-    return <GenericForm tipo="editar" entidade="EMPRESA" />;
+  if (slug === TipoForm.ADICIONAR.toLowerCase()) {
+    return (
+      <GenericForm tipo={TipoForm.ADICIONAR} entidade={TipoUsuario.EMPRESA} />
+    );
+  } else if (slug === TipoForm.EDITAR.toLowerCase()) {
+    return (
+      <GenericForm tipo={TipoForm.EDITAR} entidade={TipoUsuario.EMPRESA} />
+    );
   } else {
     return <TabelaEmpresas empresas={data} />;
   }

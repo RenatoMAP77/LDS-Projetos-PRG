@@ -1,12 +1,12 @@
-import { tipoUsuario } from "@/lib/types";
+import { TipoUsuario } from "@/lib/types";
 import api from "@/api/api";
 
-const endpointMap: Record<tipoUsuario, string> = {
+const endpointMap: Record<TipoUsuario, string> = {
   EMPRESA: "/empresaParceira",
   ALUNO: "/aluno",
 };
 
-const getEndpoint = (tipo: tipoUsuario): string => {
+const getEndpoint = (tipo: TipoUsuario): string => {
   const endpoint = endpointMap[tipo];
   if (!endpoint) {
     throw new Error("Tipo de usuário inválido");
@@ -14,7 +14,7 @@ const getEndpoint = (tipo: tipoUsuario): string => {
   return endpoint;
 };
 
-export const readAllEntidades = async <T>(tipo: tipoUsuario): Promise<T[]> => {
+export const readAllEntidades = async <T>(tipo: TipoUsuario): Promise<T[]> => {
   const endpoint = getEndpoint(tipo);
   const response = await api.get(endpoint);
   return response.data;
@@ -22,7 +22,7 @@ export const readAllEntidades = async <T>(tipo: tipoUsuario): Promise<T[]> => {
 
 export const readEntidadeById = async <T>(
   id: string,
-  tipo: tipoUsuario
+  tipo: TipoUsuario
 ): Promise<T> => {
   const endpoint = getEndpoint(tipo);
   const response = await api.get(`${endpoint}/${id}`);
@@ -31,8 +31,9 @@ export const readEntidadeById = async <T>(
 
 export const createEntidade = async <T>(
   entidade: T,
-  tipo: tipoUsuario
+  tipo: TipoUsuario
 ): Promise<T> => {
+  
   const endpoint = getEndpoint(tipo);
   const response = await api.post(endpoint, entidade);
   return response.data;
@@ -40,11 +41,9 @@ export const createEntidade = async <T>(
 
 export const updateEntidade = async <T extends { id?: string }>(
   entidade: T,
-  tipo: tipoUsuario
+  tipo: TipoUsuario
 ): Promise<T> => {
-  if (!entidade.id)
-    throw new Error("O campo 'id' é obrigatório para atualizar a entidade.");
-
+  
   const endpoint = getEndpoint(tipo);
   const response = await api.put(`${endpoint}/${entidade.id}`, entidade);
   return response.data;
@@ -52,7 +51,7 @@ export const updateEntidade = async <T extends { id?: string }>(
 
 export const deleteEntidade = async (
   id: string,
-  tipo: tipoUsuario
+  tipo: TipoUsuario
 ): Promise<void> => {
   const endpoint = getEndpoint(tipo);
   await api.delete(`${endpoint}/${id}`);
