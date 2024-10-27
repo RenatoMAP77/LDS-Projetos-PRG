@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Aluno } from "@/lib/types";
 import { Button } from "@/components/ui/button";
-import { deleteEntidade, getEntidades } from "@/services/crudService";
+import { useEntidade } from "@/context/EntidadeContext";
 import { Skeleton } from "@/components/ui/skeleton";
 
 interface AlunosTableProps {
@@ -16,6 +16,7 @@ const AlunosTable: React.FC<AlunosTableProps> = ({ alunos }) => {
   const [alunoSelecionado, setAlunoSelecionado] = useState<Aluno | null>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [loading, setLoading] = useState(false);
+  const {lerEntidades, deletarEntidade} = useEntidade();
 
   const handleEdit = (aluno: Aluno) => {
     router.push(`/alunos/editar?id=${aluno.id}`);
@@ -28,7 +29,7 @@ const AlunosTable: React.FC<AlunosTableProps> = ({ alunos }) => {
 
   const confirmDelete = async () => {
     if (alunoSelecionado?.id) {
-      await deleteEntidade(alunoSelecionado.id, "ALUNO");
+      await deletarEntidade(alunoSelecionado.id, "ALUNO");
       reloadAlunos();
     }
     setShowDeleteModal(false);
@@ -36,7 +37,7 @@ const AlunosTable: React.FC<AlunosTableProps> = ({ alunos }) => {
 
   const reloadAlunos = async () => {
     setLoading(true);
-    const novosAlunos = await getEntidades<Aluno>("ALUNO");
+    const novosAlunos = await lerEntidades("ALUNO");
     setAlunoList(novosAlunos);
     setLoading(false);
   };

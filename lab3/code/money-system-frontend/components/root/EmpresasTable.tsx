@@ -3,8 +3,8 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Empresa } from "@/lib/types";
 import { Button } from "@/components/ui/button";
-import { deleteEntidade, getEntidades } from "@/services/crudService";
 import {Skeleton} from "@/components/ui/skeleton";
+import { useEntidade } from "@/context/EntidadeContext";
 
 interface TabelaEmpresasProps {
   empresas: Empresa[];
@@ -18,6 +18,7 @@ const TabelaEmpresas: React.FC<TabelaEmpresasProps> = ({ empresas }) => {
   );
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [loading, setLoading] = useState(false);
+  const { lerEntidades, deletarEntidade } = useEntidade();
 
   const handleEdit = (empresa:Empresa) => {
 
@@ -32,7 +33,7 @@ const TabelaEmpresas: React.FC<TabelaEmpresasProps> = ({ empresas }) => {
 
   const confirmDelete = async () => {
     if (empresaSelecionada?.id) {
-      await deleteEntidade(empresaSelecionada.id,'EMPRESA');
+      await deletarEntidade(empresaSelecionada.id,'EMPRESA');
       reloadEmpresas();
     }
     setShowDeleteModal(false);
@@ -40,7 +41,7 @@ const TabelaEmpresas: React.FC<TabelaEmpresasProps> = ({ empresas }) => {
 
   const reloadEmpresas = async () => {
     setLoading(true);
-    const novasEmpresas = await getEntidades<Empresa>('EMPRESA');
+    const novasEmpresas = await lerEntidades('EMPRESA');
     setEmpresaList(novasEmpresas);
     setLoading(false);
   };

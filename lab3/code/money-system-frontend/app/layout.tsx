@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import SidebarComponent from "@/components/root/Sidebar";
 import { Toaster } from "@/components/ui/toaster";
+import { EntidadeProvider } from "@/context/EntidadeContext";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -30,8 +31,10 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <SidebarComponent children={children} />
-        <Toaster />
+        <EntidadeProvider>
+          <SidebarComponent children={children} />
+          <Toaster />
+        </EntidadeProvider>
       </body>
     </html>
   );

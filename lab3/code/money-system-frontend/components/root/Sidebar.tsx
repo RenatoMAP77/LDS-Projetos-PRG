@@ -27,13 +27,8 @@ import Link from "next/link";
 import { data } from "@/lib/utils";
 
 export default function SidebarComponent({ children }: any) {
-  const [activeItem, setActiveItem] = useState("Alunos");
   const [breadcrumb, setBreadcrumb] = useState("Início");
 
-  const handleMenuClick = (itemTitle: string, breadcrumbTitle: string) => {
-    setActiveItem(itemTitle);
-    setBreadcrumb(breadcrumbTitle);
-  };
 
   return (
     <SidebarProvider>

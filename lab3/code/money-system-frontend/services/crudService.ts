@@ -1,4 +1,4 @@
-import { Empresa, tipoUsuario, Aluno } from "@/lib/types";
+import {  tipoUsuario } from "@/lib/types";
 import api from "@/api/api";
 
 const getEndpoint = (tipo: tipoUsuario) => {
@@ -12,13 +12,13 @@ const getEndpoint = (tipo: tipoUsuario) => {
   }
 };
 
-export const getEntidades = async <T>(tipo: tipoUsuario): Promise<T[]> => {
+export const readAllEntidades = async <T>(tipo: tipoUsuario): Promise<T[]> => {
   const endpoint = getEndpoint(tipo);
   const response = await api.get(endpoint);
   return response.data;
 };
 
-export const getEntidadeById = async <T>(id: string, tipo: tipoUsuario): Promise<T> => {
+export const readEntidadeById = async <T>(id: string, tipo: tipoUsuario): Promise<T> => {
   const endpoint = getEndpoint(tipo);
   const response = await api.get(`${endpoint}/${id}`);
   return response.data;

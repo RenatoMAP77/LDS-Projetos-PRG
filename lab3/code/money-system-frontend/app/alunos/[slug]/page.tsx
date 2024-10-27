@@ -1,17 +1,17 @@
 import AlunosTable from "@/components/root/AlunosTable";
-import AlunosFormulary from "@/components/root/AlunosFormulary";
+import GenericForm from "@/components/root/GenericForm";
 import { Aluno } from "@/lib/types";
-import { getEntidades } from "@/services/crudService";
+import { readAllEntidades } from "@/services/crudService";
 
 export default async function Page({ params }: any) {
   const { slug } = await params;
   
-  const data = await getEntidades<Aluno>('ALUNO');
+  const data = await readAllEntidades<Aluno>('ALUNO');
 
   if (slug === "adicionar") {
-    return <AlunosFormulary tipo="adicionar" />;
+    return <GenericForm tipo="adicionar" entidade="ALUNO" />;
   } else if (slug === "editar") {
-    return <AlunosFormulary tipo="editar" />;
+    return <GenericForm tipo="editar" entidade="ALUNO" />;
   } else {
     return <AlunosTable alunos={data} />;
   }
