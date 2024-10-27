@@ -1,15 +1,17 @@
 import {  tipoUsuario } from "@/lib/types";
 import api from "@/api/api";
 
-const getEndpoint = (tipo: tipoUsuario) => {
-  switch (tipo) {
-    case 'EMPRESA':
-      return "/empresaParceira";
-    case 'ALUNO':
-      return "/aluno";
-    default:
-      throw new Error("Tipo de usuário inválido");
+const endpointMap: Record<tipoUsuario, string> = {
+  EMPRESA: "/empresaParceira",
+  ALUNO: "/aluno",
+};
+
+const getEndpoint = (tipo: tipoUsuario): string => {
+  const endpoint = endpointMap[tipo];
+  if (!endpoint) {
+    throw new Error("Tipo de usuário inválido");
   }
+  return endpoint;
 };
 
 export const readAllEntidades = async <T>(tipo: tipoUsuario): Promise<T[]> => {
