@@ -45,7 +45,7 @@ public class AlunoController {
     public ResponseEntity<Aluno> create(@RequestBody AlunoDTO alunoDto) {
         
        Aluno aluno = this.alunoService.createAluno(new Aluno(alunoDto.cpf(), alunoDto.rg(), alunoDto.endereco(),
-        alunoDto.curso(), alunoDto.nome(), alunoDto.email(), alunoDto.senha(),
+        alunoDto.curso(), alunoDto.nome(), alunoDto.email(), alunoDto.senha(), alunoDto.saldoMoedas(),
          instituicaoService.getInstituicaoById(alunoDto.instituicaoId())));
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(aluno.getId()).toUri();
         return ResponseEntity.created(uri).build();

@@ -2,12 +2,14 @@ package prg.lab.main.Models;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -37,23 +39,24 @@ public class Aluno extends Usuario {
 
     private String curso;
 
-    private int saldoMoedas;
+    private Double saldoMoedas;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "instituicao_id")
     private Instituicao instituicao;
 
     @OneToMany
+    @JsonIgnore
     private List<Cupom> cupons;
 
-    public Aluno(String cpf, String rg, String endereco, String curso, String nome, String email, String senha, Instituicao instituicao) {
+    public Aluno(String cpf, String rg, String endereco, String curso, String nome, String email, String senha,Double saldo, Instituicao instituicao) {
         super(nome, email, senha);
         this.id = null;
         this.cpf = cpf;
         this.rg = rg;
         this.endereco = endereco;
         this.curso = curso;
-        this.saldoMoedas = 0;
+        this.saldoMoedas = saldo;
         this.instituicao = instituicao;
 
     }

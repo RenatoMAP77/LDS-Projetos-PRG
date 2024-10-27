@@ -1,6 +1,6 @@
 package prg.lab.main.Util.DTOs;
 
-public record AlunoDTO(String cpf, String rg, String endereco, String curso, int saldoMoedas, Long instituicaoId, String nome, String email, String senha) {
+public record AlunoDTO(String cpf, String rg, String endereco, String curso, Double saldoMoedas, Long instituicaoId, String nome, String email, String senha) {
     
     public AlunoDTO {
         if (cpf == null || cpf.isBlank()) {

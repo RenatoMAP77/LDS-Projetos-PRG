@@ -1,11 +1,17 @@
 package prg.lab.main.Models;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -32,4 +38,15 @@ public class Instituicao {
     @OneToOne
     @JoinColumn(name = "professor_id")
     private Professor professor;
+
+    @OneToMany
+    @JsonIgnore
+    private List<Aluno> alunos;
+
+    public Instituicao(String nome, Professor professor) {
+        this.id = null;
+        this.nome = nome;
+        this.professor = professor;
+        this.alunos = new ArrayList<>();
+    }
 }

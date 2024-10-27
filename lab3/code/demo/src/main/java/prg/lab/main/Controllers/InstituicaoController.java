@@ -47,7 +47,7 @@ public ResponseEntity<Instituicao> create(@RequestBody InstituicaoDTO instituica
     } else {
         System.out.println("Instituição DTO Nome: " + instituicaoDTO.nome());
     }
-    Instituicao instituicao = instituicaoService.createInstituicao(new Instituicao(null, instituicaoDTO.nome(), null));
+    Instituicao instituicao = instituicaoService.createInstituicao(new Instituicao( instituicaoDTO.nome(), null));
     
     URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}").buildAndExpand(instituicao.getId()).toUri();
