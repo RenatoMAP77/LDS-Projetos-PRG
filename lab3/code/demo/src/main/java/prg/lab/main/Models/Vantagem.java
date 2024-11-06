@@ -32,8 +32,6 @@ public class Vantagem {
 
     private String descricao;
 
-    private String foto;
-
     private int custoEmMoedas;
     
 
@@ -44,13 +42,11 @@ public class Vantagem {
     @OneToMany
     private List<Cupom> cupons;
 
-    public Vantagem(String descricao, int custoEmMoedas, String foto, EmpresaParceira empresaParceira) {
+    public Vantagem(String descricao, int custoEmMoedas, EmpresaParceira empresaParceira) {
 
         this.descricao = descricao;
 
         this.custoEmMoedas = custoEmMoedas;
-
-        this.foto = foto;
 
         this.empresa = empresaParceira;
 

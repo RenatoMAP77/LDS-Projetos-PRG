@@ -32,7 +32,7 @@ public class VantagemController {
     @PostMapping()
     public ResponseEntity<Vantagem> cadastrarVantagem(VantagemDTO vantagemDTO) {
         Vantagem vantagem = vantagemService.createVantagem(new Vantagem(vantagemDTO.descricao(), vantagemDTO.custoEmMoedas(),
-        vantagemDTO.foto(), empresaParceiraService.findById(vantagemDTO.empresaId())));
+     empresaParceiraService.findById(vantagemDTO.empresaId())));
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(vantagem.getId()).toUri();
         return ResponseEntity.created(uri).build();
     }

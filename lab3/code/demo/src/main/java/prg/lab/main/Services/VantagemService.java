@@ -28,7 +28,7 @@ public class VantagemService {
     @Transactional
     public Vantagem updateVantagem(Vantagem vantagem){
         Vantagem newVantagem = getVantagemById(vantagem.getId());
-        newVantagem.setFoto(vantagem.getFoto());
+        newVantagem.setCustoEmMoedas(vantagem.getCustoEmMoedas());
         return vantagemRepository.save(vantagem);
     }
 
