@@ -28,6 +28,7 @@ public class AlunoService {
     public Aluno updateAluno(Aluno aluno) {
         Aluno newAluno = getAlunoById(aluno.getId());
         newAluno.setNome(aluno.getNome());
+        newAluno.setInstituicao(aluno.getInstituicao());
         return alunoRepository.save(aluno);
     }
     @Transactional

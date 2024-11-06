@@ -1,5 +1,6 @@
 package prg.lab.main.Services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,13 @@ public class VantagemService {
         newVantagem.setFoto(vantagem.getFoto());
         return vantagemRepository.save(vantagem);
     }
+
+    @Transactional
+    public List<Vantagem> getAllVantagens(){
+        return vantagemRepository.findAll();
+    }
+
+
     @Transactional
     public void deleteVantagem(Long id){
         vantagemRepository.deleteById(id);

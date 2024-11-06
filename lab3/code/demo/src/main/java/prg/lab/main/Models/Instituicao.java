@@ -40,7 +40,7 @@ public class Instituicao {
     private Professor professor;
 
     @OneToMany
-    @JsonIgnore
+    
     private List<Aluno> alunos;
 
     public Instituicao(String nome, Professor professor) {

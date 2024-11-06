@@ -1,5 +1,6 @@
 package prg.lab.main.Models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.Entity;
@@ -42,4 +43,19 @@ public class Vantagem {
 
     @OneToMany
     private List<Cupom> cupons;
+
+    public Vantagem(String descricao, int custoEmMoedas, String foto, EmpresaParceira empresaParceira) {
+
+        this.descricao = descricao;
+
+        this.custoEmMoedas = custoEmMoedas;
+
+        this.foto = foto;
+
+        this.empresa = empresaParceira;
+
+        cupons = new ArrayList<>();
+
+    }
+
 }
