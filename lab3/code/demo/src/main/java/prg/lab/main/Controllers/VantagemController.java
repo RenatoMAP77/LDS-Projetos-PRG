@@ -11,7 +11,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import io.swagger.v3.oas.annotations.Operation;
 import prg.lab.main.Models.Vantagem;
+import prg.lab.main.Services.EmpresaParceiraService;
 import prg.lab.main.Services.VantagemService;
+import prg.lab.main.Util.DTOs.VantagemDTO;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,11 +25,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class VantagemController {
     @Autowired
     VantagemService vantagemService;
+    @Autowired
+    EmpresaParceiraService empresaParceiraService;
 
     @Operation(description = "Cadastra uma nova vantagem")
     @PostMapping()
-    public ResponseEntity<Vantagem> cadastrarVantagem(Vantagem vantagem) {
-        this.vantagemService.createVantagem(vantagem);
+    public ResponseEntity<Vantagem> cadastrarVantagem(VantagemDTO vantagemDTO) {
+        Vantagem vantagem = vantagemService.createVantagem(new Vantagem(vantagemDTO.descricao(), vantagemDTO.custoEmMoedas(),
+        vantagemDTO.foto(), empresaParceiraService.findById(vantagemDTO.empresaId())));
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(vantagem.getId()).toUri();
         return ResponseEntity.created(uri).build();
     }
