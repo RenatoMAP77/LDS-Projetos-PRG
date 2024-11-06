@@ -47,6 +47,7 @@ const AlunosTable: React.FC<AlunosTableProps> = ({ alunos }) => {
     setAlunoList(alunos);
   }, [alunos]);
 
+ 
 
   return (
     <>
