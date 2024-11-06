@@ -164,7 +164,7 @@ export default function GenericForm({ tipo, entidade }: GenericFormProps) {
                 <FormLabel htmlFor="senha">
                   Senha (mínimo 8 caracteres)
                 </FormLabel>
-                <Input {...field} />
+                <Input type="password" {...field} />
               </FormItem>
             )}
           />
