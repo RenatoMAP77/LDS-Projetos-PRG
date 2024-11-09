@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import {Skeleton} from "@/components/ui/skeleton";
 import { useEntidade } from "@/context/EntidadeContext";
 import { TipoUsuario } from "@/lib/types";
+
 interface TabelaEmpresasProps {
   empresas: Empresa[];
 }
@@ -55,28 +56,28 @@ const TabelaEmpresas: React.FC<TabelaEmpresasProps> = ({ empresas }) => {
       {loading ? (
         <Skeleton className="h-20 w-full" />
       ) : (
-        <table className="min-w-full border border-gray-200">
+        <table className="min-w-full ">
           <thead>
-            <tr className="bg-gray-100">
-              <th className="px-4 py-2 border-b">Nome</th>
-              <th className="px-4 py-2 border-b">CNPJ</th>
-              <th className="px-4 py-2 border-b">Descrição</th>
-              <th className="px-4 py-2 border-b">Email</th>
-              <th className="px-4 py-2 border-b">Editar</th>
-              <th className="px-4 py-2 border-b">Excluir</th>
+            <tr className="">
+              <th className="px-4 py-2 border-b text-center">Nome</th>
+              <th className="px-4 py-2 border-b text-center">CNPJ</th>
+              <th className="px-4 py-2 border-b text-center">Descrição</th>
+              <th className="px-4 py-2 border-b text-center">Email</th>
+              <th className="px-4 py-2 border-b text-center">Editar</th>
+              <th className="px-4 py-2 border-b text-center">Excluir</th>
             </tr>
           </thead>
           <tbody>
             {empresaList.map((empresa) => (
               <tr key={empresa.id}>
-                <td className="px-4 py-2 border-b">{empresa.nome}</td>
-                <td className="px-4 py-2 border-b">{empresa.cnpj}</td>
-                <td className="px-4 py-2 border-b">{empresa.descricao}</td>
-                <td className="px-4 py-2 border-b">{empresa.email}</td>
-                <td className="px-4 py-2 border-b">
+                <td className="px-4 py-2 border-b text-center">{empresa.nome}</td>
+                <td className="px-4 py-2 border-b text-center">{empresa.cnpj}</td>
+                <td className="px-4 py-2 border-b text-center">{empresa.descricao}</td>
+                <td className="px-4 py-2 border-b text-center">{empresa.email}</td>
+                <td className="px-4 py-2 border-b ">
                   <Button
                     onClick={() => handleEdit(empresa)}
-                    className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded"
+                    className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded w-full"
                   >
                     Editar
                   </Button>
@@ -84,7 +85,7 @@ const TabelaEmpresas: React.FC<TabelaEmpresasProps> = ({ empresas }) => {
                 <td className="px-4 py-2 border-b">
                   <Button
                     onClick={() => handleDelete(empresa)}
-                    className="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded"
+                    className="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded w-full"
                   >
                     Excluir
                   </Button>

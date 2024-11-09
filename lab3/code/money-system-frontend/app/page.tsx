@@ -1,4 +1,4 @@
-import { School, Briefcase } from "lucide-react";
+import { School, Briefcase, Coins, HandHeartIcon, Paperclip } from "lucide-react";
 import { ActionCard } from "@/components/root/ActionCard";
 
 
@@ -16,6 +16,25 @@ export default function HomePage() {
       icon: <Briefcase className="h-6 w-6" />,
       href: "/empresas",
     },
+    {
+      title: "Vantagens",
+      description: "Gerecie as  vantagens na plataforma",
+      icon: <HandHeartIcon className="h-6 w-6" />,
+      href: "/vantagens",
+    },
+    {
+      title: "Moedas",
+      description: "Gerecie as moedas na plataforma",
+      icon: <Coins className="h-6 w-6" />,
+      href: "/moedas",
+    },
+    {
+      title: "Extratos",
+      description: "Gerecie os extratos na plataforma",
+      icon: <Paperclip className="h-6 w-6" />,
+      href: "/extratos",
+    },
+
     
   ];
 

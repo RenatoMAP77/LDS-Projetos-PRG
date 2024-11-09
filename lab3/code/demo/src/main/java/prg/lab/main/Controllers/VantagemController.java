@@ -30,7 +30,7 @@ public class VantagemController {
 
     @Operation(description = "Cadastra uma nova vantagem")
     @PostMapping()
-    public ResponseEntity<Vantagem> cadastrarVantagem(VantagemDTO vantagemDTO) {
+    public ResponseEntity<Vantagem> cadastrarVantagem(@RequestBody VantagemDTO vantagemDTO) {
         Vantagem vantagem = vantagemService.createVantagem(new Vantagem(vantagemDTO.descricao(), vantagemDTO.custoEmMoedas(),
      empresaParceiraService.findById(vantagemDTO.empresaId())));
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(vantagem.getId()).toUri();

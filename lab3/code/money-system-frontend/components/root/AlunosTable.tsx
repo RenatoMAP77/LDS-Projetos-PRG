@@ -54,36 +54,36 @@ const AlunosTable: React.FC<AlunosTableProps> = ({ alunos }) => {
       {loading ? (
         <Skeleton className="h-20 w-full" />
       ) : (
-        <table className="min-w-full border border-gray-200">
+        <table className="min-w-full">
           <thead>
-            <tr className="bg-gray-100">
-              <th className="px-4 py-2 border-b">Nome</th>
-              <th className="px-4 py-2 border-b">CPF</th>
-              <th className="px-4 py-2 border-b">RG</th>
-              <th className="px-4 py-2 border-b">Endereço</th>
-              <th className="px-4 py-2 border-b">Curso</th>
-              <th className="px-4 py-2 border-b">Moedas</th>
-              <th className="px-4 py-2 border-b">Instituição</th>
-              <th className="px-4 py-2 border-b">Email</th>
-              <th className="px-4 py-2 border-b">Editar</th>
-              <th className="px-4 py-2 border-b">Excluir</th>
+            <tr>
+              <th className="px-4 py-2 border-b text-center">Nome</th>
+              <th className="px-4 py-2 border-b text-center">CPF</th>
+              <th className="px-4 py-2 border-b text-center">RG</th>
+              <th className="px-4 py-2 border-b text-center">Endereço</th>
+              <th className="px-4 py-2 border-b text-center">Curso</th>
+              <th className="px-4 py-2 border-b text-center">Moedas</th>
+              <th className="px-4 py-2 border-b text-center">Instituição</th>
+              <th className="px-4 py-2 border-b text-center">Email</th>
+              <th className="px-4 py-2 border-b text-center">Editar</th>
+              <th className="px-4 py-2 border-b text-center">Excluir</th>
             </tr>
           </thead>
           <tbody>
             {alunoList.map((aluno) => (
               <tr key={aluno.id}>
-                <td className="px-4 py-2 border-b">{aluno.nome}</td>
-                <td className="px-4 py-2 border-b">{aluno.cpf}</td>
-                <td className="px-4 py-2 border-b">{aluno.rg}</td>
-                <td className="px-4 py-2 border-b">{aluno.endereco}</td>
-                <td className="px-4 py-2 border-b">{aluno.curso}</td>
-                <td className="px-4 py-2 border-b">{aluno.saldoMoedas}</td>
-                <td className="px-4 py-2 border-b">{aluno.instituicao?.nome}</td>
-                <td className="px-4 py-2 border-b">{aluno.email}</td>
-                <td className="px-4 py-2 border-b">
+                <td className="px-4 py-2 border-b text-center">{aluno.nome}</td>
+                <td className="px-4 py-2 border-b text-center">{aluno.cpf}</td>
+                <td className="px-4 py-2 border-b text-center">{aluno.rg}</td>
+                <td className="px-4 py-2 border-b text-center">{aluno.endereco}</td>
+                <td className="px-4 py-2 border-b text-center">{aluno.curso}</td>
+                <td className="px-4 py-2 border-b text-center">{aluno.saldoMoedas}</td>
+                <td className="px-4 py-2 border-b text-center">{aluno.instituicao?.nome}</td>
+                <td className="px-4 py-2 border-b text-center">{aluno.email}</td>
+                <td className="px-4 py-2 border-b text-center">
                   <Button
                     onClick={() => handleEdit(aluno)}
-                    className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded"
+                    className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded w-full"
                   >
                     Editar
                   </Button>
@@ -91,7 +91,7 @@ const AlunosTable: React.FC<AlunosTableProps> = ({ alunos }) => {
                 <td className="px-4 py-2 border-b">
                   <Button
                     onClick={() => handleDelete(aluno)}
-                    className="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded"
+                    className="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded w-full"
                   >
                     Excluir
                   </Button>

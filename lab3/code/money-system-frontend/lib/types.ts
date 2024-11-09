@@ -32,11 +32,25 @@ export type Aluno = {
   nome: string;
   email: string;
   senha: string;
-  instituicao? : Instituicao;
+  instituicao?: Instituicao;
 };
 
 export type Instituicao = {
   id: string;
   nome: string;
-  
 };
+
+export type VantagemCreate = {
+  custoEmMoedas: number;
+  descricao: string;
+  empresaId: string | undefined;
+};
+
+export type VantagemRead = {
+  id: number;
+  descricao: string;
+  custoEmMoedas: number;
+  empresa: Empresa;
+  cupons: any[]; 
+};
+

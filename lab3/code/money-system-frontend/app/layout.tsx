@@ -4,6 +4,7 @@ import "./globals.css";
 import SidebarComponent from "@/components/root/Sidebar";
 import { Toaster } from "@/components/ui/toaster";
 import { EntidadeProvider } from "@/context/EntidadeContext";
+import { VantagemProvider } from "@/context/VantagemContext";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -29,11 +30,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased dark`}
       >
         <EntidadeProvider>
+          <VantagemProvider>
           <SidebarComponent children={children} />
           <Toaster />
+          </VantagemProvider>
         </EntidadeProvider>
       </body>
     </html>
