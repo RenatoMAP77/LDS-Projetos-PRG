@@ -22,6 +22,14 @@ public class AlunoService {
     }
     @Transactional
     public Aluno createAluno(Aluno aluno) {
+        if (alunoRepository.existsByEmail(aluno.getEmail())) {
+            throw new RuntimeException("Email já cadastrado");
+            
+        }
+        if (aluno.getSaldoMoedas()<0) {
+            throw new RuntimeException("Saldo de moedas não pode ser negativo");
+            
+        }
         return alunoRepository.save(aluno);
     }
     @Transactional

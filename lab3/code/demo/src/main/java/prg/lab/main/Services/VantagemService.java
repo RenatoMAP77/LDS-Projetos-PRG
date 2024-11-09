@@ -23,6 +23,13 @@ public class VantagemService {
 
     @Transactional
     public Vantagem createVantagem(Vantagem vantagem){
+        if(vantagemRepository.existsByDescricao(vantagem.getDescricao())) {
+            throw new RuntimeException("Vantagem já existe");
+        }
+        if (vantagem.getCustoEmMoedas() < 0) {
+            throw new RuntimeException("Custo em moedas não pode ser negativo");
+            
+        }
         return vantagemRepository.save(vantagem);
     }
     @Transactional

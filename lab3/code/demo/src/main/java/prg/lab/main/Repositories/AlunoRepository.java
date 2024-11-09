@@ -11,5 +11,7 @@ import prg.lab.main.Models.Aluno;
 public interface AlunoRepository extends JpaRepository<Aluno, Long> {
 
     Optional<Aluno> findByEmailAndSenha(String email, String senha);
+
+    boolean existsByEmail(String email);
     
 }
