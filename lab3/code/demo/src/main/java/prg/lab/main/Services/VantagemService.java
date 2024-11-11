@@ -22,7 +22,7 @@ public class VantagemService {
     }
 
     @Transactional
-    public Vantagem createVantagem(Vantagem vantagem){
+    public Vantagem cadastrarVantagem(Vantagem vantagem){
         if(vantagemRepository.existsByDescricao(vantagem.getDescricao())) {
             throw new RuntimeException("Vantagem já existe");
         }
@@ -40,7 +40,7 @@ public class VantagemService {
     }
 
     @Transactional
-    public List<Vantagem> getAllVantagens(){
+    public List<Vantagem> listarVantagens(){
         return vantagemRepository.findAll();
     }
 

@@ -33,6 +33,8 @@ public class Vantagem {
     private String descricao;
 
     private int custoEmMoedas;
+
+    private String foto;
     
 
     @ManyToOne
@@ -42,7 +44,7 @@ public class Vantagem {
     @OneToMany
     private List<Cupom> cupons;
 
-    public Vantagem(String descricao, int custoEmMoedas, EmpresaParceira empresaParceira) {
+    public Vantagem(String descricao, int custoEmMoedas, EmpresaParceira empresaParceira, String foto) {
 
         this.descricao = descricao;
 
@@ -51,6 +53,11 @@ public class Vantagem {
         this.empresa = empresaParceira;
 
         cupons = new ArrayList<>();
+ //se a foto for nula, seta uma foto padrão
+        if(foto == null) {
+            this.foto = "https://istoe.com.br/wp-content/uploads/2016/01/as_14585846654714.jpg";
+        } else
+        this.foto = foto;
 
     }
 
