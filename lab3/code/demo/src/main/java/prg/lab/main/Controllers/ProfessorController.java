@@ -7,15 +7,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import prg.lab.main.Models.Professor;
+import prg.lab.main.Services.InstituicaoService;
 import prg.lab.main.Services.ProfessorService;
+import prg.lab.main.Util.DTOs.ProfessorDTO;
 
 @RestController
 @RequestMapping("/professor")
@@ -24,20 +28,25 @@ public class ProfessorController {
     @Autowired
     private ProfessorService professorService;
 
+    @Autowired
+    private InstituicaoService instituicaoService;
+
     @GetMapping("/{id}")
-    public ResponseEntity<Professor> getMethodName(@RequestParam Long id) {
+    public ResponseEntity<Professor> getMethodName(@PathVariable Long id) {
         return ResponseEntity.ok(professorService.getProfessorById(id));
     }
 
     @PostMapping()
-    public ResponseEntity<Professor> create(@RequestParam Professor professor) {
-        this.professorService.createProfessor(professor);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(professor.getId()).toUri();
+    public ResponseEntity<Professor> create(@RequestBody ProfessorDTO professor) {
+        System.out.println(professor.toString());
+      Professor newProfessor =  this.professorService.createProfessor(new Professor( professor.cpf(), professor.departamento(), 
+        professor.saldoMoedas(), instituicaoService.getInstituicaoById(professor.instituicaoId()), professor.email(), professor.nome(), professor.senha()));
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(newProfessor.getId()).toUri();
         return ResponseEntity.created(uri).build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Professor> update(@RequestParam("id") Long id, @RequestParam Professor professor) {
+    public ResponseEntity<Professor> update(@PathVariable Long id, @PathVariable Professor professor) {
        professor.setId(id);
        this.professorService.updateProfessor(professor);
          return ResponseEntity.noContent().build();

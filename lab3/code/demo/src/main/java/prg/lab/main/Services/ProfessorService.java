@@ -38,4 +38,22 @@ public class ProfessorService {
     public List<Professor> getAllProfessores() {
         return professorRepository.findAll();
     }
+
+    @Transactional
+    public void creditarMoedas(Long id, int quantidade) {
+        Professor professor = getProfessorById(id);
+        professor.setSaldoMoedas(professor.getSaldoMoedas() + quantidade);
+        professorRepository.save(professor);
+    }
+
+    @Transactional
+    public void debitarMoedas(Long id, Double quantidade) {
+        Professor professor = getProfessorById(id);
+        if (professor.getSaldoMoedas() < quantidade) {
+            throw new RuntimeException("Saldo do professor insuficiente para realizar a transação");
+            
+        }
+        professor.setSaldoMoedas(professor.getSaldoMoedas() - quantidade);
+        professorRepository.save(professor);
+    }
 }

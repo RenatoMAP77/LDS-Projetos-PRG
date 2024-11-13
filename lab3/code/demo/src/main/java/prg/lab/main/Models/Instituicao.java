@@ -4,15 +4,11 @@ package prg.lab.main.Models;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -25,7 +21,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-@Table(name = "Instituicoes")
+@Table(name = "Instituicao")
 @Entity
 public class Instituicao {
     
@@ -35,18 +31,16 @@ public class Instituicao {
 
     private String nome;
 
-    @OneToOne
-    @JoinColumn(name = "professor_id")
-    private Professor professor;
+    @OneToMany
+    private List<Professor> professor;
 
     @OneToMany
-    
     private List<Aluno> alunos;
 
-    public Instituicao(String nome, Professor professor) {
+    public Instituicao(String nome) {
         this.id = null;
         this.nome = nome;
-        this.professor = professor;
+        this.professor = new ArrayList<>();
         this.alunos = new ArrayList<>();
     }
 }

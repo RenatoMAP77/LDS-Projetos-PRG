@@ -1,10 +1,13 @@
 package prg.lab.main.Models;
 
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -26,13 +29,24 @@ public class Professor extends Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
     private String cpf;
 
     private String departamento;
 
-    private int saldoMoedas;
+    private Double saldoMoedas;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "instituicao_id")
     private Instituicao instituicao;
+
+    public Professor( String cpf, String departamento, Double saldoMoedas, Instituicao instituicao, String email, String nome, String senha) {
+        this.cpf = cpf;
+        this.departamento = departamento;
+        this.saldoMoedas = saldoMoedas;
+        this.instituicao = instituicao;
+        this.setEmail(email);
+        this.setNome(nome);
+        this.setSenha(senha);
+    }
 }

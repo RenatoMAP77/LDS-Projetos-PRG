@@ -2,10 +2,13 @@ package prg.lab.main.Models;
 
 import java.time.LocalDateTime;
 
+import org.hibernate.metamodel.model.domain.DomainType;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -33,14 +36,31 @@ public class Transacao {
 
     private LocalDateTime data;
 
-    private int quantidade;
+    private String descricao;
+
+    private Double quantidade;
 
     private TransactionTypes tipo;
 
     @ManyToOne
+    @JoinColumn(name = "aluno_id")
     private Aluno aluno;
 
     @ManyToOne
+    @JoinColumn(name = "empresa_id")
     private EmpresaParceira empresa;
+
+    @ManyToOne
+    @JoinColumn(name = "professor_id")
+    private Professor professor;
     
+    public Transacao(LocalDateTime data, String descricao, Double quantidade, TransactionTypes tipo, Aluno aluno, EmpresaParceira empresa, Professor professor) {
+        this.data = data;
+        this.descricao = descricao;
+        this.quantidade = quantidade;
+        this.tipo = tipo;
+        this.aluno = aluno;
+        this.empresa = empresa;
+        this.professor = professor;
+    }
 }

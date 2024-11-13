@@ -53,4 +53,21 @@ public class AlunoService {
         return aluno.orElseThrow(() -> new RuntimeException("Email ou senha inválidos"));
     }
 
+    @Transactional
+    public void creditarMoedas(Long id, Double quantidade) {
+        Aluno aluno = getAlunoById(id);
+        aluno.setSaldoMoedas(aluno.getSaldoMoedas() + quantidade);
+        alunoRepository.save(aluno);
+    }
+
+    @Transactional
+    public void debitarMoedas(Long id, Double quantidade) {
+        Aluno aluno = getAlunoById(id);
+        if (aluno.getSaldoMoedas() < quantidade) {
+            throw new RuntimeException("Saldo do aluno insuficiente para realizar a transação");
+            
+        }
+        aluno.setSaldoMoedas(aluno.getSaldoMoedas() - quantidade);
+        alunoRepository.save(aluno);
+    }
 }
