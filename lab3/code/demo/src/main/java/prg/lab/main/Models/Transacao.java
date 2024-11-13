@@ -2,7 +2,6 @@ package prg.lab.main.Models;
 
 import java.time.LocalDateTime;
 
-import org.hibernate.metamodel.model.domain.DomainType;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

@@ -9,13 +9,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import io.swagger.v3.oas.annotations.Operation;
 
-import prg.lab.main.Models.EmpresaParceira;
 import prg.lab.main.Models.Instituicao;
 import prg.lab.main.Services.InstituicaoService;
 import prg.lab.main.Util.DTOs.InstituicaoDTO;
