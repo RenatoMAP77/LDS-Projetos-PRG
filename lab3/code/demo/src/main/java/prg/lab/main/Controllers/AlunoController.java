@@ -2,6 +2,7 @@ package prg.lab.main.Controllers;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import prg.lab.main.Services.AlunoService;
 import prg.lab.main.Services.InstituicaoService;
 import prg.lab.main.Util.DTOs.AlunoDTO;
 import prg.lab.main.Util.DTOs.LoginDTO;
+import prg.lab.main.Util.DTOs.LoginRequestDTO;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -75,9 +77,10 @@ public class AlunoController {
     }
 
     @Operation(description = "Login de aluno")
-    @GetMapping("/login")
-    public ResponseEntity<Aluno> login(@RequestBody LoginDTO loginDTO) {
-        return ResponseEntity.ok(alunoService.login(loginDTO.email(), loginDTO.senha()));
+   @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody LoginRequestDTO aluno) {
+        Optional<Aluno> newAluno = this.alunoService.login(aluno.getEmail(), aluno.getSenha());
+        return ResponseEntity.ok(newAluno.get().getTipoUsuario().toString());
     }
 
 }

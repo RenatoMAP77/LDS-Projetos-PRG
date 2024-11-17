@@ -30,6 +30,11 @@ public class ProfessorService {
         newProfessor.setNome(professor.getNome());
         return professorRepository.save(professor);
     }
+
+    @Transactional
+    public Optional<Professor> login(String email, String senha) {
+        return professorRepository.findByEmailAndSenha(email, senha);
+    }
     @Transactional
     public void deleteProfessor(Long id) {
         professorRepository.deleteById(id);

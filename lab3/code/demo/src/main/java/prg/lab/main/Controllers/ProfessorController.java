@@ -2,6 +2,7 @@ package prg.lab.main.Controllers;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import prg.lab.main.Models.Professor;
 import prg.lab.main.Services.InstituicaoService;
 import prg.lab.main.Services.ProfessorService;
+import prg.lab.main.Util.DTOs.LoginRequestDTO;
 import prg.lab.main.Util.DTOs.ProfessorDTO;
 
 @RestController
@@ -56,6 +58,12 @@ public class ProfessorController {
     public ResponseEntity<Void> deleteById(@RequestParam Long id) {
         this.professorService.deleteProfessor(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody LoginRequestDTO professor) {
+        Optional<Professor> newProfessor = this.professorService.login(professor.getEmail(), professor.getSenha());
+        return ResponseEntity.ok(newProfessor.get().getTipoUsuario().toString());
     }
 
     @GetMapping()

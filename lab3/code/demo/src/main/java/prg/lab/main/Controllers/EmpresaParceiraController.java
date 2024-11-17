@@ -1,6 +1,7 @@
 package prg.lab.main.Controllers;
 
 import java.net.URI;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import prg.lab.main.Models.EmpresaParceira;
 import prg.lab.main.Services.EmpresaParceiraService;
 import prg.lab.main.Util.DTOs.EmpresaParceiraDTO;
+import prg.lab.main.Util.DTOs.LoginDTO;
+import prg.lab.main.Util.DTOs.LoginRequestDTO;
 
 @RestController
 @RequestMapping("/empresaParceira")
@@ -50,12 +53,12 @@ public class EmpresaParceiraController {
      
     @Operation(description = "Cria uma nova empresa")
     @PostMapping
-    public ResponseEntity<Void> create(@RequestBody EmpresaParceiraDTO empresa){
+    public ResponseEntity<String> create(@RequestBody EmpresaParceiraDTO empresa){
         EmpresaParceira empresaParceira = new EmpresaParceira(empresa.cnpj(), empresa.nome(), empresa.email(), empresa.senha(), empresa.descricao());
          this.empresaParceiraService.create(empresaParceira);
          URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                     .path("/{id}").buildAndExpand(empresaParceira.getId()).toUri() ;
-         return ResponseEntity.created(uri).build();
+         return ResponseEntity.ok(empresaParceira.getTipoUsuario().toString());
     }
 
     @Operation(description = "Exclui uma empresa pelo id")
@@ -75,10 +78,12 @@ public class EmpresaParceiraController {
     }
 
     @Operation(description="Faz login de uma empresa",summary = "Faz login de uma empresa")
-    @GetMapping("/login")
-    public ResponseEntity<EmpresaParceira> login(@RequestBody String email, @RequestBody String senha){
-        EmpresaParceira empresa = this.empresaParceiraService.login(email, senha);
-        return ResponseEntity.ok().body(empresa);
+     @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody LoginRequestDTO loginRequestDTO) {
+        
+            Optional<EmpresaParceira> empresa = empresaParceiraService.login(loginRequestDTO.getEmail(), loginRequestDTO.getSenha());
+            return ResponseEntity.ok().body(empresa.get().getTipoUsuario().toString());
+            
     }
 
     // @Operation(description="Atualiza a senha de uma empresa",summary = "Atualiza a senha de uma empresa")

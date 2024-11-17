@@ -39,13 +39,13 @@ public class EmpresaParceiraService {
         return empresaParceiraRepository.findAll();
     }
 
-    public EmpresaParceira login(String email, String senha){
-        Optional<EmpresaParceira> empresa=  this.empresaParceiraRepository.findByEmailAndSenha(email, senha);
-        return empresa.orElseThrow(() -> new RuntimeException("Email ou senha inválidos"));
+    public Optional<EmpresaParceira> login(String email, String senha) {
+        return empresaParceiraRepository.findByEmailAndSenha(email,senha);
+            
     }
 
     public EmpresaParceira findByEmail(String email){
         Optional<EmpresaParceira> empresa = this.empresaParceiraRepository.findByEmail(email);
-        return empresa.orElseThrow(() -> new RuntimeException("Email não encontrado"));
+        return empresa.filter(e -> e.getEmail().equals(email)).orElseThrow(() -> new RuntimeException("Empresa não encontrada"));
     }
 }
