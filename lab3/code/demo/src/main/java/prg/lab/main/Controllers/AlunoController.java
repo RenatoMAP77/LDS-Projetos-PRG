@@ -1,7 +1,9 @@
 package prg.lab.main.Controllers;
 
 import java.net.URI;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,9 +80,14 @@ public class AlunoController {
 
     @Operation(description = "Login de aluno")
    @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequestDTO aluno) {
+    public ResponseEntity<?> login(@RequestBody LoginRequestDTO aluno) {
         Optional<Aluno> newAluno = this.alunoService.login(aluno.getEmail(), aluno.getSenha());
-        return ResponseEntity.ok(newAluno.get().getTipoUsuario().toString());
+        Map<String, Object> response = new HashMap<>();
+        response.put("id", newAluno.get().getId());
+        response.put("tipoUsuario", newAluno.get().getTipoUsuario());
+        
+        //return ResponseEntity.ok(newAluno.get().getTipoUsuario().toString());
+        return ResponseEntity.ok(response);
     }
 
 }

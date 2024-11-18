@@ -1,7 +1,9 @@
 package prg.lab.main.Controllers;
 
 import java.net.URI;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,9 +63,13 @@ public class ProfessorController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequestDTO professor) {
+    public ResponseEntity<?> login(@RequestBody LoginRequestDTO professor) {
         Optional<Professor> newProfessor = this.professorService.login(professor.getEmail(), professor.getSenha());
-        return ResponseEntity.ok(newProfessor.get().getTipoUsuario().toString());
+        Map<String, Object> response = new HashMap<>();
+        response.put("id", newProfessor.get().getId());
+        response.put("tipoUsuario", newProfessor.get().getTipoUsuario());
+        //return ResponseEntity.ok(newProfessor.get().getTipoUsuario().toString());
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping()
