@@ -6,129 +6,180 @@ import { Button } from "@/components/ui/button";
 import { useEntidade } from "@/context/EntidadeContext";
 import { Skeleton } from "@/components/ui/skeleton";
 import { TipoUsuario } from "@/lib/types";
+import { Input } from "@/components/ui/input";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from "@/components/ui/form";
+import { Textarea } from "@/components/ui/textarea";
+import { createDonate } from "@/services/donateService";
+import { toast } from "@/hooks/use-toast";
 
 interface AlunosTableProps {
-  alunos: Aluno[];
+    alunos: Aluno[];
 }
 
+const formSchema = z.object({
+    quantidade: z.number().min(1, "A quantidade deve ser maior que zero"),
+    descricao: z.string().min(1, "A descrição é obrigatória"),
+});
+
 const AlunosTable: React.FC<AlunosTableProps> = ({ alunos }) => {
-  const router = useRouter();
-  const [alunoList, setAlunoList] = useState<Aluno[]>(alunos);
-  const [alunoSelecionado, setAlunoSelecionado] = useState<Aluno | null>(null);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const {lerEntidades, deletarEntidade} = useEntidade();
+    const router = useRouter();
+    const [alunoList, setAlunoList] = useState<Aluno[]>(alunos);
+    const [alunoSelecionado, setAlunoSelecionado] = useState<Aluno | null>(null);
+    const [showDonationModal, setShowDonationModal] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const { lerEntidades, deletarEntidade } = useEntidade();
+    const idProfessor = localStorage.getItem("id");
 
-  const handleEdit = (aluno: Aluno) => {
-    router.push(`/alunos/editar?id=${aluno.id}`);
-  };
+    const form = useForm<z.infer<typeof formSchema>>({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            quantidade: 0,
+            descricao: "",
+        },
+    });
 
-  const handleDelete = (aluno: Aluno) => {
-    setAlunoSelecionado(aluno);
-    setShowDeleteModal(true);
-  };
+    const handleDonation = (aluno: Aluno) => {
+        setAlunoSelecionado(aluno);
+        setShowDonationModal(true);
+    };
 
-  const confirmDelete = async () => {
-    if (alunoSelecionado?.id) {
-      await deletarEntidade(alunoSelecionado.id, TipoUsuario.ALUNO);
-      reloadAlunos();
-    }
-    setShowDeleteModal(false);
-  };
+    const onSubmit = async (values: z.infer<typeof formSchema>) => {
+        try {
+            const data = {
+                idAluno: alunoSelecionado?.id,
+                idProfessor: Number(idProfessor),
+                quantidade: values.quantidade,
+                descricao: values.descricao,
+            }
+            await createDonate(data);
+            await reloadAlunos();
+            toast({
+                title: "Doação feita com sucesso",
+            });
+        }
+        catch (error) {
+            toast({
+                title: "Erro!",
+            });
+            console.error("Doação falhou:", error);
+        } finally {
+            setShowDonationModal(false);
 
-  const reloadAlunos = async () => {
-    setLoading(true);
-    const novosAlunos = await lerEntidades(TipoUsuario.ALUNO);
-    setAlunoList(novosAlunos);
-    setLoading(false);
-  };
+        }
+    };
 
-  useEffect(() => {
-    setAlunoList(alunos);
-  }, [alunos]);
+    const reloadAlunos = async () => {
+        setLoading(true);
+        const novosAlunos = await lerEntidades(TipoUsuario.ALUNO);
+        setAlunoList(novosAlunos);
+        setLoading(false);
+    };
 
- 
+    useEffect(() => {
+        setAlunoList(alunos);
+    }, [alunos]);
 
-  return (
-    <>
-      {loading ? (
-        <Skeleton className="h-20 w-full" />
-      ) : (
-        <table className="min-w-full">
-          <thead>
-            <tr>
-              <th className="px-4 py-2 border-b text-center">Nome</th>
-              <th className="px-4 py-2 border-b text-center">CPF</th>
-              <th className="px-4 py-2 border-b text-center">RG</th>
-              <th className="px-4 py-2 border-b text-center">Endereço</th>
-              <th className="px-4 py-2 border-b text-center">Curso</th>
-              <th className="px-4 py-2 border-b text-center">Moedas</th>
-              <th className="px-4 py-2 border-b text-center">Instituição</th>
-              <th className="px-4 py-2 border-b text-center">Email</th>
-              <th className="px-4 py-2 border-b text-center">Editar</th>
-              <th className="px-4 py-2 border-b text-center">Excluir</th>
-            </tr>
-          </thead>
-          <tbody>
-            {alunoList.map((aluno) => (
-              <tr key={aluno.id}>
-                <td className="px-4 py-2 border-b text-center">{aluno.nome}</td>
-                <td className="px-4 py-2 border-b text-center">{aluno.cpf}</td>
-                <td className="px-4 py-2 border-b text-center">{aluno.rg}</td>
-                <td className="px-4 py-2 border-b text-center">{aluno.endereco}</td>
-                <td className="px-4 py-2 border-b text-center">{aluno.curso}</td>
-                <td className="px-4 py-2 border-b text-center">{aluno.saldoMoedas}</td>
-                <td className="px-4 py-2 border-b text-center">{aluno.instituicao?.nome}</td>
-                <td className="px-4 py-2 border-b text-center">{aluno.email}</td>
-                <td className="px-4 py-2 border-b text-center">
-                  <Button
-                    onClick={() => handleEdit(aluno)}
-                    className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded w-full"
-                  >
-                    Editar
-                  </Button>
-                </td>
-                <td className="px-4 py-2 border-b">
-                  <Button
-                    onClick={() => handleDelete(aluno)}
-                    className="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded w-full"
-                  >
-                    Excluir
-                  </Button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+    return (
+        <>
+            {loading ? (
+                <Skeleton className="h-20 w-full" />
+            ) : (
+                <table className="min-w-full">
+                    <thead>
+                        <tr>
+                            <th className="px-4 py-2 border-b text-center">Nome</th>
+                            <th className="px-4 py-2 border-b text-center">CPF</th>
+                            <th className="px-4 py-2 border-b text-center">RG</th>
+                            <th className="px-4 py-2 border-b text-center">Curso</th>
+                            <th className="px-4 py-2 border-b text-center">Moedas</th>
+                            <th className="px-4 py-2 border-b text-center">Instituição</th>
+                            <th className="px-4 py-2 border-b text-center">Doar Moedas</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {alunoList.map((aluno) => (
+                            <tr key={aluno.id}>
+                                <td className="px-4 py-2 border-b text-center">{aluno.nome}</td>
+                                <td className="px-4 py-2 border-b text-center">{aluno.cpf}</td>
+                                <td className="px-4 py-2 border-b text-center">{aluno.rg}</td>
+                                <td className="px-4 py-2 border-b text-center">{aluno.curso}</td>
+                                <td className="px-4 py-2 border-b text-center">{aluno.saldoMoedas}</td>
+                                <td className="px-4 py-2 border-b text-center">{aluno.instituicao?.nome}</td>
+                                <td className="px-4 py-2 border-b text-center">
+                                    <Button
+                                        onClick={() => handleDonation(aluno)}
+                                        className="bg-green-500 hover:bg-green-600 text-white px-2 py-1 rounded w-full"
+                                    >
+                                        Doar Moedas
+                                    </Button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            )}
 
-      {showDeleteModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded shadow-lg w-full max-w-md">
-            <h2 className="text-lg font-bold mb-4">Confirmação de Exclusão</h2>
-            <p className="mb-6">
-              Tem certeza de que deseja excluir a empresa{" "}
-              {alunoSelecionado?.nome}?
-            </p>
-            <div className="flex justify-end space-x-2">
-              <Button
-                onClick={() => setShowDeleteModal(false)}
-                className="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded"
-              >
-                Cancelar
-              </Button>
-              <Button
-                onClick={confirmDelete}
-                className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
-              >
-                Excluir
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
-    </>
-  );
+            {showDonationModal && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="bg-white p-6 rounded shadow-lg w-full max-w-md">
+                        <h2 className="text-xl font-bold mb-4">Doar Moedas para {alunoSelecionado?.nome}</h2>
+                        <Form {...form}>
+                            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                                <FormField
+                                    control={form.control}
+                                    name="quantidade"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Quantidade de Moedas</FormLabel>
+                                            <FormControl>
+                                                <Input type="number" {...field} onChange={(e) => field.onChange(Number(e.target.value))} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="descricao"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Descrição</FormLabel>
+                                            <FormControl>
+                                                <Textarea {...field} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <div className="flex justify-end space-x-2 pt-2">
+                                    <Button
+                                        type="button"
+                                        onClick={() => setShowDonationModal(false)}
+                                        variant="secondary"
+                                    >
+                                        Cancelar
+                                    </Button>
+                                    <Button type="submit">
+                                        Confirmar Doação
+                                    </Button>
+                                </div>
+                            </form>
+                        </Form>
+                    </div>
+                </div>
+            )}
+        </>
+    );
 };
 
 export default AlunosTable;

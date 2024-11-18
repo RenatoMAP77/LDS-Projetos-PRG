@@ -1,97 +1,95 @@
 import { type ClassValue, clsx } from "clsx";
 import { Briefcase, School, Home, Coins, HandHeartIcon, Paperclip } from "lucide-react";
 import { twMerge } from "tailwind-merge";
+import { ROUTES } from "./constants";
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
+    return twMerge(clsx(inputs));
 }
 
 export const data = {
-  navMain: [
-    {
-      title: "Início",
-      home: "/",
-      icon: Home,
-    },
-    {
-      title: "Alunos",
-      home: "/alunos",
-      icon: School,
-      items: [
+    navMain: [
         {
-          title: "Listar Alunos",
-          url: "/alunos/listar",
-          breadcrumb: "Listar Alunos",
+            title: "Alunos",
+            home: ROUTES.PAINEL_ALUNOS,
+            icon: School,
+            items: [
+                {
+                    title: "Início",
+                    url: ROUTES.PAINEL_ALUNOS,
+                    breadcrumb: "Início",
+                },
+                {
+                    title: "Resgatar vantagens",
+                    url: ROUTES.PAINEL_ALUNOS_VANTAGENS_RESGATAR,
+                    breadcrumb: "Resgatar Vantagens",
+                },
+                // {
+                //     title: "Visualizar recibos",
+                //     url: ROUTES.PAINEL_ALUNOS_RECIBOS,
+                //     breadcrumb: "Visualizar recibos",
+                // },
+                {
+                    title: "Sair",
+                    url: ROUTES.HOME,
+                    breadcrumb: "",
+                }
+            ],
         },
         {
-          title: "Adicionar Alunos",
-          url: "/alunos/adicionar",
-          breadcrumb: "Adicionar Alunos",
-        }
-      ],
-    },
-    {
-      title: "Empresas Parceiras",
-      home:"/empresas",
-      icon: Briefcase,
-      items: [
-        {
-          title: "Listar Empresas",
-          url: "/empresas/listar",
-          breadcrumb: "Listar Empresas",
+            title: "Empresas",
+            home: ROUTES.PAINEL_EMPRESAS,
+            icon: Briefcase,
+            items: [
+                {
+                    title: "Início",
+                    url: ROUTES.PAINEL_EMPRESAS,
+                    breadcrumb: "Início",
+                },
+                {
+                    title: "Cadastrar vantagens",
+                    url: ROUTES.PAINEL_EMPRESAS_VANTAGENS_ADICIONAR,
+                    breadcrumb: "Listar Vantagens",
+                },
+                {
+                    title: "Listar vantagens",
+                    url: ROUTES.PAINEL_EMPRESAS_VANTAGENS_LISTAR,
+                    breadcrumb: "Listar Vantagens",
+                },
+                {
+                    title: "Sair",
+                    url: ROUTES.HOME,
+                    breadcrumb: "",
+                }
+            ],
+
         },
         {
-          title: "Adicionar Empresa",
-          url: "/empresas/adicionar",
-          breadcrumb: "Adicionar Empresa",
-        }
-      ],
-    },
-    {
-      title: "Vantagens",
-      home:"/vantagens",
-      icon: HandHeartIcon,
-      items: [
-        {
-          title: "Listar Vantagens",
-          url: "/vantagens/listar",
-          breadcrumb: "Listar Vantagens",
+            title: "Professores",
+            home: ROUTES.PAINEL_PROFESSORES,
+            icon: School,
+            items: [
+                {
+                    title: "Início",
+                    url: ROUTES.PAINEL_PROFESSORES,
+                    breadcrumb: "Início",
+                },
+                {
+                    title: "Doar moedas",
+                    url: ROUTES.PAINEL_PROFESSORES_MOEDAS,
+                    breadcrumb: "Doar moedas",
+                },
+                // {
+                //     title: "Visualizar recibos",
+                //     url: ROUTES.PAINEL_PROFESSORES_RECIBOS,
+                //     breadcrumb: "Visualizar recibos",
+                // },
+                {
+                    title: "Sair",
+                    url: ROUTES.HOME,
+                    breadcrumb: "",
+                }
+            ],
         },
-        {
-          title: "Adicionar Vantagem",
-          url: "/vantagens/adicionar",
-          breadcrumb: "Adicionar Vantagem",
-        },
-        {
-          title: "Trocar Vantagem",
-          url: "/vantagens/trocar",
-          breadcrumb: "Trocar Vantagem",
-        }
-      ],
-    },
-    {
-      title: "Moedas",
-      home:"/moedas",
-      icon: Coins,
-      items: [
-        {
-          title: "Enviar Moedas",
-          url: "/moedas/enviar",
-          breadcrumb: "Enviar Moedas",
-        }
-      ],
-    },
-    {
-      title: "Extratos",
-      home:"/extratos",
-      icon: Paperclip,
-      items: [
-        {
-          title: "Consultar Extratos",
-          url: "/extratos/listar",
-          breadcrumb: "Consultar Extratos",
-        }
-      ],
-    },
-  ],
+    ],
 };
