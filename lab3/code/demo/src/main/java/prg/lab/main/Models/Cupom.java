@@ -40,5 +40,11 @@ public class Cupom {
     @JoinColumn(name="vantagem_id")
     private Vantagem vantagem;
 
+    public Cupom(String codigo, EmpresaParceira empresa, Aluno aluno, Vantagem vantagem){
+        this.codigo = codigo;
+        this.empresa = empresa;
+        this.aluno = aluno;
+        this.vantagem = vantagem;
+    }
 
 }

@@ -31,6 +31,16 @@ public class EmailService {
         sendEmail(emailToSend);
        
     }
+    public void enviarVantagemEmail(String emailAlunoDestinatario, String nomeVantagem , Double quantidadeMoedas , String codigoCupom) {
+        Email emailToSend = new Email();
+        emailToSend.setTo(emailAlunoDestinatario);
+        emailToSend.setSubject("Você resgatou uma vantagem!");
+        emailToSend.setBody("<h1>Parabéns!</h1><p>Você resgatou a vantagem " + nomeVantagem +
+         " por " + quantidadeMoedas + " moedas</p>"
+         + "<p>Seu código de cupom é: " + codigoCupom + "</p>");
+        sendEmail(emailToSend);
+       
+    }
 
     private void sendEmail(Email email) {
         if (email == null ||email.getTo() == null || email.getTo().isEmpty() || email.getSubject() == null || email.getSubject().isEmpty() || email.getBody() == null || email.getBody().isEmpty()) {

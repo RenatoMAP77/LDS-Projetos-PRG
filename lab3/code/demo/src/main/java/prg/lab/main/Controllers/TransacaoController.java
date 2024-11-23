@@ -18,6 +18,7 @@ import prg.lab.main.Services.EmpresaParceiraService;
 import prg.lab.main.Services.ProfessorService;
 import prg.lab.main.Services.TransacaoService;
 import prg.lab.main.Util.DTOs.PremiarAlunoDTO;
+import prg.lab.main.Util.DTOs.ResgatarVantagemDTO;
 import prg.lab.main.Util.Enums.TransactionTypes;
 
 @RestController
@@ -57,5 +58,13 @@ public class TransacaoController {
            alunoService.getAlunoById(transacao.idAluno()),
            null,
             professorService.getProfessorById(transacao.idProfessor()))));
+    }
+
+    @PostMapping("/resgatar")
+    public ResponseEntity<Transacao> resgatarVantagem(@RequestBody ResgatarVantagemDTO resgatarVantagemDTO) {
+
+        
+        return ResponseEntity.ok(transacaoService.regatarVantagem(resgatarVantagemDTO));
+       
     }
 }
