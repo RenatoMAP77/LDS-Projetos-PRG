@@ -72,3 +72,19 @@ export type LoginResponse = {
     tipoUsuario: "ALUNO" | "EMPRESA" | "PROFESSOR";
     id: number;
 }
+
+export type Transaction = {
+    alunoId: number;
+    vantagemId: number;
+}
+
+export type TransactionResponse = {
+    aluno: Aluno;
+    empresa: Empresa;
+    professor: Professor;
+    id: number;
+    data: string;
+    descricao: string;
+    quantidade: number;
+    tipo: "PREMIACAO_MOEDAS" | "RESGATE_VANTAGEM";
+}

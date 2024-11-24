@@ -69,6 +69,7 @@ export default function VantagensForm() {
             toast({
                 title: "Erro ao criar vantagem",
                 description: "Houve um problema ao tentar criar a vantagem.",
+                variant: "destructive",
             });
         } finally {
             setLoading(false);

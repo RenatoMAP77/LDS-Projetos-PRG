@@ -21,6 +21,7 @@ export const VantagemProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       toast({
         title: "Erro ao buscar entidades",
         description: "Tente novamente.",
+          variant: "destructive",
       });
     }
   };
@@ -37,6 +38,7 @@ export const VantagemProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       toast({
         title: "Erro ao criar entidade",
         description: "Tente novamente.",
+          variant: "destructive",
       });
     }
   };

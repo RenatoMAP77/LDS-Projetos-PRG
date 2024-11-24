@@ -70,6 +70,7 @@ const AlunosTable: React.FC<AlunosTableProps> = ({ alunos }) => {
         catch (error) {
             toast({
                 title: "Erro!",
+                variant: "destructive",
             });
             console.error("Doação falhou:", error);
         } finally {

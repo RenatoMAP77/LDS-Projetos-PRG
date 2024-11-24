@@ -8,13 +8,13 @@ import { useState, useEffect } from "react";
 const actions = [
     {
         title: "Listar",
-        description: "Visualize todos empresas cadastrados",
+        description: "Visualize todos vantagens cadastradas",
         icon: <List className="h-6 w-6" />,
         href: "/painel/empresas/vantagens/listar"
     },
     {
         title: "Adicionar",
-        description: "Registre uma novo empresa",
+        description: "Registre uma nova vantagem",
         icon: <PlusCircle className="h-6 w-6" />,
         href: "/painel/empresas/vantagens/adicionar"
     }

@@ -138,6 +138,7 @@ export default function GenericForm({ tipo, entidade }: GenericFormProps) {
                 title: "Erro!",
                 description: `Erro ao ${tipo === TipoForm.ADICIONAR ? "criar" : "atualizar"
                     } ${entidade}, tente novamente.`,
+                variant: "destructive",
             });
             setLoading(false);
         }
