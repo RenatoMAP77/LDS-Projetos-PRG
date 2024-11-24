@@ -24,11 +24,11 @@ export const data = {
                     url: ROUTES.PAINEL_ALUNOS_VANTAGENS_RESGATAR,
                     breadcrumb: "Resgatar Vantagens",
                 },
-                // {
-                //     title: "Visualizar recibos",
-                //     url: ROUTES.PAINEL_ALUNOS_RECIBOS,
-                //     breadcrumb: "Visualizar recibos",
-                // },
+                {
+                    title: "Visualizar histórico",
+                    url: ROUTES.PAINEL_ALUNOS_RECIBOS,
+                    breadcrumb: "Visualizar histórico",
+                },
                 {
                     title: "Sair",
                     url: ROUTES.HOME,

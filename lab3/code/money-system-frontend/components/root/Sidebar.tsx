@@ -76,7 +76,7 @@ export default function SidebarComponent({ children }: { children: React.ReactNo
                                         />
                                     </div>
                                     <div className="grid flex-1 text-left text-sm leading-tight">
-                                        <span className="truncate font-semibold">Sistema de Moeda Estudantil</span>
+                                        <span className="truncate font-semibold">Moeda Estudantil</span>
                                         <span className="truncate text-xs">Versão 2.0</span>
                                     </div>
                                 </Link>

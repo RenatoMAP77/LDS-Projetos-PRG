@@ -41,7 +41,7 @@ export default function HomePage() {
                 <h1 className="mb-2 text-2xl font-bold">Bem-vindo {professor?.nome}</h1>
                 <p className="text-xl text-muted-foreground">Você possui: {professor?.saldoMoedas} Moedas</p>
             </div>
-            <div className="grid gap-6 md:grid-cols-2 ">
+            <div className="grid gap-6  ">
                 {actions.map((action) => (
                     <ActionCard key={action.title} {...action} />
                 ))}

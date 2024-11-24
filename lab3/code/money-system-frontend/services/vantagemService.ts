@@ -10,3 +10,5 @@ export const readAllVantagens = async <T>(): Promise<T> => {
 export const createVantagem = async <T>(data: T): Promise<void> => {
   await api.post(url, data);
 };
+
+

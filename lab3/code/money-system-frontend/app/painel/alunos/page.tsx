@@ -12,14 +12,14 @@ const actions = [
         description: "Resgate vantagens",
         icon: <List className="h-6 w-6" />,
         href: ROUTES.PAINEL_ALUNOS_VANTAGENS_RESGATAR
-        // },
-        // {
-        //     title: "Visualize seus recibos",
-        //     description: "Visualizar recibos",
-        //     icon: <PlusCircle className="h-6 w-6" />,
-        //     href: ROUTES.PAINEL_ALUNOS_RECIBOS
-        // }
+    },
+    {
+        title: "Visualize seu histórico",
+        description: "Visualizar histórico de vantagens",
+        icon: <PlusCircle className="h-6 w-6" />,
+        href: ROUTES.PAINEL_ALUNOS_RECIBOS
     }
+    
 ]
 
 
