@@ -1,6 +1,7 @@
 package prg.lab.main.Services;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -119,6 +120,10 @@ public class TransacaoService {
     @Transactional
     public void deleteTransacao(Long id) {
         transacaoRepository.deleteById(id);
+    }
+
+    public List<Transacao> history(Long id) {
+        return transacaoRepository.findAllByAlunoId(id);
     }
 
     // @Transactional

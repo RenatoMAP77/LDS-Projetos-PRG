@@ -67,4 +67,9 @@ public class TransacaoController {
         return ResponseEntity.ok(transacaoService.regatarVantagem(resgatarVantagemDTO));
        
     }
+
+    @GetMapping("/history/{id}")
+    public ResponseEntity<?> getHistory(@PathVariable Long id) {
+        return ResponseEntity.ok(transacaoService.history(id));
+    }
 }
