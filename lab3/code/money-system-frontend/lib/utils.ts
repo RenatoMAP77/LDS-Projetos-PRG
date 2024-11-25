@@ -79,11 +79,11 @@ export const data = {
                     url: ROUTES.PAINEL_PROFESSORES_MOEDAS,
                     breadcrumb: "Doar moedas",
                 },
-                // {
-                //     title: "Visualizar recibos",
-                //     url: ROUTES.PAINEL_PROFESSORES_RECIBOS,
-                //     breadcrumb: "Visualizar recibos",
-                // },
+                {
+                    title: "Visualizar transações",
+                    url: ROUTES.PAINEL_PROFESSORES_RECIBOS,
+                    breadcrumb: "Visualizar transações",
+                },
                 {
                     title: "Sair",
                     url: ROUTES.HOME,

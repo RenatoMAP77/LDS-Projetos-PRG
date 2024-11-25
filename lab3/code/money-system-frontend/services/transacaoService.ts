@@ -12,6 +12,12 @@ const url2 = "/transacao/history";
 
 export const getUserHistory = async<T>(id: number): Promise<TransactionResponse[]> => {
     const response = await api.get(`${url2}/${id}`);
-    console.log(response, "resp dentro do service")
+    return response.data;
+}
+
+const url3 = "/transacao/history/professor";
+
+export const getProfessorHistory = async<T>(id: number): Promise<TransactionResponse[]> => {
+    const response = await api.get(`${url3}/${id}`);
     return response.data;
 }

@@ -8,7 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { TipoUsuario } from "@/lib/types";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import * as z from "zod";
 import {
     Form,
@@ -21,6 +21,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { createDonate } from "@/services/donateService";
 import { toast } from "@/hooks/use-toast";
+import { Loader } from "lucide-react";
 
 interface AlunosTableProps {
     alunos: Aluno[];
@@ -32,11 +33,11 @@ const formSchema = z.object({
 });
 
 const AlunosTable: React.FC<AlunosTableProps> = ({ alunos }) => {
-    const router = useRouter();
     const [alunoList, setAlunoList] = useState<Aluno[]>(alunos);
     const [alunoSelecionado, setAlunoSelecionado] = useState<Aluno | null>(null);
     const [showDonationModal, setShowDonationModal] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [loadingButton, setLoadingButton] = useState(false)
     const { lerEntidades, deletarEntidade } = useEntidade();
     const idProfessor = localStorage.getItem("id");
 
@@ -55,6 +56,7 @@ const AlunosTable: React.FC<AlunosTableProps> = ({ alunos }) => {
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
+            setLoadingButton(true);
             const data = {
                 idAluno: alunoSelecionado?.id,
                 idProfessor: Number(idProfessor),
@@ -75,7 +77,7 @@ const AlunosTable: React.FC<AlunosTableProps> = ({ alunos }) => {
             console.error("Doação falhou:", error);
         } finally {
             setShowDonationModal(false);
-
+            setLoadingButton(false);
         }
     };
 
@@ -120,8 +122,9 @@ const AlunosTable: React.FC<AlunosTableProps> = ({ alunos }) => {
                                     <Button
                                         onClick={() => handleDonation(aluno)}
                                         className="bg-green-500 hover:bg-green-600 text-white px-2 py-1 rounded w-full"
+                                        disabled={loadingButton}
                                     >
-                                        Doar Moedas
+                                        {loadingButton ? <Loader /> : "Doar"}
                                     </Button>
                                 </td>
                             </tr>
@@ -167,11 +170,13 @@ const AlunosTable: React.FC<AlunosTableProps> = ({ alunos }) => {
                                         type="button"
                                         onClick={() => setShowDonationModal(false)}
                                         variant="secondary"
+                                        disabled={loadingButton}
                                     >
                                         Cancelar
                                     </Button>
-                                    <Button type="submit">
-                                        Confirmar Doação
+                                    <Button type="submit" disabled={loadingButton}
+                                    >
+                                        {loadingButton ? <Loader /> : "Confirmar"}
                                     </Button>
                                 </div>
                             </form>

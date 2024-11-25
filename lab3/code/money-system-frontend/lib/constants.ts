@@ -12,8 +12,6 @@ export const ROUTES = {
     PAINEL_EMPRESAS_VANTAGENS_LISTAR: "/painel/empresas/vantagens/listar",
     PAINEL_ALUNOS_VANTAGENS_RESGATAR: "/painel/alunos/vantagens",
     PAINEL_ALUNOS_RECIBOS: "/painel/alunos/vantagens/historico",
-    PAINEL_PROFESSORES_RECIBOS: "/painel/professores/recibos",
+    PAINEL_PROFESSORES_RECIBOS: "/painel/professores/moedas/historico",
     PAINEL_PROFESSORES_MOEDAS: "/painel/professores/moedas",
-
-    ADMIN_ORDER: (id: number) => `/admin/pedidos/${id}`,
 };

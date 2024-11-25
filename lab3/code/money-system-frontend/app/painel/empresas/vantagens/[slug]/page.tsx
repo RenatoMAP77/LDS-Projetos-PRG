@@ -2,6 +2,7 @@ import VantagensTable from "@/components/root/VantagensTable";
 import { VantagemRead, TipoForm, TipoUsuario } from "@/lib/types";
 import { readAllVantagens } from "@/services/vantagemService";
 import VantagensForm from "@/components/root/VantagensForm";
+import GenericForm from "@/components/root/GenericForm";
 
 interface Params {
     params: {
@@ -13,12 +14,11 @@ export default async function Page({ params }: Params) {
     const { slug } = await params;
     const data = await readAllVantagens<VantagemRead[]>();
 
-
     if (slug === TipoForm.ADICIONAR.toLowerCase()) {
         return (
             <VantagensForm />
         );
     } else {
-        return <VantagensTable data={data} />;
+        return <VantagensTable data={data} tipo={TipoUsuario.EMPRESA} />;
     }
 }

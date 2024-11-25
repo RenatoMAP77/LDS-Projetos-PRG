@@ -121,7 +121,7 @@ export default function SidebarComponent({ children }: { children: React.ReactNo
                         <Breadcrumb>
                             <BreadcrumbList>
                                 <BreadcrumbItem>
-                                    <BreadcrumbLink href="/">Início</BreadcrumbLink>
+                                    <BreadcrumbLink href="">Início</BreadcrumbLink>
                                 </BreadcrumbItem>
                                 <BreadcrumbSeparator />
                                 {breadcrumb !== "Início" && (

@@ -120,15 +120,22 @@ export default function GenericForm({ tipo, entidade }: GenericFormProps) {
                 await adicionarEntidade(values, entidade);
             } else {
                 await editarEntidade(id as string, values, entidade);
+                
             }
             if (entidade === "ALUNO") {
                 localStorage.setItem("type", "ALUNO");
-                router.push(ROUTES.PAINEL_ALUNOS);
+
+                router.push(ROUTES.LOGIN_ALUNOS);
             }
             else {
                 localStorage.setItem("type", "EMPRESA");
-                router.push(ROUTES.PAINEL_EMPRESAS);
+
+                router.push(ROUTES.LOGIN_EMPRESAS);
             }
+            toast({
+                title: "Cadastro realizado com sucesso!",
+                description: "Faça login para acessar o sistema de moedas.",
+            });
 
             //   setTimeout(() => {
             //     router.push(`/${entidade.toLowerCase()}s/listar`);

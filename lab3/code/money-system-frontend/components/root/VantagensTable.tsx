@@ -1,20 +1,24 @@
 "use client"
-import { VantagemRead } from "@/lib/types";
+import { TipoUsuario, VantagemRead } from "@/lib/types";
 import { Button } from "../ui/button";
-import { Transaction, TransactionResponse } from "@/lib/types";
+import { Transaction } from "@/lib/types";
 import { takeVantage } from "@/services/transacaoService";
 import { useToast } from "@/hooks/use-toast";
+import { useState } from "react";
+import { Loader } from "lucide-react";
 
 type VantagemTableProps = {
     data: VantagemRead[];
+    tipo: TipoUsuario;
 };
 
 export default function VantagensTable({
     data,
+    tipo
 }: VantagemTableProps) {
-
     const alunoId = localStorage.getItem("id");
     const { toast } = useToast();
+    const [loading, setLoading] = useState(false);
 
     const handleTakeVantage = async (id: number) => {
         const transaction: Transaction = {
@@ -24,8 +28,8 @@ export default function VantagensTable({
 
 
         try {
-            const response = await takeVantage(transaction);
-            console.log(response);
+            setLoading(true);
+            await takeVantage(transaction);
             toast({
                 title: "Vantagem resgatada com sucesso",
                 description: "A vantagem foi resgatada.",
@@ -36,11 +40,10 @@ export default function VantagensTable({
                 description: error.response.data.message,
                 variant: "destructive",
             });
+        } finally {
+            setLoading(false);
         }
     }
-
-
-
 
     return (
         <table className="min-w-full ">
@@ -49,9 +52,9 @@ export default function VantagensTable({
                     <th className="  px-4 py-2 border-b ">Custo</th>
                     <th className="  px-4 py-2 border-b">Descrição</th>
                     <th className="  px-4 py-2 border-b">Foto</th>
-                    <th className="  px-4 py-2 border-b">Ações</th>
-                </tr>
-            </thead>
+                    {tipo === TipoUsuario.ALUNO && <th className="  px-4 py-2 border-b">Ação</th>}
+                </tr >
+            </thead >
             <tbody>
                 {data?.map((vantagem, index) => (
                     <tr key={index}>
@@ -64,17 +67,19 @@ export default function VantagensTable({
                         <td className=" border-b ">
                             <img src={vantagem.foto} alt={vantagem.descricao} width={100} height={100} ></img>
                         </td>
-                        <td className="  px-4 py-2  ">
+                        {tipo === TipoUsuario.ALUNO && <td className="  px-4 py-2  ">
                             <Button
                                 className="bg-green-500 text-white px-2 py-1 rounded w-full"
                                 onClick={() => { handleTakeVantage(vantagem.id) }}
+                                disabled={loading}
                             >
-                                Resgatar
+                                {loading ? <Loader /> : "Resgatar"}
                             </Button>
-                        </td>
+                        </td>}
                     </tr>
-                ))}
+                ))
+                }
             </tbody>
-        </table>
-    );
+        </table >
+    )
 }

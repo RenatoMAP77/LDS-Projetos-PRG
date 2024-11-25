@@ -20,6 +20,7 @@ import { Input } from "@/components/ui/input"
 import { ROUTES } from '@/lib/constants'
 import { loginProfessor } from '@/services/loginService'
 import { useRouter } from 'next/navigation'
+import { toast } from '@/hooks/use-toast'
 
 const formSchema = z.object({
     email: z.string().email({ message: "Email inválido" }),
@@ -29,7 +30,9 @@ const formSchema = z.object({
 export default function loginEmpresas() {
     const searchParams = useSearchParams()
     const router = useRouter();
-    const [userType, setUserType] = useState('')
+    const [userType, setUserType] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
 
     useEffect(() => {
         const type = searchParams.get('type')
@@ -50,13 +53,23 @@ export default function loginEmpresas() {
             senha: values.senha
         }
         try {
+            setLoading(true);
             const response = await loginProfessor(data);
-            console.log(response)
             localStorage.setItem("type", response.tipoUsuario);
             localStorage.setItem("id", response.id.toString());
             router.push(ROUTES.PAINEL_PROFESSORES);
+            toast({
+                title: "Login realizado com sucesso!",
+                description: "Bem-vindo ao sistema de moedas.",
+            });
         } catch (error) {
-            console.error("Login failed:", error)
+            setError("Email ou senha inválidos");
+            toast({
+                title: "Email ou senha inválidos!",
+                variant: "destructive",
+            });
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -98,9 +111,9 @@ export default function loginEmpresas() {
                             />
                         </CardContent>
                         <CardFooter className="flex flex-col space-y-4">
+                            {error && <div className="text-red-500 text-center">{error}</div>}
                             <Link href={ROUTES.HOME} className="border w-full rounded-md text-center p-1">Voltar</Link>
-                            <Button type="submit" className="w-full">Entrar</Button>
-
+                            <Button type="submit" className="w-full" disabled={loading}>Entrar</Button>
                         </CardFooter>
                     </form>
                 </Form>
