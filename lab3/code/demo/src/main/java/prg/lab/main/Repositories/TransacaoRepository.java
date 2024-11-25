@@ -11,5 +11,7 @@ import prg.lab.main.Models.Transacao;
 public interface TransacaoRepository extends JpaRepository<Transacao, Long> {
 
     List<Transacao> findAllByAlunoId(Long id);
+
+    List<Transacao> findAllByProfessorId(Long id);
     
 }

@@ -69,7 +69,14 @@ public class TransacaoController {
     }
 
     @GetMapping("/history/{id}")
+    @Operation(description = "Busca o histórico de transações de um aluno", summary = "Busca o histórico de transações de um aluno")
     public ResponseEntity<?> getHistory(@PathVariable Long id) {
         return ResponseEntity.ok(transacaoService.history(id));
+    }
+
+    @GetMapping("/history/professor/{id}")
+    @Operation(description = "Busca o histórico de transações de um professor", summary =  "Busca o histórico de transações de um professor")
+    public ResponseEntity<?> getHistoryProfessor(@PathVariable Long id) {
+        return ResponseEntity.ok(transacaoService.historyProfessor(id));
     }
 }

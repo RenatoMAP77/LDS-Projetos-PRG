@@ -126,6 +126,10 @@ public class TransacaoService {
         return transacaoRepository.findAllByAlunoId(id);
     }
 
+    public List<Transacao> historyProfessor(Long id) {
+        return transacaoRepository.findAllByProfessorId(id);
+    }
+
     // @Transactional
     // public Transacao updateTransacao(Transacao transacao){
     // Transacao newTransacao = getTransacaoById(transacao.getId());
