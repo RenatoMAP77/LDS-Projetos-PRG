@@ -7,8 +7,7 @@ import org.springframework.stereotype.Service;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
-
-
+import prg.lab.main.Models.EmpresaParceira;
 import prg.lab.main.Util.Email;
 
 
@@ -38,6 +37,17 @@ public class EmailService {
         emailToSend.setBody("<h1>Parabéns!</h1><p>Você resgatou a vantagem " + nomeVantagem +
          " por " + quantidadeMoedas + " moedas</p>"
          + "<p>Seu código de cupom é: " + codigoCupom + "</p>");
+        sendEmail(emailToSend);
+       
+    }
+
+    public void enviarVantagemEmailEmpresa(String emailEmpresaParceira, String nomeVantagem , Double quantidadeMoedas , String codigoCupom, String emailAluno, String nomeAluno) {
+        Email emailToSend = new Email();
+        emailToSend.setTo(emailEmpresaParceira);
+        emailToSend.setSubject("Vantagem resgatada!");
+        emailToSend.setBody("<h1>Parabéns!</h1><p>A vantagem " + nomeVantagem +
+         " foi resgatada pelo aluno: "+ nomeAluno +" com email: "+ emailAluno + " por " + quantidadeMoedas + " moedas</p>"
+         + "<p>Código do cupom: " + codigoCupom + "</p>");
         sendEmail(emailToSend);
        
     }

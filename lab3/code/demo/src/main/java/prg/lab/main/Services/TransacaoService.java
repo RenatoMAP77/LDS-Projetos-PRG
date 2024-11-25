@@ -59,63 +59,65 @@ public class TransacaoService {
     }
 
     public Transacao regatarVantagem(ResgatarVantagemDTO resgatarVantagemDTO) {
-    // Buscar a vantagem usando o ID do DTO
-    Vantagem vantagem = vantagemService.getVantagemById(resgatarVantagemDTO.vantagemId());
-    double valor = (double) vantagem.getCustoEmMoedas();
+        // Buscar a vantagem usando o ID do DTO
+        Vantagem vantagem = vantagemService.getVantagemById(resgatarVantagemDTO.vantagemId());
+        double valor = (double) vantagem.getCustoEmMoedas();
 
-    // Buscar o aluno usando o ID do DTO
-    Aluno aluno = alunoService.getAlunoById(resgatarVantagemDTO.alunoId());
-    Double saldo = aluno.getSaldoMoedas();
+        // Buscar o aluno usando o ID do DTO
+        Aluno aluno = alunoService.getAlunoById(resgatarVantagemDTO.alunoId());
+        Double saldo = aluno.getSaldoMoedas();
 
-    // Verificar se o saldo do aluno é suficiente
-    if (saldo == null || saldo < valor) {
-        throw new RuntimeException("Saldo do aluno insuficiente para resgatar a vantagem ou saldo é nulo");
+        // Verificar se o saldo do aluno é suficiente
+        if (saldo == null || saldo < valor) {
+            throw new RuntimeException("Saldo do aluno insuficiente para resgatar a vantagem ou saldo é nulo");
+        }
+
+        if (saldo == 0) {
+            throw new RuntimeException("Aluno sem saldo");
+        }
+
+        // Criar a transação
+        Transacao transacao = new Transacao();
+        transacao.setQuantidade(valor);
+        transacao.setData(LocalDateTime.now());
+        transacao.setTipo(TransactionTypes.TROCA_VANTAGEM);
+        transacao.setAluno(aluno);
+        transacao.setDescricao(vantagem.getDescricao());
+        transacao.setEmpresa(vantagem.getEmpresa());
+
+        // Debitar as moedas do aluno
+        alunoService.debitarMoedas(aluno.getId(), valor);
+
+        // Gerar o código do cupom
+        String codigoCupom = UUID.randomUUID().toString();
+        Cupom cupom = new Cupom(codigoCupom, vantagem.getEmpresa(), aluno, vantagem);
+
+        // Criar o cupom
+        cupomService.createCupom(cupom);
+
+        // Adicionar o cupom à lista de cupons da vantagem
+        vantagem.getCupons().add(cupom);
+
+        aluno.getCupons().add(cupom);
+
+        // Enviar email
+        emailService.enviarVantagemEmail(
+                aluno.getEmail(),
+                vantagem.getDescricao(),
+                valor,
+                codigoCupom);
+
+        emailService.enviarVantagemEmailEmpresa(
+                vantagem.getEmpresa().getEmail(),
+                vantagem.getDescricao(),
+                valor,
+                codigoCupom,
+                aluno.getEmail(),
+                aluno.getNome());
+
+        // Salvar a transação no repositório
+        return transacaoRepository.save(transacao);
     }
-
-    if (saldo == 0) {
-        throw new RuntimeException("Aluno sem saldo");
-    }
-
-    // Criar a transação
-    Transacao transacao = new Transacao();
-    transacao.setQuantidade(valor);
-    transacao.setData(LocalDateTime.now());
-    transacao.setTipo(TransactionTypes.TROCA_VANTAGEM);
-    transacao.setAluno(aluno);
-    transacao.setDescricao(vantagem.getDescricao());
-    transacao.setEmpresa(vantagem.getEmpresa());
-
-
-    
-    
-    // Debitar as moedas do aluno
-    alunoService.debitarMoedas(aluno.getId(), valor);
-
-    // Gerar o código do cupom
-    String codigoCupom = UUID.randomUUID().toString();
-    Cupom cupom = new Cupom(codigoCupom, vantagem.getEmpresa(), aluno, vantagem);
-    
-    // Criar o cupom
-    cupomService.createCupom(cupom);
-
-    // Adicionar o cupom à lista de cupons da vantagem
-    vantagem.getCupons().add(cupom);
-
-
-    aluno.getCupons().add(cupom);
-
-    // Enviar email
-    emailService.enviarVantagemEmail(
-            aluno.getEmail(),
-            vantagem.getDescricao(),
-            valor,
-            codigoCupom);
-
-    // Salvar a transação no repositório
-    return transacaoRepository.save(transacao);
-}
-
-    
 
     @Transactional
     public void deleteTransacao(Long id) {
