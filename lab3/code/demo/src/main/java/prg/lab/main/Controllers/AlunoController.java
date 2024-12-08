@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -17,6 +18,7 @@ import prg.lab.main.Services.AlunoService;
 import prg.lab.main.Services.InstituicaoService;
 import prg.lab.main.Util.DTOs.AlunoDTO;
 import prg.lab.main.Util.DTOs.LoginRequestDTO;
+import prg.lab.main.Util.DTOs.LoginResponseDTO;
 
 @RestController
 @RequestMapping("/aluno")
@@ -92,15 +94,20 @@ public class AlunoController {
 
     @Operation(description = "Login de aluno")
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequestDTO aluno) {
-        
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO aluno) {
         Optional<Aluno> newAluno = alunoService.login(aluno.getEmail(), aluno.getSenha());
-        Map<String, Object> response = new HashMap<>();
 
-        response.put("id", newAluno.get().getId());
-        response.put("tipoUsuario", newAluno.get().getTipoUsuario());
+        if (newAluno.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // Retorno para login falho
+        }
+
+        LoginResponseDTO response = new LoginResponseDTO(
+            newAluno.get().getId(),
+            newAluno.get().getTipoUsuario()
+        );
 
         return ResponseEntity.ok(response);
-
+        
     }
+
 }

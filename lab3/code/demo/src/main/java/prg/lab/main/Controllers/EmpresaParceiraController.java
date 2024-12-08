@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -15,6 +16,7 @@ import prg.lab.main.Models.EmpresaParceira;
 import prg.lab.main.Services.EmpresaParceiraService;
 import prg.lab.main.Util.DTOs.EmpresaParceiraDTO;
 import prg.lab.main.Util.DTOs.LoginRequestDTO;
+import prg.lab.main.Util.DTOs.LoginResponseDTO;
 
 @RestController
 @RequestMapping("/empresaParceira")
@@ -84,20 +86,24 @@ public class EmpresaParceiraController {
 
     @Operation(description = "Faz login de uma empresa", summary = "Faz login de uma empresa")
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequestDTO loginRequestDTO) {
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO loginRequestDTO) {
         Optional<EmpresaParceira> empresa = empresaParceiraService.login(
             loginRequestDTO.getEmail(),
             loginRequestDTO.getSenha()
         );
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("id", empresa.get().getId());
-        response.put("tipoUsuario", empresa.get().getTipoUsuario());
+        if (empresa.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // Retorno caso login falhe
+        }
 
+        LoginResponseDTO response = new LoginResponseDTO(
+            empresa.get().getId(),
+            empresa.get().getTipoUsuario()
+        );
 
         return ResponseEntity.ok(response);
-
     }
+
 
     // @Operation(description = "Atualiza a senha de uma empresa", summary = "Atualiza a senha de uma empresa")
     // @PatchMapping("/{id}/senha")

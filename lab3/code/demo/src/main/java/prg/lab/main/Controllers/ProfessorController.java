@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,10 +20,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import io.swagger.v3.oas.annotations.Operation;
 import prg.lab.main.Models.Professor;
 import prg.lab.main.Services.InstituicaoService;
 import prg.lab.main.Services.ProfessorService;
 import prg.lab.main.Util.DTOs.LoginRequestDTO;
+import prg.lab.main.Util.DTOs.LoginResponseDTO;
 import prg.lab.main.Util.DTOs.ProfessorDTO;
 
 @RestController
@@ -73,15 +76,21 @@ public class ProfessorController {
         return ResponseEntity.noContent().build();
     }
 
+    @Operation(description = "Login de professor")
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequestDTO professor) {
-
-        Optional<Professor> newProfessor = this.professorService.login(professor.getEmail(), professor.getSenha());
-        Map<String, Object> response = new HashMap<>();
-
-        response.put("id", newProfessor.get().getId());
-        response.put("tipoUsuario", newProfessor.get().getTipoUsuario());
-
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO professor) {
+        Optional<Professor> newProfessor = professorService.login(professor.getEmail(), professor.getSenha());
+    
+        if (newProfessor.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // Retorno para login falho
+        }
+    
+        // Criando a resposta com o DTO
+        LoginResponseDTO response = new LoginResponseDTO(
+            newProfessor.get().getId(),
+            newProfessor.get().getTipoUsuario()
+        );
+    
         return ResponseEntity.ok(response);
     }
 
