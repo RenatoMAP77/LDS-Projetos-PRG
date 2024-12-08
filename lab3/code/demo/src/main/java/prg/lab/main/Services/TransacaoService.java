@@ -6,7 +6,7 @@ import prg.lab.main.Models.Cupom;
 import prg.lab.main.Models.Transacao;
 import prg.lab.main.Models.Vantagem;
 import prg.lab.main.Repositories.TransacaoRepository;
-import prg.lab.main.Services.EmailService.EmailService;
+import prg.lab.main.Services.EmailService.*;
 import prg.lab.main.Util.DTOs.ResgatarVantagemDTO;
 import prg.lab.main.Util.Enums.TransactionTypes;
 import prg.lab.main.Services.EmailService.EmailContentProvider.*;
@@ -33,8 +33,7 @@ public class TransacaoService {
 
     @Autowired
     private CupomService cupomService;
-
-    @Autowired
+    
     private EmailService emailService;
 
     @Autowired
