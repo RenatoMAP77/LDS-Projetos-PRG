@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RestController
 @RequestMapping("/vantagem")
 public class VantagemController {
+    
     @Autowired
     VantagemService vantagemService;
     @Autowired
@@ -31,16 +32,21 @@ public class VantagemController {
     @Operation(description = "Cadastra uma nova vantagem")
     @PostMapping()
     public ResponseEntity<Vantagem> cadastrarVantagem(@RequestBody VantagemDTO vantagemDTO) {
+
         Vantagem vantagem = vantagemService.cadastrarVantagem(new Vantagem(vantagemDTO.descricao(), vantagemDTO.custoEmMoedas(),
-     empresaParceiraService.findById(vantagemDTO.empresaId()), vantagemDTO.foto()));
+            empresaParceiraService.findById(vantagemDTO.empresaId()), vantagemDTO.foto()));
+
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(vantagem.getId()).toUri();
+
         return ResponseEntity.created(uri).build();
     }
 
     @Operation(description = "Lista todas as vantagens")
     @GetMapping()
     public ResponseEntity<List<Vantagem>> listarVantagens() {
+
         List<Vantagem> vantagens = vantagemService.listarVantagens();
+
         return ResponseEntity.ok(vantagens);
     }
 
