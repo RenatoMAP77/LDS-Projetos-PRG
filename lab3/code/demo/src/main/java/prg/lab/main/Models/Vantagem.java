@@ -35,7 +35,7 @@ public class Vantagem {
 
     private String descricao;
 
-    private int custoEmMoedas;
+    private Double custoEmMoedas;
 
     private String foto;
 
@@ -55,7 +55,7 @@ public class Vantagem {
     @JsonIgnore // Ignora este campo na serialização
     private List<Cupom> cupons;
 
-    public Vantagem(String descricao, int custoEmMoedas, EmpresaParceira empresaParceira, String foto) {
+    public Vantagem(String descricao, Double custoEmMoedas, EmpresaParceira empresaParceira, String foto) {
 
         this.descricao = descricao;
 

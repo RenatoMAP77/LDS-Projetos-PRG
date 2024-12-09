@@ -1,21 +1,23 @@
 package prg.lab.main.Services;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import jakarta.transaction.Transactional;
 import prg.lab.main.Models.Aluno;
 import prg.lab.main.Models.Cupom;
 import prg.lab.main.Models.Transacao;
 import prg.lab.main.Models.Vantagem;
 import prg.lab.main.Repositories.TransacaoRepository;
+import prg.lab.main.Services.EmailService.*;
 import prg.lab.main.Util.DTOs.ResgatarVantagemDTO;
 import prg.lab.main.Util.Enums.TransactionTypes;
+import prg.lab.main.Services.EmailService.EmailContentProvider.*;
+import prg.lab.main.Util.Email;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 public class TransacaoService {
@@ -31,92 +33,122 @@ public class TransacaoService {
 
     @Autowired
     private CupomService cupomService;
-
-    @Autowired
+    
     private EmailService emailService;
 
     @Autowired
     private VantagemService vantagemService;
 
     public Transacao getTransacaoById(Long id) {
-        Optional<Transacao> transacao = transacaoRepository.findById(id);
-        return transacao.orElseThrow(() -> new RuntimeException("Transacao não encontrada"));
+        return transacaoRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Transação não encontrada"));
     }
 
     @Transactional
     public Transacao premiarAluno(Transacao transacao) {
-        if (transacao.getProfessor().getSaldoMoedas() < transacao.getQuantidade()) {
-            throw new RuntimeException("Saldo do professor insuficiente para realizar a transação");
-        }
+        validarSaldoProfessor(transacao.getProfessor().getSaldoMoedas(), transacao.getQuantidade());
+
         professorService.debitarMoedas(transacao.getProfessor().getId(), transacao.getQuantidade());
         alunoService.creditarMoedas(transacao.getAluno().getId(), transacao.getQuantidade());
-        emailService.enviarBonusEmail(
-                transacao.getAluno().getEmail(),
-                transacao.getProfessor().getEmail(),
-                transacao.getQuantidade(),
-                transacao.getDescricao());
+
+        enviarEmailPremiacaoAluno(transacao);
+
         return transacaoRepository.save(transacao);
     }
 
+    @Transactional
     public Transacao regatarVantagem(ResgatarVantagemDTO resgatarVantagemDTO) {
-        // Buscar a vantagem usando o ID do DTO
         Vantagem vantagem = vantagemService.getVantagemById(resgatarVantagemDTO.vantagemId());
-        double valor = (double) vantagem.getCustoEmMoedas();
-
-        // Buscar o aluno usando o ID do DTO
         Aluno aluno = alunoService.getAlunoById(resgatarVantagemDTO.alunoId());
-        Double saldo = aluno.getSaldoMoedas();
 
-        // Verificar se o saldo do aluno é suficiente
-        if (saldo == null || saldo < valor) {
+        validarSaldoAluno(aluno.getSaldoMoedas(), vantagem.getCustoEmMoedas());
+
+        Transacao transacao = criarTransacaoTrocaVantagem(aluno, vantagem);
+
+        alunoService.debitarMoedas(aluno.getId(), vantagem.getCustoEmMoedas());
+
+        Cupom cupom = gerarCupom(vantagem, aluno);
+        cupomService.createCupom(cupom);
+
+        vantagem.getCupons().add(cupom);
+        aluno.getCupons().add(cupom);
+
+        enviarEmailsTrocaVantagem(aluno, vantagem, cupom);
+
+        return transacaoRepository.save(transacao);
+    }
+
+    private void validarSaldoProfessor(double saldoProfessor, double quantidade) {
+        if (saldoProfessor < quantidade) {
+            throw new RuntimeException("Saldo do professor insuficiente para realizar a transação");
+        }
+    }
+
+    private void validarSaldoAluno(Double saldoAluno, double custoVantagem) {
+        if (saldoAluno == null || saldoAluno < custoVantagem) {
             throw new RuntimeException("Saldo do aluno insuficiente para resgatar a vantagem ou saldo é nulo");
         }
+    }
 
-        if (saldo == 0) {
-            throw new RuntimeException("Aluno sem saldo");
-        }
-
-        // Criar a transação
+    private Transacao criarTransacaoTrocaVantagem(Aluno aluno, Vantagem vantagem) {
         Transacao transacao = new Transacao();
-        transacao.setQuantidade(valor);
+        transacao.setQuantidade(vantagem.getCustoEmMoedas());
         transacao.setData(LocalDateTime.now());
         transacao.setTipo(TransactionTypes.TROCA_VANTAGEM);
         transacao.setAluno(aluno);
         transacao.setDescricao(vantagem.getDescricao());
         transacao.setEmpresa(vantagem.getEmpresa());
+        return transacao;
+    }
 
-        // Debitar as moedas do aluno
-        alunoService.debitarMoedas(aluno.getId(), valor);
-
-        // Gerar o código do cupom
+    private Cupom gerarCupom(Vantagem vantagem, Aluno aluno) {
         String codigoCupom = UUID.randomUUID().toString();
-        Cupom cupom = new Cupom(codigoCupom, vantagem.getEmpresa(), aluno, vantagem);
+        return new Cupom(codigoCupom, vantagem.getEmpresa(), aluno, vantagem);
+    }
 
-        // Criar o cupom
-        cupomService.createCupom(cupom);
+    private void enviarEmailPremiacaoAluno(Transacao transacao) {
+        IEmailContentProvider contentProvider = new BonusEmailContentProvider(
+            transacao.getProfessor().getEmail(),
+            transacao.getQuantidade(),
+            transacao.getDescricao()
+        );
 
-        // Adicionar o cupom à lista de cupons da vantagem
-        vantagem.getCupons().add(cupom);
+        Email email = new Email();
+        email.setTo(transacao.getAluno().getEmail());
+        email.setSubject(contentProvider.getSubject());
+        email.setBody(contentProvider.getBody());
 
-        aluno.getCupons().add(cupom);
+        emailService.sendEmail(email);
+    }
 
-        // Enviar email
-        emailService.enviarVantagemEmail(
-                aluno.getEmail(),
-                vantagem.getDescricao(),
-                valor,
-                codigoCupom);
+    private void enviarEmailsTrocaVantagem(Aluno aluno, Vantagem vantagem, Cupom cupom) {
+        IEmailContentProvider alunoEmailContent = new VantagemEmailContentProvider(
+            vantagem.getDescricao(),
+            vantagem.getCustoEmMoedas(),
+            cupom.getCodigo()
+        );
 
-        emailService.enviarVantagemEmailEmpresa(
-                vantagem.getEmpresa().getEmail(),
-                vantagem.getDescricao(),
-                valor,
-                codigoCupom,
-                aluno.getEmail(),
-                aluno.getNome());
+        Email alunoEmail = new Email();
+        alunoEmail.setTo(aluno.getEmail());
+        alunoEmail.setSubject(alunoEmailContent.getSubject());
+        alunoEmail.setBody(alunoEmailContent.getBody());
 
-        // Salvar a transação no repositório
-        return transacaoRepository.save(transacao);
+        emailService.sendEmail(alunoEmail);
+
+        IEmailContentProvider empresaEmailContent = new VantagemEmpresaEmailContentProvider(
+            vantagem.getDescricao(),
+            vantagem.getCustoEmMoedas(),
+            cupom.getCodigo(),
+            aluno.getEmail(),
+            aluno.getNome()
+        );
+
+        Email empresaEmail = new Email();
+        empresaEmail.setTo(vantagem.getEmpresa().getEmail());
+        empresaEmail.setSubject(empresaEmailContent.getSubject());
+        empresaEmail.setBody(empresaEmailContent.getBody());
+
+        emailService.sendEmail(empresaEmail);
     }
 
     @Transactional
@@ -131,13 +163,5 @@ public class TransacaoService {
     public List<Transacao> historyProfessor(Long id) {
         return transacaoRepository.findAllByProfessorId(id);
     }
-
-    // @Transactional
-    // public Transacao updateTransacao(Transacao transacao){
-    // Transacao newTransacao = getTransacaoById(transacao.getId());
-    // newTransacao.setData(transacao.getData());
-    // newTransacao.setQuantidade(transacao.getQuantidade());
-    // return transacaoRepository.save(transacao);
-
-    // }
 }
+

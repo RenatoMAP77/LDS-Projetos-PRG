@@ -25,32 +25,43 @@ public class InstituicaoController {
     @Autowired
     private InstituicaoService instituicaoService;
 
-    @Operation(description = "Busca uma instituicao pelo id")
+    @Operation(description = "Busca uma instituição pelo ID")
     @GetMapping("/{id}")
     public ResponseEntity<Instituicao> findById(@PathVariable Long id) {
+
         return ResponseEntity.ok(instituicaoService.getInstituicaoById(id));
+        
     }
 
-    @Operation(description = "Busca todas as instituicoes")
+    @Operation(description = "Busca todas as instituições")
     @GetMapping
     public ResponseEntity<Iterable<Instituicao>> findAll() {
         return ResponseEntity.ok(instituicaoService.findAll());
     }
 
-    @Operation(description = "Cria uma nova instituicao")
-@PostMapping
-public ResponseEntity<Instituicao> create(@RequestBody InstituicaoDTO instituicaoDTO) {
-    if (instituicaoDTO == null) {
-        System.out.println("instituicaoDTO é null!");
-    } else {
-        System.out.println("Instituição DTO Nome: " + instituicaoDTO.nome());
-    }
-    Instituicao instituicao = instituicaoService.createInstituicao(new Instituicao( instituicaoDTO.nome()));
-    
-    URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{id}").buildAndExpand(instituicao.getId()).toUri();
-    return ResponseEntity.created(uri).build();
-}
+    @Operation(description = "Cria uma nova instituição")
+    @PostMapping
+    public ResponseEntity<Instituicao> create(@RequestBody InstituicaoDTO instituicaoDTO) {
 
-    
+        if (instituicaoDTO == null) {
+
+            System.out.println("instituicaoDTO é null!");
+
+        } else {
+
+            System.out.println("Instituição DTO Nome: " + instituicaoDTO.nome());
+
+        }
+
+        Instituicao instituicao = instituicaoService.createInstituicao(
+            new Instituicao(instituicaoDTO.nome())
+        );
+
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(instituicao.getId())
+                .toUri();
+
+        return ResponseEntity.created(uri).build();
+    }
 }

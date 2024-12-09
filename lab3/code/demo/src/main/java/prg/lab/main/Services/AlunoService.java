@@ -54,7 +54,7 @@ public class AlunoService {
     }
 
     @Transactional
-    public void creditarMoedas(Long id, Double quantidade) {
+    public void creditarMoedas(Long id, double quantidade) {
         Aluno aluno = getAlunoById(id);
         aluno.setSaldoMoedas(aluno.getSaldoMoedas() + quantidade);
         alunoRepository.save(aluno);

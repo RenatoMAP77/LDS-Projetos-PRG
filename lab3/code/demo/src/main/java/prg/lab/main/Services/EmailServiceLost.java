@@ -13,12 +13,10 @@ import prg.lab.main.Util.Email;
 
 
 @Service
-public class EmailService {
+public class EmailServiceLost {
 
     @Autowired
     private JavaMailSender mailSender;
-    
-
     
     public void enviarBonusEmail(String emailAlunoDestinatario, String nomeProfessor , Double quantidadeMoedas,String descricao) {
         Email emailToSend = new Email();
