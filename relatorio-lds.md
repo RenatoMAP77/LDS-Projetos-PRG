@@ -44,7 +44,7 @@ Esses problemas poderiam ter sido facilmente resolvidos com a implementação de
 
 # IV – Sugestão de melhorias
 
-- Fernando
+##### Fernando
 Uma série de alterações foram realizadas no metodo login, com objetivo principal melhorar a organização, a reutilização e a clareza do código. Primeiramente, substituímos o uso de HashMap para estruturar a resposta por um DTO (Data Transfer Object), denominado LoginResponseDTO. Esse DTO encapsula os campos necessários para a resposta do login, como id e tipoUsuario, proporcionando uma estrutura mais limpa e padronizada. Essa abordagem elimina a manipulação manual de mapas de dados, facilitando a leitura e manutenção do código.
 
 Além disso, o LoginResponseDTO foi projetado para ser genérico, permitindo sua reutilização em diferentes métodos de login, como para professores, alunos ou empresas. Isso garante consistência nas respostas da API, evitando duplicação de código e promovendo uma arquitetura mais escalável.
@@ -56,7 +56,7 @@ Por fim, os métodos de login nos controladores foram completamente refatorados 
 
 
 
-- Jhonata
+##### Jhonata
 
 Descrição
 Refatoração do EmailService
